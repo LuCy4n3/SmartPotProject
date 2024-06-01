@@ -21,7 +21,7 @@ namespace SqlServerVer2
             builder.Services.AddEndpointsApiExplorer();
             //This section below is for connection string 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<SamplePlantDbContext>(options =>
+            builder.Services.AddDbContext<PlantContext>(options =>
             {
                 options.UseSqlServer(connectionString,
                     sqlServerOptions =>
@@ -31,7 +31,7 @@ namespace SqlServerVer2
             });
             /*     builder.Services.AddDbContext<SamplePlantDbContext>(options =>
          options.UseSqlServer(builder.Configuration.GetConnectionString("optimumDB")));*/
-            builder.Services.AddDbContext<SamplePotDbContext>(options =>
+            builder.Services.AddDbContext<PotContext>(options =>
             {
                 options.UseSqlServer(connectionString,
                     sqlServerOptions =>
@@ -58,7 +58,7 @@ namespace SqlServerVer2
                             app.UseSwagger();
                             app.UseSwaggerUI();
                         }*/
-            var pots = new List<Pot>();
+          /*  var pots = new List<Pot>();
 
             void InitializePots() => pots = Enumerable.Range(1, 5)
                 .Select(index => new Pot(index, "", 0, false, false, 0, 0, 0, 0, 0))
@@ -102,7 +102,7 @@ namespace SqlServerVer2
             {
                 InitializePots();
                 return Results.NoContent();
-            });
+            });*/
 
             app.UseAuthorization();
             app.UseHttpsRedirection();

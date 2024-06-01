@@ -7,8 +7,8 @@ namespace SqlServerVer2
     [ApiController]
     public class PlantController : ControllerBase
     {
-        private readonly SamplePlantDbContext _context;
-        public PlantController(SamplePlantDbContext context)
+        private readonly PlantContext _context;
+        public PlantController(PlantContext context)
         {
             _context = context;
         }
@@ -78,8 +78,8 @@ namespace SqlServerVer2
     [ApiController]
     public class PotController : ControllerBase
     {
-        private readonly SamplePotDbContext _context;
-        public PotController(SamplePotDbContext context)
+        private readonly PotContext _context;
+        public PotController(PotContext context)
         {
             _context = context;
         }

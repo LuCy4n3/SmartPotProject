@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Q1vhN2jLHqiqJrFS4bAaI3ao+mF+Dbq654gKpVa8Hvx27oDIBrdAm8F87eTvFGSESYVhNXQb2VffPw3+KMQIvg==",
+  "dgSpecHash": "iirrIym+xeOZ7lHPISsvzUWCHTdc/5GL+wquKnqMERtn7cxNyu6S7a9hyGQgHoLrWMZATckJduW7p8GVBKDatQ==",
   "success": true,
-  "projectFilePath": "C:\\WORK\\Proiect\\SqlServerVer2\\SqlServerVer2\\SqlServerVer2.csproj",
+  "projectFilePath": "C:\\WORK\\Proiect\\ProiectGhiveci\\SqlServerVer2\\SqlServerVer2\\SqlServerVer2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\simon\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\simon\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
