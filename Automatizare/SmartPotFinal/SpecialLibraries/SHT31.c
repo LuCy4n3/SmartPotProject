@@ -5,8 +5,7 @@
  *  Author: simon
  */ 
 #include "SHT31.h"
-#include "C:\Users\simon\Documents\Atmel Studio\7.0\Automatizare\SmartPotFinal\include\i2c_master.h"
-#include <include/i2c_master.h>
+#include "../include/i2c_master.h"
 
 
 

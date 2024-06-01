@@ -1,6 +1,6 @@
 #include <atmel_start.h>
 #include <util/delay.h>
-#include "C:\Users\simon\Documents\Atmel Studio\7.0\Automatizare\SmartPotFinal\SpecialLibraries\SHT31.h"
+#include "SpecialLibraries/SHT31.h"
 
 int main(void)
 {
