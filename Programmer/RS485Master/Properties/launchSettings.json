@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RS485Master": {
+      "commandName": "Project",
+      "commandLineArgs": "COM3 1 0x56"
+    }
+  }
+}
