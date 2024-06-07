@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProgrammerV2": {
+      "commandName": "Project",
+      "commandLineArgs": "SerialPort=COM6 BaudRate=9600 DeviceId=0x11 FilePath=\"b:\\work\\Embedded\\CleanProjects\\AVR32DD32BootLoader\\TestApp\\Release\\TestApp.hex\""
+    }
+  }
+}
