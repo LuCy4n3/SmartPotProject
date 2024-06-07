@@ -6,6 +6,7 @@
  */ 
 #include "SHT31.h"
 #include "../include/i2c_master.h"
+#include <util/delay.h>
 
 
 

@@ -368,7 +368,7 @@ i2c_error_t I2C_0_master_operation(bool read)
 	if (!I2C_0_status.busy) {
 		I2C_0_status.busy = true;
 		ret               = I2C_NOERR;
-
+		USART_1_write('n');
 		if (read) {
 			I2C_0_status.state = I2C_SEND_ADR_READ;
 		} else {

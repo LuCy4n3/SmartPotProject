@@ -64,6 +64,7 @@ typedef enum {
    */
 	uint8_t testFunct(uint8_t test);
 	i2c_error_t begin(uint8_t i2caddr);
+	uint16_t readStatus(void);
 	i2c_error_t reset(void);
 	//uint16_t readTempHum(void);
 	i2c_error_t writeCommand(uint16_t command,uint8_t readAmount);

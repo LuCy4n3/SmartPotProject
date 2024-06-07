@@ -1,11 +1,11 @@
 #include <atmel_start.h>
 #include <util/delay.h>
 #include "SpecialLibraries/SHT31.h"
-
+#include "include/i2c_master.h"
 
  void WriteOneByte(uint8_t dataByte)
  {
-	 USART1_Write(dataByte);
+	 USART_1_write(dataByte);
 	 //while(!USART1_IsTxReady());
  }
  void serialWrite(uint8_t* data,uint8_t length)
@@ -54,11 +54,17 @@ int main(void)
 	atmel_start_init();
 	
 	PORTA_set_pin_dir(4,PORT_DIR_OUT);
+	PORTC_set_pin_dir(2,PORT_DIR_OUT);
 	USART_1_init();//in principiu asta se face deja in functia atmel_start_init()
 	USART_1_enable();//in principiu asta se face deja in functia atmel_start_init()
 	USART_1_enable_tx();//in principiu asta se face deja in functia atmel_start_init()
 	
-	
+	I2C_0_init();
+	begin(SHT31_DEFAULT_ADDR);
+	//I2C_0_do_I2C_RESET();
+			PORTC_set_pin_level(2,1);
+
+	uint16_t status;
 	//as incepe prin a face debug la primele comenzi pe care le trimiti la SHT31. De exemplu as returna diverse numere din functia de begin din fisierul SHT31 si apoi as trimite numerele pe HC12 pt debug
 	//sa folosesti  serialPrintNumber de mai sus pentru asta si astfel poti sa faci debug...
 	
@@ -66,8 +72,11 @@ int main(void)
 	while (1) {
 		USART_1_write('a');
 		PORTA_set_pin_level(4,1);
+		status = readStatus();
+		WriteOneByte((uint8_t)status);
+		WriteOneByte((uint8_t)status>>8);
 		_delay_ms(500);
-		USART_1_write(testFunct('b'));
+		//USART_1_write(testFunct('b'));
 		PORTA_set_pin_level(4,0);
 		_delay_ms(500);
 	}
