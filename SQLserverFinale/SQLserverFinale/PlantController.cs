@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLserverFinale.Models;
 
@@ -134,6 +134,40 @@ namespace SQLserverFinale
             return NoContent();
 
         }
+        // PUT: api/Pot/{UserId}/{PotId}
+        [HttpPut("{UserId}/{PotId}")]
+        public async Task<IActionResult> UpdatePotAsync(int UserId, int PotId, Pot updatedPot)
+        {
+            if (UserId != updatedPot.UserId || PotId != updatedPot.PotId)
+            {
+                return BadRequest();
+            }
+
+            var existingPot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
+            if (existingPot == null)
+            {
+                return NotFound();
+            }
+
+            // Update all properties
+            existingPot.PotName = updatedPot.PotName;
+            existingPot.PotType = updatedPot.PotType;
+            existingPot.PlantName = updatedPot.PlantName;
+            existingPot.PumpStatus = updatedPot.PumpStatus;
+            existingPot.GreenHouseStatus = updatedPot.GreenHouseStatus;
+            existingPot.GreenHouseTemperature = updatedPot.GreenHouseTemperature;
+            existingPot.GreenHouseHumidity = updatedPot.GreenHouseHumidity;
+            existingPot.GreenHousePressure = updatedPot.GreenHousePressure;
+            existingPot.PotPotassium = updatedPot.PotPotassium;
+            existingPot.PotPhospor = updatedPot.PotPhospor;
+            existingPot.PotNitrogen = updatedPot.PotNitrogen;
+
+            _context.Pot.Update(existingPot);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         public ActionResult<Pot> DelPlant(int id)
         {

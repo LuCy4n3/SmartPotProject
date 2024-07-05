@@ -1,6 +1,8 @@
 #include <atmel_start.h>
 #include <util/delay.h>
 #include "MyCode/Sensors/SHT31.h"
+#define INDEX 1
+#define TYPE 2
 void WriteOneByte(uint8_t dataByte)
 {
 	USART_0_write(dataByte);
@@ -55,21 +57,23 @@ void SerialWrite(const char* data)
 		//while(!USART1_IsTxReady());
 	}
 }
-void sendTemp(uint32_t readTemp)
+void headerHandler(uint8_t utilityId)
+{
+		WriteOneByte(15);
+		WriteOneByte(INDEX);
+		WriteOneByte(TYPE);
+		WriteOneByte(utilityId);
+}
+void sendTemp(uint32_t readTemp,uint8_t utilityId)
 {
 	uint8_t* tempBytes = (uint8_t*)&readTemp;
-	WriteOneByte(15);
-	WriteOneByte(1);
-	WriteOneByte(sizeof(tempBytes));	
+	headerHandler(utilityId);
 	serialPrint(tempBytes);
 }
-void sendHum(uint32_t readHum)
+void sendHum(uint32_t readHum,uint8_t utilityId)
 {
 	uint8_t* humBytes = (uint8_t*)&readHum;
-
-	WriteOneByte(15);
-	WriteOneByte(2);
-	WriteOneByte(sizeof(humBytes));  // Sending 4 bytes for the 32-bit integer
+	headerHandler(utilityId);
 	serialPrint(humBytes);
 }
 int32_t bme_sht31_Hummidity = 0;
@@ -97,10 +101,10 @@ int main(void)
 	while (1) {
 		SHT31.begin(0x44);
 		SHT31.readBoth(&bme_sht31_Temperature,&bme_sht31_Hummidity);
-		sendTemp(bme_sht31_Temperature);
+		sendTemp(bme_sht31_Temperature,1);
 		//SerialWrite("\r\n");
 		_delay_ms(1000);
-		sendHum(bme_sht31_Hummidity);
+		sendHum(bme_sht31_Hummidity,2);
 		//uint8_t* humBytes = (uint8_t*)&bme_sht31_Hummidity;
 		
 		//serialPrint(humBytes);

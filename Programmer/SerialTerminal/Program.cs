@@ -54,7 +54,7 @@ namespace SerialTerminal
             //return;
             //await TestOptoAsync();
             int pinNumber = 1;
-            string comPort = "COM4  ";
+            string comPort = "COM4";
             if (args.Length > 0)
                 comPort = args[0];
             if (args.Length > 1)

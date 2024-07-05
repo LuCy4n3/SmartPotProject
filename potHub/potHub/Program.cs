@@ -8,6 +8,9 @@ using System.Threading;
 using RJCP.IO.Ports;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 class Program
 {
@@ -25,10 +28,44 @@ class Program
     static async Task Main()
     {
         Program program = new Program();
+        program.StartUpFucntion();
         program.StartBackgroundTask();
         await program.ReadFunctionAsync();
     }
+    private async void StartUpFucntion()
+    {
+        serialPortStream.Open();
+        bool ok = false;
+        Console.WriteLine("Looking for data.");
+        while (!ok)
+        {
 
+            if (serialPortStream.BytesToRead > 0)
+            {
+                Console.WriteLine("Got data.");
+                byte[] data = new byte[serialPortStream.BytesToRead];
+                serialPortStream.Read(data, 0, data.Length);
+                ok = GetIndex(data);
+            }
+        }
+        serialPortStream.Close();
+        await GetPotAsync(pot.PotId, pot);
+    }
+    private bool GetIndex(byte[] data)
+    {
+        if (data[0] == 15)
+        {
+            pot.PotId = data[1];
+            pot.PotType = data[2];
+            Console.WriteLine("Got the index.");
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("Bad data. Retrying to get index...");
+            return false;
+        }
+    }
     private async Task ReadFunctionAsync()
     {
         serialPortStream.Open();
@@ -59,44 +96,44 @@ class Program
 
         serialPortStream.Close();
     }
-
+  
     private void ProcessData(byte[] data)
     {
-        if ((data[0] <= 4 || data[0] >= 1) && data.Length >= 2)
+        if ((data[0] == 15) && data.Length >= 3)
         {
-            if (data[1] == 15)
-            {
+            if (data[1] >= 1 && data[1] <= 2 )
                 ParseSensorData(data);
-            }
             else
-            {
-                Console.WriteLine("Invalid data header: " + ToHexByte(data[1]));
-            }
+                Console.WriteLine("Invalid type header: " + ToHexByte(data[1]));
+        }
+        else
+        {
+            Console.WriteLine("Invalid data header: " + ToHexByte(data[0]));
         }
     }
 
     private void ParseSensorData(byte[] data)
     {
-        switch (data[2])
+        switch (data[3])
         {
-            case 1 when data.Length == 12:
+            case 10 when data.Length == 12:
                 Console.WriteLine($"Humidity: {ToHexByte(data[6])} {ToHexByte(data[7])}, Temperature: {ToHexByte(data[8])} {ToHexByte(data[9])}");
                 break;
-            case 4 when data.Length == 14:
+            case 40 when data.Length == 14:
                 Console.WriteLine($"NPK - Nitrogen: {ToHexByte(data[6])} {ToHexByte(data[7])}, Phosphor: {ToHexByte(data[8])} {ToHexByte(data[9])}, Potassium: {ToHexByte(data[10])} {ToHexByte(data[11])}");
                 break;
             case 3 when data.Length == 10:
                 Console.WriteLine($"pH: {ToHexByte(data[6])} {ToHexByte(data[7])}");
                 break;
-            case 13 when data.Length == 5:
-                temp = (data[3] << 8) | data[4];
-                Console.WriteLine($"External Temperature: {ToHexByte(data[3])} {ToHexByte(data[4])}");
-                _ = PostPotAsync(5, data[0], temp, hum);
+            case 1 when data.Length == 6:
+                temp = (data[5]<<8) | data[4];
+                Console.WriteLine($"External Temperature: {ToHexByte(data[4])} {ToHexByte(data[5])} . And real temp is {temp}");
+                _ = PostPutAsync(temp, hum, pot);
                 break;
-            case 14 when data.Length == 5:
-                hum = (data[3] << 8) | data[4];
-                Console.WriteLine($"External Humidity: {ToHexByte(data[3])} {ToHexByte(data[4])}");
-                _ = PostPotAsync(5, data[0], temp, hum);
+            case 2 when data.Length == 6:
+                hum = (data[5] << 8) | data[4];
+                Console.WriteLine($"External Humidity: {ToHexByte(data[4])} {ToHexByte(data[5])}. And real hum is {hum}");
+                _ = PostPutAsync( temp, hum, pot);
                 break;
             case 7 when data.Length == 5:
                 Console.WriteLine($"Photo Sensor 1: {ToHexByte(data[3])} {ToHexByte(data[4])}");
@@ -112,7 +149,7 @@ class Program
                 break;
             case 5 when data.Length == 5:
                 Console.WriteLine($"Potentiometer: {ToHexByte(data[3])} {ToHexByte(data[4])}");
-                _ = PostPotAsync(4, 1, (data[3] << 8) | data[4], 0);
+                _ = PostPutAsync((data[3] << 8) | data[4], 0,pot);
                 break;
             default:
                 Console.WriteLine("Invalid data: " + ToHexString(data));
@@ -120,16 +157,17 @@ class Program
         }
     }
 
-    private async Task PostPotAsync(int index, int type, int temp, int hum)
+    private async Task PostPutAsync(int temp, int hum, Pot potMain)
     {
-        var pot = new Pot { index = index, type = type, temp = (double)temp / 100, humidity = (float)hum / 100 };
+        Console.WriteLine("Trying to POST ....");
+        var pot = new Pot { PotId = potMain.PotId, UserId = 1, PlantName = potMain.PlantName, PotName = potMain.PlantName, PotType = potMain.PotType, GreenHouseTemperature = (double)temp / 100, GreenHouseHumidity = (double)hum / 100 };
 
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {
-            httpClient.BaseAddress = new Uri("http://192.168.201.1:3000/api/Pot");
+            httpClient.BaseAddress = new Uri("http://192.168.201.1:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await httpClient.PostAsJsonAsync("/pots/", pot);
+            var response = await httpClient.PutAsJsonAsync("/api/Pot/1/1", pot);
 
             if (response.IsSuccessStatusCode)
             {
@@ -145,18 +183,27 @@ class Program
 
     private async Task GetPotAsync(int index, Pot pot)
     {
+        Console.WriteLine("Trying to GET ...");
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {
-            httpClient.BaseAddress = new Uri("http://192.168.137.185:3000");
+            httpClient.BaseAddress = new Uri("http://192.168.201.1:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await httpClient.GetAsync($"/pots/{index}");
+            var response = await httpClient.GetAsync($"/api/Pot/1/{index}");
 
             if (response.IsSuccessStatusCode)
             {
+                Console.WriteLine("Succesful GET req, updating Pot!");
                 var content = await response.Content.ReadAsStringAsync();
-                var updatedPot = JsonConvert.DeserializeObject<Pot>(content);
-                UpdatePot(pot, updatedPot);
+                try
+                {
+                    var updatedPot = JsonConvert.DeserializeObject<Pot>(content);
+                    UpdatePot(pot, updatedPot);
+                }
+                catch
+                {
+                    Console.WriteLine("Error on updating pot. this is the response: "+content);
+                }
             }
             else
             {
@@ -167,28 +214,29 @@ class Program
 
     private void UpdatePot(Pot original, Pot updated)
     {
-        original.index = updated.index;///////////////
-        original.type = updated.type;/////////////////////
-        original.pompa = updated.pompa;//////////////////
-        original.sera = updated.sera;////////////////////
-        original.temp = updated.temp;///////////////////        CHANGE THE LOGIC HERE!!!!
-        original.humidity = updated.humidity;///////////        TYHE POT WONT CHANGE ITS TYPE PER GET REQ OR THE POT PARAMS ETC.
-        original.potassium = updated.potassium;/////////
-        original.phosphor = updated.phosphor;///////////
-        original.nitrogen = updated.nitrogen;///////////
+        original.PotName = updated.PotName; // Update pot name
+        original.PlantName = updated.PlantName; // Update plant name
+        original.PumpStatus = updated.PumpStatus; // Update pump status
+        original.GreenHouseStatus = updated.GreenHouseStatus; // Update greenhouse status
+        //original.GreenHouseTemperature = updated.GreenHouseTemperature; // Update greenhouse temperature
+       // original.GreenHouseHumidity = updated.GreenHouseHumidity; // Update greenhouse humidity
+       // original.GreenHousePressure = updated.GreenHousePressure; // Update greenhouse pressure
+        //original.PotPotassium = updated.PotPotassium; // Update potassium level
+      //  original.PotPhospor = updated.PotPhospor; // Update phosphor level
+       // original.PotNitrogen = updated.PotNitrogen; // Update nitrogen level
     }
 
     private void HandlePotStatus(Pot pot)
     {
-        type = (byte)pot.type;
+        type = (byte)pot.PotType;
 
-        if (pot.type == 1 || pot.type == 2 || pot.type == 3)
+        if (pot.PotType == 1 || pot.PotType == 2 || pot.PotType == 3)
         {
-            HandlePumpStatus(pot.pompa);
+            HandlePumpStatus(pot.PumpStatus);
         }
-        else if (pot.type == 4)
+        else if (pot.PotType == 4)
         {
-            HandleSeraStatus(pot.sera);
+            HandleSeraStatus(pot.GreenHouseStatus);
         }
     }
 
@@ -244,7 +292,7 @@ class Program
         {
             while (true)
             {
-                await GetPotAsync(5, pot);
+                await GetPotAsync(pot.PotId, pot);
                 await Task.Delay(5000); // Refresh every 5 seconds
             }
         });
@@ -253,13 +301,18 @@ class Program
 
 public class Pot
 {
-    public int index { get; set; }
-    public int type { get; set; }
-    public bool pompa { get; set; }
-    public bool sera { get; set; }
-    public double temp { get; set; }
-    public double humidity { get; set; }
-    public double potassium { get; set; }
-    public double phosphor { get; set; }
-    public double nitrogen { get; set; }
+    public int PotId { get; set; }
+    public string PotName { get; set; }
+    public int PotType { get; set; }
+    public string PlantName { get; set; }
+    public int UserId { get; set; }
+
+    public bool PumpStatus { get; set; }
+    public bool GreenHouseStatus { get; set; }
+    public double GreenHouseTemperature { get; set; }
+    public double GreenHouseHumidity { get; set; }
+    public double GreenHousePressure { get; set; }
+    public double PotPotassium { get; set; }
+    public double PotPhospor { get; set; }
+    public double PotNitrogen { get; set; }
 }
