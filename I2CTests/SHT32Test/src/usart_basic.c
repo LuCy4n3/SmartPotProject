@@ -39,6 +39,7 @@
 #include <usart_basic.h>
 #include <atomic.h>
 
+
 /* Static Variables holding the ringbuffer used in IRQ mode */
 static uint8_t          USART_0_rxbuf[USART_0_RX_BUFFER_SIZE];
 static volatile uint8_t USART_0_rx_head;
@@ -48,8 +49,10 @@ static uint8_t          USART_0_txbuf[USART_0_TX_BUFFER_SIZE];
 static volatile uint8_t USART_0_tx_head;
 static volatile uint8_t USART_0_tx_tail;
 static volatile uint8_t USART_0_tx_elements;
+static volatile uint8_t headerLocation;
 
 void USART_0_default_rx_isr_cb(void);
+void USART_0_rx_isr_ByMe(void);
 void (*USART_0_rx_isr_cb)(void) = &USART_0_default_rx_isr_cb;
 void USART_0_default_udre_isr_cb(void);
 void (*USART_0_udre_isr_cb)(void) = &USART_0_default_udre_isr_cb;
@@ -58,9 +61,13 @@ void USART_0_default_rx_isr_cb(void)
 {
 	uint8_t data;
 	uint8_t tmphead;
-
+	bool headerFound = false;
+	bool completeDataCondition = false;
+	
 	/* Read the received data */
 	data = USART1.RXDATAL;
+	
+	//USART_0_write(data);
 	/* Calculate buffer index */
 	tmphead = (USART_0_rx_head + 1) & USART_0_RX_BUFFER_MASK;
 
@@ -73,8 +80,57 @@ void USART_0_default_rx_isr_cb(void)
 		/* Store received data in buffer */
 		USART_0_rxbuf[tmphead] = data;
 		USART_0_rx_elements++;
+		if(USART_0_rx_elements >= 1)
+		{
+			
+			uint8_t i;
+			for(i = headerLocation; i <= USART_0_rx_elements; i++)
+			{
+				if(headerFound)
+				{
+					completeDataCondition = ( (USART_0_rx_elements - headerLocation) >= 2 );
+					if(USART_0_rx_elements >= USART_0_RX_BUFFER_SIZE)
+					completeDataCondition = true;
+					break;
+				}
+				if(USART_0_rxbuf[i] == HEADER)
+				{
+					headerFound = true;
+					headerLocation = i;
+				}
+			}
+			if( completeDataCondition )
+			{
+				//USART_0_write(USART_0_rxbuf[headerLocation]);
+				if(USART_0_rxbuf[headerLocation + 1] == INDEX)
+				{
+					//USART_0_write(USART_0_rxbuf[headerLocation + 1]);
+					if(USART_0_rxbuf[headerLocation + 2] == 1)
+					PORTC_set_pin_level(2,true);
+					else
+					PORTC_set_pin_level(2,false);
+					//USART_0_write(USART_0_rxbuf[headerLocation + 2]);
+				}
+				else
+				USART_0_write(USART_0_rxbuf[headerLocation + 1]+199);
+				
+				uint8_t x = 0;
+
+				headerLocation      = x;
+				USART_0_rx_head     = x;
+				USART_0_rx_elements = x;
+			
+			}		
+		}
+		
 	}
 }
+
+void USART_0_rx_isr_ByMe(void)
+{
+		PORTC_toggle_pin_level(2);
+}
+
 
 void USART_0_default_udre_isr_cb(void)
 {
@@ -216,7 +272,9 @@ void USART_0_write(const uint8_t data)
  */
 int8_t USART_0_init()
 {
-
+	
+	ENABLE_INTERRUPTS();
+	
 	USART1.BAUD = (uint16_t)USART1_BAUD_RATE(2400); /* set baud rate register */
 
 	USART1.CTRLA = 0 << USART_ABEIE_bp      /* Auto-baud Error Interrupt Enable: disabled */
@@ -258,7 +316,8 @@ int8_t USART_0_init()
 	USART_0_tx_tail     = x;
 	USART_0_tx_head     = x;
 	USART_0_tx_elements = x;
-
+	headerLocation = x;
+	
 	return 0;
 }
 

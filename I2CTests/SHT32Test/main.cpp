@@ -1,8 +1,14 @@
 #include <atmel_start.h>
 #include <util/delay.h>
+#include <util/atomic.h>
 #include "MyCode/Sensors/SHT31.h"
 #define INDEX 1
 #define TYPE 2
+uint8_t ReadOneByte()
+{
+	while(!USART_0_is_rx_ready());
+	return USART_0_read();
+}
 void WriteOneByte(uint8_t dataByte)
 {
 	USART_0_write(dataByte);
@@ -84,7 +90,9 @@ SHT31Class SHT31;
 int main(void)
 {
 	/* Initializes MCU, drivers and middleware */
+	//ENABLE_INTERRUPTS();
 	atmel_start_init();
+	
 	PORTA_set_pin_dir(4,PORT_DIR_OUT);
 	PORTC_set_pin_dir(2,PORT_DIR_OUT);
 	PORTC_set_pin_level(2,false);
@@ -103,14 +111,15 @@ int main(void)
 		SHT31.readBoth(&bme_sht31_Temperature,&bme_sht31_Hummidity);
 		sendTemp(bme_sht31_Temperature,1);
 		//SerialWrite("\r\n");
-		_delay_ms(1000);
+		_delay_ms(5000);
 		sendHum(bme_sht31_Hummidity,2);
 		//uint8_t* humBytes = (uint8_t*)&bme_sht31_Hummidity;
-		
+		//if(ReadOneByte() == 1)
+			//PORTC_set_pin_level(2,true);
 		//serialPrint(humBytes);
 		PORTA_set_pin_level(4,true);
-		_delay_ms(1000);
+		_delay_ms(3000);
 		PORTA_set_pin_level(4,false);
-		_delay_ms(1000);
+		_delay_ms(3000);
 	}
 }

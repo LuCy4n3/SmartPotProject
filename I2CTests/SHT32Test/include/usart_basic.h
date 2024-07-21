@@ -39,7 +39,8 @@ extern "C" {
 #define USART1_BAUD_RATE(BAUD_RATE) ((float)(4000000 * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 /* USART_0 Ringbuffer */
-
+#define INDEX 1
+#define HEADER 15
 #define USART_0_RX_BUFFER_SIZE 32
 #define USART_0_TX_BUFFER_SIZE 32
 #define USART_0_RX_BUFFER_MASK (USART_0_RX_BUFFER_SIZE - 1)
