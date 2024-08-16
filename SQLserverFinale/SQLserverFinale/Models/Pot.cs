@@ -27,14 +27,14 @@ namespace SQLserverFinale.Models
         [ForeignKey("User")]
         [Required]
         public int UserId { get; set; }
-        public bool PumpStatus { get; set; }
-        public bool GreenHouseStatus { get; set; }
-        public double GreenHouseTemperature { get; set; }
-        public double GreenHouseHumidity { get; set; }
-        public double GreenHousePressure { get; set; }
-        public double PotPotassium {  get; set; }
-        public double PotPhospor {  get; set; }
-        public double PotNitrogen { get; set; }
+        public bool? PumpStatus { get; set; }
+        public bool? GreenHouseStatus { get; set; }
+        public double? GreenHouseTemperature { get; set; }
+        public double? GreenHouseHumidity { get; set; }
+        public double? GreenHousePressure { get; set; }
+        public double? PotPotassium {  get; set; }
+        public double? PotPhospor {  get; set; }
+        public double? PotNitrogen { get; set; }
         // public Plant Plant { get; set; }
 
     }

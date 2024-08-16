@@ -134,6 +134,23 @@ namespace SQLserverFinale
             return NoContent();
 
         }
+        [HttpPut("{UserId}/{PotId}/PumpStatus:{PumpStatus}")]
+        public async Task<ActionResult<Pot>> UpdateUserAsync(int UserId, int PotId, bool PumpStatus)
+        {
+            var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
+            if (pot == null)
+            {
+                NotFound();
+            }
+
+            pot.PumpStatus = PumpStatus;
+
+            _context.Pot.Update(pot);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
         // PUT: api/Pot/{UserId}/{PotId}
         [HttpPut("{UserId}/{PotId}")]
         public async Task<IActionResult> UpdatePotAsync(int UserId, int PotId, Pot updatedPot)
@@ -150,17 +167,17 @@ namespace SQLserverFinale
             }
 
             // Update all properties
-            existingPot.PotName = updatedPot.PotName;
-            existingPot.PotType = updatedPot.PotType;
-            existingPot.PlantName = updatedPot.PlantName;
-            existingPot.PumpStatus = updatedPot.PumpStatus;
-            existingPot.GreenHouseStatus = updatedPot.GreenHouseStatus;
-            existingPot.GreenHouseTemperature = updatedPot.GreenHouseTemperature;
-            existingPot.GreenHouseHumidity = updatedPot.GreenHouseHumidity;
-            existingPot.GreenHousePressure = updatedPot.GreenHousePressure;
-            existingPot.PotPotassium = updatedPot.PotPotassium;
-            existingPot.PotPhospor = updatedPot.PotPhospor;
-            existingPot.PotNitrogen = updatedPot.PotNitrogen;
+            if (updatedPot.PotName != null) existingPot.PotName = updatedPot.PotName;
+            if (updatedPot.PotType != null) existingPot.PotType = updatedPot.PotType;
+            if (updatedPot.PlantName != null) existingPot.PlantName = updatedPot.PlantName;
+            if (updatedPot.PumpStatus != null) existingPot.PumpStatus = updatedPot.PumpStatus;
+            if (updatedPot.GreenHouseStatus != null) existingPot.GreenHouseStatus = updatedPot.GreenHouseStatus;
+            if (updatedPot.GreenHouseTemperature.HasValue) existingPot.GreenHouseTemperature = updatedPot.GreenHouseTemperature.Value;
+            if (updatedPot.GreenHouseHumidity.HasValue) existingPot.GreenHouseHumidity = updatedPot.GreenHouseHumidity.Value;
+            if (updatedPot.GreenHousePressure.HasValue) existingPot.GreenHousePressure = updatedPot.GreenHousePressure.Value;
+            if (updatedPot.PotPotassium.HasValue) existingPot.PotPotassium = updatedPot.PotPotassium.Value;
+            if (updatedPot.PotPhospor.HasValue) existingPot.PotPhospor = updatedPot.PotPhospor.Value;
+            if (updatedPot.PotNitrogen.HasValue) existingPot.PotNitrogen = updatedPot.PotNitrogen.Value;
 
             _context.Pot.Update(existingPot);
             await _context.SaveChangesAsync();
