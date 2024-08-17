@@ -4,8 +4,7 @@ import com.example.greengrowtechapp.Handlers.Plant;
 
 import java.util.List;
 
-public interface NetworkCallback {
-    void onSuccess();
-    void onListGetSucces(List<Plant> plants);
+public interface JSONresponseCallback {
+    void onSuccess(List<Plant> plants);
     void onFailure();
 }

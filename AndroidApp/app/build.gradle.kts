@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.10") // Ensure all Kotlin stdlib dependencies are the same version
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.activity:activity:1.7.2")
     implementation("com.google.android.material:material:1.9.0") // Ensure this version supports SDK 33
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

@@ -1,18 +1,48 @@
 package com.example.greengrowtechapp.Handlers;
 
-import android.widget.Toast;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JSONresponseHandler implements Serializable {
     private int index, type;
     private boolean sera, pompa;
     private double temp, lumi, hum, pot, pho, ni, tempExt, humExt;
     private String plantName;
+    public List<Plant> parsePlantData(JSONArray jsonArray) throws JSONException {
+        List<Plant> plantList = new ArrayList<>();
 
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject plantObject = jsonArray.getJSONObject(i);
+
+            Plant plant = new Plant(
+                    plantObject.getInt("plantId"),
+                    plantObject.getString("plantName"),
+                    plantObject.getString("plantGroup"),
+                    plantObject.getString("waterPref"),
+                    plantObject.getString("lifeCycle"),
+                    plantObject.getString("plantHabit"),
+                    plantObject.getString("flowerColor"),
+                    plantObject.getInt("phMinVal"),
+                    plantObject.getInt("phMaxVal"),
+                    plantObject.getInt("minTemp"),
+                    plantObject.getInt("maxTemp"),
+                    plantObject.getInt("sunReq"),
+                    plantObject.getInt("plantHeight"),
+                    plantObject.getInt("plantWidth"),
+                    plantObject.getInt("fruitingTime"),
+                    plantObject.getInt("flowerTime")
+            );
+
+            plantList.add(plant);
+        }
+
+        return plantList;
+    }
     public void parsePotData(JSONObject response) throws JSONException  {
         try {
             if (response != null) {

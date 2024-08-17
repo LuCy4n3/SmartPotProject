@@ -13,12 +13,17 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<String> mButtonText; // LiveData for button text
     private final MutableLiveData<Boolean> mButtonPump; // LiveData for button state
     private final MutableLiveData<Boolean> mButtonGreenHouse; // LiveData for button state
+    private final MutableLiveData<Integer> mindexOfCurrentPot = new MutableLiveData<>();
+    private final MutableLiveData<Integer> mindexOfCurrentUser = new MutableLiveData<>();
+    private final MutableLiveData<String> mURL = new MutableLiveData<>();
+
 
     private final MutableLiveData<JSONresponseHandler> mResponseHandler = new MutableLiveData<>();
-    private int nmbOfPresses = 0;
 
 
     private final MutableLiveData<NetworkHandler> mNetworkHandler = new MutableLiveData<>();
+
+
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -36,10 +41,38 @@ public class HomeViewModel extends ViewModel {
         mResponseHandler.postValue(null);
 
         mNetworkHandler.postValue(null);
+
+        mindexOfCurrentPot.postValue(0);
+
+        mindexOfCurrentUser.postValue(0);
+
+        mURL.postValue(null);
+    }
+    public MutableLiveData<Integer> getIndexOfCurrentPot() {
+        return mindexOfCurrentPot;
+    }
+    public void setIndexOfCurrentPot(Integer val) {
+        mindexOfCurrentPot.postValue(val);
+    }
+    public MutableLiveData<Integer> getIndexOfCurrentUser() {
+        return mindexOfCurrentUser;
+    }
+    public void setIndexOfCurrentUser(Integer val) {
+        mindexOfCurrentUser.postValue(val);
+    }
+    public MutableLiveData<String> getURL() {
+        return mURL;
+    }
+    public void setURL(String url) {
+        mURL.postValue(url);
     }
     public void setResponseHandler(JSONresponseHandler obj)
     {
         mResponseHandler.postValue(obj);
+    }
+    public void setNetworkHandler(NetworkHandler obj)
+    {
+        mNetworkHandler.postValue(obj);
     }
     public LiveData<JSONresponseHandler> getResponseHandler()
     {
@@ -47,10 +80,6 @@ public class HomeViewModel extends ViewModel {
     }
     public MutableLiveData<NetworkHandler> getNetworkHandler() {
         return mNetworkHandler;
-    }
-    public void setNetworkHandler(NetworkHandler obj)
-    {
-        mNetworkHandler.postValue(obj);
     }
     public LiveData<String> getText() {
         return mText;
@@ -67,6 +96,7 @@ public class HomeViewModel extends ViewModel {
     public MutableLiveData<Boolean> getmButtonGreenHouse() {
         return mButtonGreenHouse;
     }
+
 
 
     public void updateTextView() {

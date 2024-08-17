@@ -4,18 +4,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.greengrowtechapp.Handlers.JSONresponseHandler;
 import com.example.greengrowtechapp.Handlers.NetworkHandler;
+import com.example.greengrowtechapp.Handlers.Plant;
 import com.example.greengrowtechapp.NetworkCallback;
 import com.example.greengrowtechapp.databinding.FragmentHomeBinding;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -24,6 +28,7 @@ public class HomeFragment extends Fragment {
 
     private JSONresponseHandler responseHandler = null;
     private NetworkHandler networkHandler = null;
+    private static final String[] paths = {"Dispozitiv 1", "Dispozitiv 2", "Dispozitiv 3", "Dispozitiv 4", "Dispozitiv 5"};
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -35,12 +40,38 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, paths);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinner.setAdapter(adapter);
+
+
+        homeViewModel.getURL().observe(getViewLifecycleOwner(), text -> {
+            homeViewModel.setURL(text);
+        });
+        homeViewModel.getIndexOfCurrentPot().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+
+            @Override
+            public void onChanged(Integer integer) {
+                //Toast.makeText(getContext(), "got the indexof pot!", Toast.LENGTH_SHORT).show();
+                homeViewModel.setIndexOfCurrentPot(integer);
+            }
+        });
+
+        homeViewModel.getIndexOfCurrentUser().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+
+            @Override
+            public void onChanged(Integer integer) {
+                //Toast.makeText(getContext(), "got the indexof user!", Toast.LENGTH_SHORT).show();
+                homeViewModel.setIndexOfCurrentUser(integer);
+            }
+        });
         homeViewModel.getResponseHandler().observe(getViewLifecycleOwner(), new Observer<JSONresponseHandler>() {
 
             @Override
             public void onChanged(JSONresponseHandler jsoNresponseHandler) {
                 responseHandler = jsoNresponseHandler;
-                Toast.makeText(getContext(), "got the shared data!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "got the shared data!", Toast.LENGTH_SHORT).show();
                 if (responseHandler == null) {
                     Toast.makeText(getContext(), "Error: Response handler not found!", Toast.LENGTH_SHORT).show();
                 }
@@ -52,19 +83,26 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(NetworkHandler netHandler) {
                 networkHandler = netHandler;
+                if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null) {
+                    String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
 
-                networkHandler.sendGetRequest("http://192.168.201.1:3000/api/Pot/1/1", new NetworkCallback() {
-                    @Override
-                    public void onSuccess() {
-                        //homeViewModel.onButtonClicked();
-                        homeViewModel.updateTextView(); // Execute this after the network request completes successfully
-                    }
+                    networkHandler.sendGetRequest(aux, new NetworkCallback() {
 
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(getContext(), "Network request failed!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onSuccess() {
+                            homeViewModel.updateTextView(); // Execute this after the network request completes successfully
+
+                        }
+                        @Override
+                        public void onListGetSucces(List<Plant> plants) {
+
+                        }
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(getContext(), "Network request failed for index "+homeViewModel.getIndexOfCurrentPot().getValue() +" !", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
 
         });
@@ -86,7 +124,7 @@ public class HomeFragment extends Fragment {
         homeViewModel.getmButtonPump().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                Toast.makeText(getContext(), "Button state changed!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Button state changed!", Toast.LENGTH_SHORT).show();
                 if(aBoolean)
                     binding.buttonPump.setVisibility(View.VISIBLE);
                 else
@@ -97,7 +135,7 @@ public class HomeFragment extends Fragment {
         homeViewModel.getmButtonGreenHouse().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                Toast.makeText(getContext(), "Button state changed!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Button state changed!", Toast.LENGTH_SHORT).show();
                 if(aBoolean)
                     binding.buttonGreenHouse.setVisibility(View.VISIBLE);
                 else
@@ -113,24 +151,46 @@ public class HomeFragment extends Fragment {
 
 
         // Set up button click listener
-//        binding.buttonHome.setOnClickListener(v -> {
-//            homeViewModel.onButtonClicked(); // Update button state after successful request
-//            Toast.makeText(getContext(), "Button HOME FRAGMENT clicked!", Toast.LENGTH_SHORT).show();
-//            networkHandler.sendGetRequest("http://192.168.201.1:3000/api/Pot/1/1", new NetworkCallback() {
-//                @Override
-//                public void onSuccess() {
-//
-//                    homeViewModel.updateTextView();
-//                }
-//
-//                @Override
-//                public void onFailure() {
-//                    Toast.makeText(getContext(), "Failed to execute request", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            //homeViewModel.onButtonClicked(); // Update the button state in the ViewModel
-//        });
+        binding.buttonUpdate.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Button HOME FRAGMENT clicked!", Toast.LENGTH_SHORT).show();
+            if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null) {
+                String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
 
+                int a = 0;
+                networkHandler.sendGetRequest(aux, new NetworkCallback() {
+                    @Override
+                    public void onSuccess() {
+                        //homeViewModel.onButtonClicked();
+                        //Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                        homeViewModel.updateTextView(); // Execute this after the network request completes successfully
+                    }
+
+                    @Override
+                    public void onListGetSucces(List<Plant> plants) {
+                        int a = 0;
+                    }
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "Network request failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            //homeViewModel.onButtonClicked(); // Update the button state in the ViewModel
+        });
+
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(), "Changed pot index to "+(position+1)+" !", Toast.LENGTH_SHORT).show();
+                homeViewModel.setIndexOfCurrentPot(position+1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         return root;
     }
 
