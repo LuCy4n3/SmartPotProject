@@ -13,6 +13,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       // "launchUrl": "swagger",
+      //"applicationUrl": "http://192.168.0.196:3000",
       "applicationUrl": "http://192.168.201.1:3000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

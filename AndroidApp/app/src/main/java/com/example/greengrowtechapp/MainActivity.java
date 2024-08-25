@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         homeViewModel.getIndexOfCurrentPot().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer newPotIndex) {
-                //handle pot index later
+                notViewModel.setIndexOfCurrentPot(newPotIndex);
+                dashViewModel.setIndexOfCurrentPot(newPotIndex);
             }
         });
 

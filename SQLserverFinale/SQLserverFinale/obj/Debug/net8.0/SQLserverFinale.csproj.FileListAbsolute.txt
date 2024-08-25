@@ -143,3 +143,4 @@ C:\WORK\Proiect\ProiectGhiveci\SQLserverFinale\SQLserverFinale\obj\Debug\net8.0\
 C:\WORK\Proiect\ProiectGhiveci\SQLserverFinale\SQLserverFinale\obj\Debug\net8.0\SQLserverFinale.pdb
 C:\WORK\Proiect\ProiectGhiveci\SQLserverFinale\SQLserverFinale\obj\Debug\net8.0\SQLserverFinale.genruntimeconfig.cache
 C:\WORK\Proiect\ProiectGhiveci\SQLserverFinale\SQLserverFinale\obj\Debug\net8.0\ref\SQLserverFinale.dll
+C:\WORK\Proiect\ProiectGhiveci\SQLserverFinale\SQLserverFinale\bin\Debug\net8.0\SQLserverFinale.staticwebassets.runtime.json

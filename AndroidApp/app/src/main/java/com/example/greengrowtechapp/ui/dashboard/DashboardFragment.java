@@ -105,10 +105,11 @@ public class DashboardFragment extends Fragment {
                         binding.textDashboard.setText(plantName);
 
                         if (networkHandler != null && homeViewModel != null && homeViewModel.getURL().getValue() != null) {
-                            String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentPot().getValue() + "/" + homeViewModel.getIndexOfCurrentUser().getValue();
+                            String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() + "/" + dashViewModel.getIndexOfCurrentPot().getValue();
+                            Toast.makeText(getContext(), "Req put on the new url" + url + "!", Toast.LENGTH_SHORT).show();
                             networkHandler.sendPutRequest(url, plantName);
                         }
-                        //Toast.makeText(getContext(), "Got the plant name " + plantName + "!", Toast.LENGTH_SHORT).show();
+
                     });
                 }
             }

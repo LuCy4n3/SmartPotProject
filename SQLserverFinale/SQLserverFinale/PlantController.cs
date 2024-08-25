@@ -1,6 +1,7 @@
 ﻿    using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLserverFinale.Models;
+using System.Diagnostics;
 
 namespace SQLserverFinale
 {
@@ -230,7 +231,7 @@ namespace SQLserverFinale
         }
 
         // POST: api/User
-        [HttpPost]
+        [HttpPut("{UserId}/{UserName}/{UserPassword}")]
         public async Task<IActionResult> CreateUser(User user)
         {
             if (user == null)
@@ -242,8 +243,8 @@ namespace SQLserverFinale
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
         }
-        [HttpPut("{UserId}/{UserPassword}")]
-        public async Task<ActionResult<User>> UpdateUserAsync(int UserId, string UserPassword)
+        [HttpPost("{UserId}/{UserPassword}")]
+        public async Task<ActionResult<User>> UpdateUserAsync(int UserId,string UserName, string UserPassword)
         {
             var user = _context.User.Find(UserId);
             if(user == null)
@@ -274,6 +275,54 @@ namespace SQLserverFinale
             _context.SaveChanges(); // Save changes to persist the deletion
 
             return NoContent(); // Return a 204 No Content response
+        }
+    }
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ImageController : ControllerBase
+    {
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage(IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+                return BadRequest("No image file was uploaded.");
+
+            // You can save the image to a specific directory
+            var directoryPath = Path.Combine("wwwroot", "images");
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            var filePath = Path.Combine("wwwroot/images", image.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            // Optionally, you can return the path of the uploaded image or any other response
+            return Ok(new { FilePath = filePath });
+        }
+    }
+    [ApiController]
+    [Route("api/[controller]")]
+    public class VideoController : ControllerBase
+    {
+        [HttpGet("start-stream")]
+        public IActionResult StartStream()
+        {
+            var processInfo = new ProcessStartInfo
+            {
+                FileName = "ffmpeg",
+                Arguments = "-i udp://0.0.0.0:3000 -c:v copy -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments wwwroot/video/stream.m3u8",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            Process ffmpegProcess = Process.Start(processInfo);
+            return Ok("Stream started");
         }
     }
 }
