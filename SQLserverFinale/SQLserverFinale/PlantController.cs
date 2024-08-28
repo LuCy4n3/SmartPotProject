@@ -118,8 +118,27 @@ namespace SQLserverFinale
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetPot), new { id = pot.PotId }, pot);
         }
-        [HttpPut("{UserId}/{PotId}/{PlantName}")]
-        public async Task<ActionResult<Pot>> UpdateUserAsync(int UserId,int PotId , string PlantName)
+        [HttpPut("{UserId}/{PotId}/ExtTemp:{temp}&&ExtHum{hum}")]
+        public async Task<ActionResult<Pot>> UpdatePlantExtTempAndHumAsync(int UserId, int PotId, double temp, double hum)
+        {
+            var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
+            if (pot == null)
+            {
+                NotFound();
+            }
+
+            pot.GreenHouseTemperature = temp;
+
+            pot.GreenHouseHumidity = hum;
+
+            _context.Pot.Update(pot);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
+        [HttpPut("{UserId}/{PotId}/PlantName:{PlantName}")]
+        public async Task<ActionResult<Pot>> UpdatePlantNameAsync(int UserId,int PotId , string PlantName)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
             if (pot == null)
@@ -136,7 +155,7 @@ namespace SQLserverFinale
 
         }
         [HttpPut("{UserId}/{PotId}/PumpStatus:{PumpStatus}")]
-        public async Task<ActionResult<Pot>> UpdateUserAsync(int UserId, int PotId, bool PumpStatus)
+        public async Task<ActionResult<Pot>> UpdatePumpStatusAsync(int UserId, int PotId, bool PumpStatus)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
             if (pot == null)
@@ -145,6 +164,23 @@ namespace SQLserverFinale
             }
 
             pot.PumpStatus = PumpStatus;
+
+            _context.Pot.Update(pot);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
+        [HttpPut("{UserId}/{PotId}/PictReq:{PictReq}")]
+        public async Task<ActionResult<Pot>> UpdatePictReqAsync(int UserId, int PotId, bool PictReq)
+        {
+            var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
+            if (pot == null)
+            {
+                NotFound();
+            }
+
+            pot.PictReq = PictReq;
 
             _context.Pot.Update(pot);
             await _context.SaveChangesAsync();
@@ -302,6 +338,19 @@ namespace SQLserverFinale
 
             // Optionally, you can return the path of the uploaded image or any other response
             return Ok(new { FilePath = filePath });
+        }
+        // GET: api/image/{imageName}
+        [HttpGet("{imageName}")]
+        public IActionResult GetImage(string imageName)
+        {
+            var filePath = Path.Combine("wwwroot", "images", imageName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "image/jpeg");
         }
     }
     [ApiController]

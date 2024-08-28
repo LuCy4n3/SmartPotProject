@@ -27,6 +27,8 @@ namespace SQLserverFinale.Models
         [ForeignKey("User")]
         [Required]
         public int UserId { get; set; }
+        public bool? HasCamera { get; set; }
+        public bool? PictReq { get; set; }
         public bool? PumpStatus { get; set; }
         public bool? GreenHouseStatus { get; set; }
         public double? GreenHouseTemperature { get; set; }
