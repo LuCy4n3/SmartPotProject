@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.greengrowtechapp.Handlers.JSONresponseHandler;
 import com.example.greengrowtechapp.Handlers.NetworkHandler;
+import com.example.greengrowtechapp.Handlers.Plant;
 import com.example.greengrowtechapp.databinding.ActivityMainBinding;
 import com.example.greengrowtechapp.ui.dashboard.DashboardViewModel;
 import com.example.greengrowtechapp.ui.home.HomeViewModel;
@@ -21,14 +22,17 @@ import com.example.greengrowtechapp.ui.notifications.NotificationsViewModel;
 
 import org.json.JSONException;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private static Integer indexOfCurrentPot = new Integer(1);
     private static Integer indexOfCurrentUser = new Integer(1);
-    private static String URLpot = new String("http://192.168.201.1:3000/api/Pot/");
-    private static String URLplant = new String("http://192.168.201.1:3000/api/Plant/");
-
+    private static String URLpot = new String("http://roka.go.ro:3000/api/Pot/");
+    private static String URLplant = new String("http://roka.go.ro:3000/api/Plant/");
+    private static String URLimage = new String("http://roka.go.ro:3000/api/image/test.jpg");
+    private static boolean pumpStat,hasCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,31 +52,23 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-
-
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        homeViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
-        homeViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
-        homeViewModel.setURL(URLpot);
-
         homeViewModel.setResponseHandler(responseHandler);
         homeViewModel.setNetworkHandler(networkHandler);
 
-        NotificationsViewModel notViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
-        notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
-        notViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
-        notViewModel.setURL(URLpot);
+        NotificationsViewModel notViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
         notViewModel.setNetworkHandler(networkHandler);
         notViewModel.setResponseHandler(responseHandler);
 
-        DashboardViewModel dashViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-        dashViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
-        dashViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
-        dashViewModel.setURL(URLplant);
+
+        DashboardViewModel dashViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         dashViewModel.setNetworkHandler(networkHandler);
         dashViewModel.setResponseHandler(responseHandler);
+
+
+
         homeViewModel.getIndexOfCurrentPot().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer newPotIndex) {
@@ -81,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        updatePumpStatusBeforeFragmentStart(networkHandler,responseHandler, homeViewModel, notViewModel, dashViewModel);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
@@ -89,7 +86,57 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
+    private void updatePumpStatusBeforeFragmentStart(NetworkHandler networkHandler,JSONresponseHandler responseHandler, HomeViewModel homeViewModel, NotificationsViewModel notViewModel, DashboardViewModel dashViewModel) {
+        String url = URLpot + indexOfCurrentUser + "/" + indexOfCurrentPot;
 
+        networkHandler.sendGetRequest(url, new NetworkCallback() {
+            @Override
+            public void onSuccess() {
+                // Assume the responseHandler updates the pumpStat internally
+                pumpStat = responseHandler.isPompa();
+                hasCamera = responseHandler.isCamera();
+
+                homeViewModel.setNetworkHandler(networkHandler);
+                homeViewModel.setResponseHandler(responseHandler);
+                homeViewModel.setmButtonPumpPress(pumpStat);
+                homeViewModel.setmHasCamera(hasCamera);
+                homeViewModel.setmButtonPumpPress(pumpStat);
+                homeViewModel.setmHasCamera(hasCamera);
+                homeViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                homeViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
+                homeViewModel.setURL(URLpot);
+                homeViewModel.setURLimage(URLimage);
+
+
+                notViewModel.setNetworkHandler(networkHandler);
+                notViewModel.setResponseHandler(responseHandler);
+                notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                notViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
+                notViewModel.setURL(URLpot);
+
+
+                dashViewModel.setNetworkHandler(networkHandler);
+                dashViewModel.setResponseHandler(responseHandler);
+                dashViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                dashViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
+                dashViewModel.setURL(URLplant);
+
+                // Pass data to other ViewModels as necessary
+                //notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                //dashViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+            }
+
+            @Override
+            public void onListGetSucces(List<Plant> plants) {
+
+            }
+
+            @Override
+            public void onFailure() {
+                //Toast.makeText(MainActivity.this, "Failed to update pump status!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void loadFragment(Fragment fragment, Bundle bundle) {
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

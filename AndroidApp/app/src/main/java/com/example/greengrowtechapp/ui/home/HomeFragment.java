@@ -1,11 +1,13 @@
 package com.example.greengrowtechapp.ui.home;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,9 @@ import com.example.greengrowtechapp.NetworkCallback;
 import com.example.greengrowtechapp.databinding.FragmentHomeBinding;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment {
 
@@ -36,6 +41,8 @@ public class HomeFragment extends Fragment {
         // ViewModel initialization
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
         // View Binding initialization
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -45,17 +52,80 @@ public class HomeFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinner.setAdapter(adapter);
 
+        homeViewModel.getURLimage().observe(getViewLifecycleOwner(), url->{
+            homeViewModel.setURLimage(url);
+        });
 
         homeViewModel.getURL().observe(getViewLifecycleOwner(), text -> {
             homeViewModel.setURL(text);
         });
+        homeViewModel.getmButtonPump().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean)
+                    binding.buttonPump.setVisibility(View.VISIBLE);
+                else
+                    binding.buttonPump.setVisibility(View.INVISIBLE);
+            }
+        });
+        homeViewModel.getmButtonGreenHouse().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean)
+                    binding.buttonGreenHouse.setVisibility(View.VISIBLE);
+                else
+                    binding.buttonGreenHouse.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        homeViewModel.getmHasCamera().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean)
+                    binding.buttonReqPict.setVisibility(View.VISIBLE);
+                else
+                    binding.buttonReqPict.setVisibility(View.INVISIBLE);
+            }
+        });
+        homeViewModel.getmButtonPumpPress().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean stat) {
+                        if(stat)
+                        {
+                            binding.buttonPump.setBackgroundColor(Color.GREEN);
+                            binding.buttonPump.setText("ON");
+                        }
+                        else
+                        {
+                            binding.buttonPump.setBackgroundColor(Color.RED);
+                            binding.buttonPump.setText("OFF");
+                        }
+                    }
+                });
+        homeViewModel.getmButtonPictReqPress().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(homeViewModel.getmButtonPictReqPress().getValue())
+                {
+                    binding.buttonReqPict.setText("Req text");
+                    binding.textHome.setVisibility(View.INVISIBLE);
+                    binding.imageViewHome.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    binding.buttonReqPict.setText("Req pict");
+                    binding.textHome.setVisibility(View.VISIBLE);
+                    binding.imageViewHome.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         homeViewModel.getIndexOfCurrentPot().observe(getViewLifecycleOwner(), new Observer<Integer>() {
 
-            @Override
-            public void onChanged(Integer integer) {
-                //Toast.makeText(getContext(), "got the indexof pot!", Toast.LENGTH_SHORT).show();
-                homeViewModel.setIndexOfCurrentPot(integer);
-            }
+                    @Override
+                    public void onChanged(Integer integer) {
+                        //Toast.makeText(getContext(), "got the indexof pot!", Toast.LENGTH_SHORT).show();
+                        homeViewModel.setIndexOfCurrentPot(integer);
+                    }
         });
 
         homeViewModel.getIndexOfCurrentUser().observe(getViewLifecycleOwner(), new Observer<Integer>() {
@@ -83,7 +153,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(NetworkHandler netHandler) {
                 networkHandler = netHandler;
-                if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null) {
+                if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null)
+                {
                     String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
 
                     networkHandler.sendGetRequest(aux, new NetworkCallback() {
@@ -100,8 +171,11 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onFailure() {
                             Toast.makeText(getContext(), "Network request failed for index "+homeViewModel.getIndexOfCurrentPot().getValue() +" !", Toast.LENGTH_SHORT).show();
+                            homeViewModel.handleError();
                         }
                     });
+
+
                 }
             }
 
@@ -116,43 +190,8 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-
-//        homeViewModel.getButtonText().observe(getViewLifecycleOwner(), text -> {
-//            binding.buttonHome.setText(text);
-//        });
-
-        homeViewModel.getmButtonPump().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                //Toast.makeText(getContext(), "Button state changed!", Toast.LENGTH_SHORT).show();
-                if(aBoolean)
-                    binding.buttonPump.setVisibility(View.VISIBLE);
-                else
-                    binding.buttonPump.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        homeViewModel.getmButtonGreenHouse().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                //Toast.makeText(getContext(), "Button state changed!", Toast.LENGTH_SHORT).show();
-                if(aBoolean)
-                    binding.buttonGreenHouse.setVisibility(View.VISIBLE);
-                else
-                    binding.buttonGreenHouse.setVisibility(View.INVISIBLE);
-            }
-        });
-
-
-        // Retrieving arguments from bundle
-
-
-
-
-
-        // Set up button click listener
         binding.buttonUpdate.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Button HOME FRAGMENT clicked!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Button HOME FRAGMENT clicked!", Toast.LENGTH_SHORT).show();
             if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null) {
                 String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
 
@@ -163,6 +202,7 @@ public class HomeFragment extends Fragment {
                         //homeViewModel.onButtonClicked();
                         //Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
                         homeViewModel.updateTextView(); // Execute this after the network request completes successfully
+
                     }
 
                     @Override
@@ -172,17 +212,47 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "Network request failed!", Toast.LENGTH_SHORT).show();
+                        homeViewModel.handleError();
                     }
                 });
-            }
+
+                networkHandler.sendPutRequest(aux,"PictReq:true");
+                String imageUrl = homeViewModel.getURLimage().getValue();
+                if(imageUrl != null)
+                    networkHandler.sendImageRequest(imageUrl, binding.imageViewHome, new NetworkCallback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onListGetSucces(List<Plant> plants) {
+
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
+                            homeViewModel.handleError();
+                        }
+                    });
+
+                }
 
             //homeViewModel.onButtonClicked(); // Update the button state in the ViewModel
+        });
+
+        binding.buttonReqPict.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeViewModel.setmButtonPictReqPress(!homeViewModel.getmButtonPictReqPress().getValue());
+            }
         });
 
         binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "Changed pot index to "+(position+1)+" !", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Changed pot index to "+(position+1)+" !", Toast.LENGTH_SHORT).show();
                 homeViewModel.setIndexOfCurrentPot(position+1);
             }
 
@@ -191,6 +261,24 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
+
+        binding.buttonPump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeViewModel.setmButtonPumpPress(!homeViewModel.getmButtonPumpPress().getValue());
+                if (networkHandler != null && homeViewModel != null && homeViewModel.getURL().getValue() != null) {
+                    String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() + "/" + homeViewModel.getIndexOfCurrentPot().getValue();
+                    networkHandler.sendPutRequest(url, "PumpStatus:" + !homeViewModel.getmButtonPumpPress().getValue());
+                }
+                else
+                    Toast.makeText(getContext(),"ERROR",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        executor.scheduleAtFixedRate(() -> updateImage(homeViewModel.getURLimage().getValue(),binding.imageViewHome), 0, 2, TimeUnit.SECONDS);
+
+
         return root;
     }
 
@@ -199,4 +287,27 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+    public void updateImage(String url, ImageView image)
+    {
+        if(url != null)
+            networkHandler.sendImageRequest(url, image, new NetworkCallback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onListGetSucces(List<Plant> plants) {
+
+                }
+
+                @Override
+                public void onFailure() {
+                    Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
+                    homeViewModel.handleError();
+                }
+            });
+
+    }
 }
+

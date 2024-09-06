@@ -10,9 +10,15 @@ import java.util.List;
 
 public class JSONresponseHandler implements Serializable {
     private int index, type;
-    private boolean sera, pompa;
+    private boolean sera, pompa,camera;
     private double temp, lumi, hum, pot, pho, ni, tempExt, humExt;
     private String plantName;
+    private String error = "no error";
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<Plant> parsePlantData(JSONArray jsonArray) throws JSONException {
         List<Plant> plantList = new ArrayList<>();
 
@@ -43,6 +49,9 @@ public class JSONresponseHandler implements Serializable {
 
         return plantList;
     }
+
+
+
     public void parsePotData(JSONObject response) throws JSONException  {
         try {
             if (response != null) {
@@ -55,11 +64,14 @@ public class JSONresponseHandler implements Serializable {
                 if (response.has("potType")) {
                     type = response.getInt("potType");
                 }
-                if (response.has("pompa")) {
-                    pompa = response.getBoolean("pompa");
+                if (response.has("hasCamera")) {
+                    camera = response.getBoolean("hasCamera");
                 }
-                if (response.has("sera")) {
-                    sera = response.getBoolean("sera");
+                if (response.has("pumpStatus")) {
+                    pompa = response.getBoolean("pumpStatus");
+                }
+                if (response.has("greenHouseStatus")) {
+                    sera = response.getBoolean("greenHouseStatus");
                 }
                 if (response.has("temp")) {
                     temp = response.getDouble("temp");
@@ -96,6 +108,10 @@ public class JSONresponseHandler implements Serializable {
 
     public int getType() {
         return type;
+    }
+
+    public boolean isCamera() {
+        return camera;
     }
 
     public boolean isPompa() {
@@ -141,5 +157,7 @@ public class JSONresponseHandler implements Serializable {
     public double getHumExt() {
         return humExt;
     }
+
+    public String getError(){return error;}
 // Additional getters for other fields can be added as needed.
 }

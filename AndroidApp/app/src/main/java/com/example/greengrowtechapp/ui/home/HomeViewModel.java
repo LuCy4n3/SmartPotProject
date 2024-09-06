@@ -11,14 +11,21 @@ public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
     private final MutableLiveData<String> mButtonText; // LiveData for button text
+    private final MutableLiveData<Boolean> mHasCamera;
     private final MutableLiveData<Boolean> mButtonPump; // LiveData for button state
+    private final MutableLiveData<Boolean> mButtonPumpPress; // LiveData for button state
+
     private final MutableLiveData<Boolean> mButtonGreenHouse; // LiveData for button state
+    private final MutableLiveData<Boolean> mButtonGreenHousePress; // LiveData for button state
+    private final MutableLiveData<Boolean> mButtonPictReqPress; // LiveData for button state
+
     private final MutableLiveData<Integer> mindexOfCurrentPot = new MutableLiveData<>();
     private final MutableLiveData<Integer> mindexOfCurrentUser = new MutableLiveData<>();
     private final MutableLiveData<String> mURL = new MutableLiveData<>();
+    private final MutableLiveData<String> mURLimage = new MutableLiveData<>();
 
 
-    private final MutableLiveData<JSONresponseHandler> mResponseHandler = new MutableLiveData<>();
+    private final MutableLiveData<JSONresponseHandler> mResponseHandler = new MutableLiveData<JSONresponseHandler>();
 
 
     private final MutableLiveData<NetworkHandler> mNetworkHandler = new MutableLiveData<>();
@@ -32,11 +39,23 @@ public class HomeViewModel extends ViewModel {
         mButtonText = new MutableLiveData<>();
         mButtonText.postValue("Click ME 2"); // Initial button text
 
+        mHasCamera = new MutableLiveData<>();
+        mHasCamera.postValue(false);
+
         mButtonPump = new MutableLiveData<>();
         mButtonPump.postValue(false); // Initial button state
 
+        mButtonPumpPress = new MutableLiveData<>();
+        mButtonPumpPress.postValue(false);
+
         mButtonGreenHouse = new MutableLiveData<>();
         mButtonGreenHouse.postValue(false); // Initial button state
+
+        mButtonGreenHousePress = new MutableLiveData<>();
+        mButtonGreenHousePress.postValue(false);
+
+        mButtonPictReqPress = new MutableLiveData<>();
+        mButtonPictReqPress.postValue(false);
 
         mResponseHandler.postValue(null);
 
@@ -47,6 +66,8 @@ public class HomeViewModel extends ViewModel {
         mindexOfCurrentUser.postValue(0);
 
         mURL.postValue(null);
+
+        mURLimage.postValue(null);
     }
     public MutableLiveData<Integer> getIndexOfCurrentPot() {
         return mindexOfCurrentPot;
@@ -66,6 +87,13 @@ public class HomeViewModel extends ViewModel {
     public void setURL(String url) {
         mURL.postValue(url);
     }
+    public MutableLiveData<String> getURLimage() {
+        return mURLimage;
+    }
+    public void setURLimage(String url) {
+        mURLimage.postValue(url);
+    }
+
     public void setResponseHandler(JSONresponseHandler obj)
     {
         mResponseHandler.postValue(obj);
@@ -84,9 +112,21 @@ public class HomeViewModel extends ViewModel {
     public LiveData<String> getText() {
         return mText;
     }
+    public void setText(String text){mText.postValue(text);}
 
     public LiveData<String> getButtonText() {
         return mButtonText;
+    }
+
+    public MutableLiveData<Boolean> getmHasCamera() {
+        return mHasCamera;
+    }
+
+    public void setmHasCamera(boolean val){
+        mHasCamera.postValue(val);
+    }
+    public void setmButtonPump(boolean val) {
+        mButtonPump.postValue(val);
     }
 
     public MutableLiveData<Boolean> getmButtonPump() {
@@ -96,6 +136,16 @@ public class HomeViewModel extends ViewModel {
     public MutableLiveData<Boolean> getmButtonGreenHouse() {
         return mButtonGreenHouse;
     }
+    public void setmButtonPumpPress(boolean val) {mButtonPumpPress.postValue(val);}
+    public MutableLiveData<Boolean> getmButtonPumpPress() {
+        return mButtonPumpPress;
+    }
+    public void setmButtonPictReqPress(boolean val) {mButtonPictReqPress.postValue(val);}
+
+    public MutableLiveData<Boolean> getmButtonPictReqPress() {
+        return mButtonPictReqPress;
+    }
+
 
 
 
@@ -146,5 +196,15 @@ public class HomeViewModel extends ViewModel {
             mButtonPump.postValue(false);
             mButtonGreenHouse.postValue(false);
         }
+        //=====================TODO:update everything here=================
+        boolean hasCamera,isPump;
+        hasCamera = auxHandler.isCamera();
+        isPump = auxHandler.isPompa();
+        mHasCamera.postValue(hasCamera);
+        mButtonPumpPress.postValue(isPump);
+    }
+    public void handleError()
+    {
+        mText.postValue(getResponseHandler().getValue().getError());
     }
 }

@@ -19,6 +19,7 @@ class Program
     private int temp = 0, hum = 0;
     private byte type = 0;
     private Pot pot = new Pot();
+    private int USER = 1;
 
     static string ToHexString(IEnumerable<byte> bytes) => "0x" + BitConverter.ToString(bytes.ToArray(), 0, bytes.Count());
     static string ToHexByte(Byte number) => "0x" + number.ToString("X2");
@@ -51,6 +52,8 @@ class Program
         serialPortStream.Close();
         await GetPotAsync(pot.PotId, pot);
         await Task.Delay(3000);
+        _ = InitPostPutTempHumAsync(0, 0, pot);
+
     }
     private bool GetIndex(byte[] data)
     {
@@ -133,7 +136,7 @@ class Program
                 {
                     _ = GetPotAsync(pot.PotId, pot);
                 }
-                finally { _ = PostPutAsync(temp, hum, pot); }
+                finally { _ = PostPutTempHumAsync(temp, hum, pot); }
                 break;
             case 2 when data.Length == 6:
                 hum = (data[5] << 8) | data[4];
@@ -142,7 +145,7 @@ class Program
                 {
                     _ = GetPotAsync(pot.PotId, pot);
                 }
-                finally { _ = PostPutAsync(temp, hum, pot); }
+                finally { _ = PostPutTempHumAsync(temp, hum, pot); }
 
                 break;
             case 7 when data.Length == 5:
@@ -159,7 +162,7 @@ class Program
                 break;
             case 5 when data.Length == 5:
                 Console.WriteLine($"Potentiometer: {ToHexByte(data[3])} {ToHexByte(data[4])}");
-                _ = PostPutAsync((data[3] << 8) | data[4], 0,pot);
+                _ = PostPutTempHumAsync((data[3] << 8) | data[4], 0,pot);
                 break;
             default:
                 Console.WriteLine("Invalid data: " + ToHexString(data));
@@ -168,42 +171,103 @@ class Program
         serialPortStream.Flush();
     }
 
-    private async Task PostPutAsync(int temp, int hum, Pot potMain) 
+    private async Task InitPostPutTempHumAsync(int temp, int hum, Pot potMain) 
     {
 
-  
+        var pot = new Pot { PlantName = null};
         Console.WriteLine("Trying to PUT ....");
-        var pot = new Pot { PotId = potMain.PotId, UserId = 1, PlantName = potMain.PlantName, PotName = potMain.PlantName, PotType = potMain.PotType, GreenHouseTemperature = (double)temp / 100, GreenHouseHumidity = (double)hum / 100 ,PumpStatus = potMain.PumpStatus};
 
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {   
-            httpClient.BaseAddress = new Uri("http://192.168.201.1:3000");
+            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                _ = GetPotAsync(potMain.PotId, potMain);
+
+            }
+            finally
+            {
+                pot = new Pot { PotId = potMain.PotId, UserId = 1, PlantName = potMain.PlantName, PotName = potMain.PlantName, PotType = potMain.PotType, GreenHouseTemperature = (double)temp / 100, GreenHouseHumidity = (double)hum / 100, PumpStatus = potMain.PumpStatus, PictReq = potMain.PictReq, HasCamera = potMain.HasCamera };
+
+                var response = await httpClient.PutAsJsonAsync("/api/Pot/"+USER+"/" + potMain.PotId, pot);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("PUT successfully updated!");
+                }
+                else
+                {
+                    Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                }
+            }
+        }
+    }
+    private async Task PostPutTempHumAsync(int temp, int hum, Pot potMain)
+    {
+
+
+        Console.WriteLine("Trying to PUT ....");
+        var pot = new Pot { PotId = potMain.PotId, UserId = 1, PlantName = potMain.PlantName, PotName = potMain.PlantName, PotType = potMain.PotType, GreenHouseTemperature = (double)temp / 100, GreenHouseHumidity = (double)hum / 100, PumpStatus = potMain.PumpStatus };
+
+        using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
+        {
+            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {
                 _ = GetPotAsync(potMain.PotId, potMain);
             }
-            finally { httpClient.Dispose(); }
-            var response = await httpClient.PutAsJsonAsync("/api/Pot/1/"+potMain.PotId, pot);
+            finally
+            {
+                string aux = "/api/Pot/" + USER + "/" + potMain.PotId + "/ExtTemp:" + (double)temp/100 + "&&ExtHum:" + (double)hum/100;
+                var response = await httpClient.PutAsync(aux, null);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("PUT successfully updated!");
+                }
+                else
+                {
+                    Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                }
+            }
+        }
+    }
+    private async Task PostPutPictReqAsync(Pot potMain)
+    {
+
+
+        Console.WriteLine("Trying to PUT ....");
+       
+        using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
+        {
+            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string aux = "/api/Pot/" + USER + "/" + potMain.PotId + "/PictReq:false";
+            var response = await httpClient.PutAsync(aux, null);
+
 
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Pot successfully updated!");
+                Console.WriteLine("Pict req put to false successfully updated!");
             }
             else
             {
                 Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
             }
+            
         }
     }
-
 
     private async Task GetPotAsync(int index, Pot pot)
     {
         Console.WriteLine("Trying to GET ...");
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {
-            httpClient.BaseAddress = new Uri("http://192.168.201.1:3000");
+            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await httpClient.GetAsync($"/api/Pot/1/{index}");
@@ -220,7 +284,7 @@ class Program
                 }
                 catch
                 {
-                    Console.WriteLine("Error on updating pot. this is the response: "+content);
+                    Console.WriteLine("Error on updating INIT pot. this is the response: "+content);
                 }
             }
             else
@@ -236,6 +300,8 @@ class Program
         original.PlantName = updated.PlantName; // Update plant name
         original.PumpStatus = updated.PumpStatus; // Update pump status
         original.GreenHouseStatus = updated.GreenHouseStatus; // Update greenhouse status
+        original.HasCamera = updated.HasCamera;
+        original.PictReq = updated.PictReq;
         //original.GreenHouseTemperature = updated.GreenHouseTemperature; // Update greenhouse temperature
        // original.GreenHouseHumidity = updated.GreenHouseHumidity; // Update greenhouse humidity
        // original.GreenHousePressure = updated.GreenHousePressure; // Update greenhouse pressure
@@ -256,6 +322,26 @@ class Program
         {
             HandleSeraStatus(pot.GreenHouseStatus);
         }
+        if (pot.PictReq)
+            HandlePictStatus(pot);
+    }
+
+    private void HandlePictStatus(Pot pot)
+    {
+        Console.WriteLine("Getting picture...");
+        try
+        {
+            _ = PostPutPictReqAsync(pot);
+
+        }
+        finally
+        {
+            serialPortStream.WriteByte(15);
+            serialPortStream.WriteByte(1);
+            serialPortStream.WriteByte(5);
+        }
+
+        //pot.PictReq = false;
     }
 
     private void HandlePumpStatus(bool activate)
@@ -321,7 +407,8 @@ public class Pot
     public int PotType { get; set; }
     public string PlantName { get; set; }
     public int UserId { get; set; }
-
+    public bool HasCamera { get; set; }
+    public bool PictReq { get; set;  }
     public bool PumpStatus { get; set; }
     public bool GreenHouseStatus { get; set; }
     public double GreenHouseTemperature { get; set; }

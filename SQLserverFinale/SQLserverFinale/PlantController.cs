@@ -118,7 +118,7 @@ namespace SQLserverFinale
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetPot), new { id = pot.PotId }, pot);
         }
-        [HttpPut("{UserId}/{PotId}/ExtTemp:{temp}&&ExtHum{hum}")]
+        [HttpPut("{UserId}/{PotId}/ExtTemp:{temp}&&ExtHum:{hum}")]
         public async Task<ActionResult<Pot>> UpdatePlantExtTempAndHumAsync(int UserId, int PotId, double temp, double hum)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
@@ -164,6 +164,23 @@ namespace SQLserverFinale
             }
 
             pot.PumpStatus = PumpStatus;
+
+            _context.Pot.Update(pot);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
+        [HttpPut("{UserId}/{PotId}/HasCamera:{HasCamera}")]
+        public async Task<ActionResult<Pot>> UpdateCameraAsync(int UserId, int PotId, bool HasCamera)
+        {
+            var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
+            if (pot == null)
+            {
+                NotFound();
+            }
+
+            pot.HasCamera = HasCamera;
 
             _context.Pot.Update(pot);
             await _context.SaveChangesAsync();
