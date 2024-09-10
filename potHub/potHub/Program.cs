@@ -15,7 +15,7 @@ using System.Diagnostics.CodeAnalysis;
 class Program
 {
     private SerialPortStream serialPortStream = new SerialPortStream("COM4", 2400);
-    private bool statusPompa = false, statusSera = false;
+    private bool statusPompa = false, statusSera = false,statusPic = false;
     private int temp = 0, hum = 0;
     private byte type = 0;
     private Pot pot = new Pot();
@@ -296,18 +296,12 @@ class Program
 
     private void UpdatePot(Pot original, Pot updated)
     {
-        original.PotName = updated.PotName; // Update pot name
-        original.PlantName = updated.PlantName; // Update plant name
-        original.PumpStatus = updated.PumpStatus; // Update pump status
-        original.GreenHouseStatus = updated.GreenHouseStatus; // Update greenhouse status
+        original.PotName = updated.PotName;
+        original.PlantName = updated.PlantName; 
+        original.PumpStatus = updated.PumpStatus; 
+        original.GreenHouseStatus = updated.GreenHouseStatus;
         original.HasCamera = updated.HasCamera;
         original.PictReq = updated.PictReq;
-        //original.GreenHouseTemperature = updated.GreenHouseTemperature; // Update greenhouse temperature
-       // original.GreenHouseHumidity = updated.GreenHouseHumidity; // Update greenhouse humidity
-       // original.GreenHousePressure = updated.GreenHousePressure; // Update greenhouse pressure
-        //original.PotPotassium = updated.PotPotassium; // Update potassium level
-      //  original.PotPhospor = updated.PotPhospor; // Update phosphor level
-       // original.PotNitrogen = updated.PotNitrogen; // Update nitrogen level
     }
 
     private void HandlePotStatus(Pot pot)
@@ -323,23 +317,17 @@ class Program
             HandleSeraStatus(pot.GreenHouseStatus);
         }
         if (pot.PictReq)
-            HandlePictStatus(pot);
+        { _ = PostPutPictReqAsync(pot); HandlePictStatus(pot); pot.PictReq = false; }
     }
 
     private void HandlePictStatus(Pot pot)
     {
         Console.WriteLine("Getting picture...");
-        try
-        {
-            _ = PostPutPictReqAsync(pot);
-
-        }
-        finally
-        {
-            serialPortStream.WriteByte(15);
-            serialPortStream.WriteByte(1);
-            serialPortStream.WriteByte(5);
-        }
+     
+        serialPortStream.WriteByte(15);
+        serialPortStream.WriteByte(1);
+        serialPortStream.WriteByte(5);
+        
 
         //pot.PictReq = false;
     }
@@ -394,7 +382,7 @@ class Program
             while (true)
             {
                 await GetPotAsync(pot.PotId, pot);
-                await Task.Delay(3000); // Refresh every 5 seconds
+                await Task.Delay(3000); 
             }
         });
     }

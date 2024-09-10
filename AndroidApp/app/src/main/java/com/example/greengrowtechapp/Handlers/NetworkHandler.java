@@ -44,10 +44,8 @@ public class NetworkHandler implements Serializable {
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
-                        // Set the image on the ImageView
                         imageView.setImageBitmap(response);
                         //errorText = "No error";
-                        // Call the success callback
                         if (callback != null) {
                             callback.onSuccess();
                         }
@@ -66,7 +64,6 @@ public class NetworkHandler implements Serializable {
                     }
                 });
 
-        // Add the request to the RequestQueue
         getRequestQueue().add(imageRequest);
     }
     public static synchronized NetworkHandler getInstance(Context context,JSONresponseHandler responseHandler) throws JSONException {
@@ -88,14 +85,14 @@ public class NetworkHandler implements Serializable {
             @Override
             public void onResponse(String response) {
                 errorText = "No error";
-                //to do:add response handler
+                //todo:add response handler
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 errorText = error.toString();
-                //to do: add response handler
+                //TODO: add response handler
             }
         };
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url+"/"+header, listener, errorListener);

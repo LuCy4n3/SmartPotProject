@@ -3,6 +3,7 @@ package com.example.greengrowtechapp;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
         updatePumpStatusBeforeFragmentStart(networkHandler,responseHandler, homeViewModel, notViewModel, dashViewModel);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
@@ -92,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         networkHandler.sendGetRequest(url, new NetworkCallback() {
             @Override
             public void onSuccess() {
-                // Assume the responseHandler updates the pumpStat internally
                 pumpStat = responseHandler.isPompa();
                 hasCamera = responseHandler.isCamera();
 
@@ -121,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 dashViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
                 dashViewModel.setURL(URLplant);
 
-                // Pass data to other ViewModels as necessary
                 //notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
                 //dashViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
             }

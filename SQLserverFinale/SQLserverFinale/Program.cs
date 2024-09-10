@@ -114,11 +114,7 @@ namespace SQLserverFinale
 
             app.UseAuthorization();
             app.UseHttpsRedirection();
-
-            app.UseStaticFiles(); // Enable serving static files
-
-
-
+            app.UseStaticFiles();
 
             app.MapControllers();
 

@@ -17,26 +17,26 @@ namespace SQLserverFinale
 
         // GET: api/Customer
         [HttpGet]
-        public ActionResult<IEnumerable<Plant>> GetPlant()
+        public ActionResult<IEnumerable<Plant>> GetPlants()
         {
             return _context.Plant.ToList();
         }
 
         // GET: api/Plant/1
         [HttpGet("{PlantName}")]
-        public async Task<IActionResult> SearchRecords(string PlantName)
+        public async Task<IActionResult> SearchPlantName(string PlantName)
         {
-            // Call the stored procedure from your Entity Framework Core context
-            var matchingRecords = await _context.SearchRecords(PlantName);
+            
+            var plant = await _context.SearchRecords(PlantName);
 
             // Check if any records were found
-            if (matchingRecords == null || matchingRecords.Count == 0)
+            if (plant == null || plant.Count == 0)
             {
                 return NotFound("No matching records found.");
             }
 
-            // Return the matching records as a response
-            return Ok(matchingRecords);
+            
+            return Ok(plant);
         }
        /* [HttpGet("{id}")]
         public ActionResult<Plant> GetPlant(int id)
@@ -50,8 +50,8 @@ namespace SQLserverFinale
         }*/
 
         // POST: api/plant
-        [HttpPost]
-        public async Task<IActionResult> CreateCustomer(Plant plant)
+        [HttpPost] // create a new plant
+        public async Task<IActionResult> CreatePlant(Plant plant)
         {
             if (plant == null)
             {
@@ -59,10 +59,10 @@ namespace SQLserverFinale
             }
             _context.Plant.Add(plant);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPlant), new { id = plant.PlantId }, plant);
+            return CreatedAtAction(nameof(GetPlants), new { id = plant.PlantId }, plant);
         }
-        [HttpDelete("{id}")]
-        public ActionResult<Plant> DelPlant(int id)
+        [HttpDelete("{id}")] // id has to be plantName
+        public ActionResult<Plant> DelPlant(string id)
         {
             var plant = _context.Plant.Find(id);
             if (plant == null)
@@ -70,10 +70,10 @@ namespace SQLserverFinale
                 return NotFound();
             }
 
-            _context.Plant.Remove(plant); // Remove the plant from the context
-            _context.SaveChanges(); // Save changes to persist the deletion
+            _context.Plant.Remove(plant); 
+            _context.SaveChanges(); 
 
-            return NoContent(); // Return a 204 No Content response
+            return NoContent(); 
         }
     }
     [Route("api/[controller]")]
@@ -88,13 +88,13 @@ namespace SQLserverFinale
 
         // GET: api/Pot
         [HttpGet]
-        public ActionResult<IEnumerable<Pot>> GetPot()
+        public ActionResult<IEnumerable<Pot>> GetPots() // get all pots
         {
             return _context.Pot.ToList();
         }
 
         // GET: api/Pot/1/1
-        [HttpGet("{UserId}/{PotId}")]
+        [HttpGet("{UserId}/{PotId}")] // get specific pot 
         public async Task<ActionResult<Pot>> GetPotAsync(int UserId,int PotId)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId); 
@@ -107,7 +107,7 @@ namespace SQLserverFinale
 
         // POST: api/Pot
         [HttpPost]
-        public async Task<IActionResult> CreatePot(Pot pot)
+        public async Task<IActionResult> CreatePot(Pot pot) // create new pot
         {
             if (pot == null)
             {
@@ -116,9 +116,9 @@ namespace SQLserverFinale
             Console.WriteLine(pot.PlantName);
             _context.Pot.Add(pot);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPot), new { id = pot.PotId }, pot);
+            return CreatedAtAction(nameof(GetPots), new { id = pot.PotId }, pot);
         }
-        [HttpPut("{UserId}/{PotId}/ExtTemp:{temp}&&ExtHum:{hum}")]
+        [HttpPut("{UserId}/{PotId}/ExtTemp:{temp}&&ExtHum:{hum}")] // update ext temp and hum used with pcb
         public async Task<ActionResult<Pot>> UpdatePlantExtTempAndHumAsync(int UserId, int PotId, double temp, double hum)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
@@ -137,7 +137,7 @@ namespace SQLserverFinale
             return NoContent();
 
         }
-        [HttpPut("{UserId}/{PotId}/PlantName:{PlantName}")]
+        [HttpPut("{UserId}/{PotId}/PlantName:{PlantName}")] // change plant name field
         public async Task<ActionResult<Pot>> UpdatePlantNameAsync(int UserId,int PotId , string PlantName)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
@@ -154,7 +154,7 @@ namespace SQLserverFinale
             return NoContent();
 
         }
-        [HttpPut("{UserId}/{PotId}/PumpStatus:{PumpStatus}")]
+        [HttpPut("{UserId}/{PotId}/PumpStatus:{PumpStatus}")] // turn on pump
         public async Task<ActionResult<Pot>> UpdatePumpStatusAsync(int UserId, int PotId, bool PumpStatus)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
@@ -171,7 +171,7 @@ namespace SQLserverFinale
             return NoContent();
 
         }
-        [HttpPut("{UserId}/{PotId}/HasCamera:{HasCamera}")]
+        [HttpPut("{UserId}/{PotId}/HasCamera:{HasCamera}")] // used like type field(add on)
         public async Task<ActionResult<Pot>> UpdateCameraAsync(int UserId, int PotId, bool HasCamera)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
@@ -188,7 +188,7 @@ namespace SQLserverFinale
             return NoContent();
 
         }
-        [HttpPut("{UserId}/{PotId}/PictReq:{PictReq}")]
+        [HttpPut("{UserId}/{PotId}/PictReq:{PictReq}")] // used with the camera add on
         public async Task<ActionResult<Pot>> UpdatePictReqAsync(int UserId, int PotId, bool PictReq)
         {
             var pot = await _context.Pot.FirstOrDefaultAsync(p => p.UserId == UserId && p.PotId == PotId);
@@ -196,8 +196,8 @@ namespace SQLserverFinale
             {
                 NotFound();
             }
-
-            pot.PictReq = PictReq;
+            if(PictReq!=null && pot!=null)
+                pot.PictReq = PictReq;
 
             _context.Pot.Update(pot);
             await _context.SaveChangesAsync();
@@ -207,7 +207,7 @@ namespace SQLserverFinale
         }
         // PUT: api/Pot/{UserId}/{PotId}
         [HttpPut("{UserId}/{PotId}")]
-        public async Task<IActionResult> UpdatePotAsync(int UserId, int PotId, Pot updatedPot)
+        public async Task<IActionResult> UpdatePotAsync(int UserId, int PotId, Pot updatedPot) // used only for debugging 
         {
             if (UserId != updatedPot.UserId || PotId != updatedPot.PotId)
             {
@@ -248,10 +248,10 @@ namespace SQLserverFinale
                 return NotFound();
             }
 
-            _context.Pot.Remove(pot); // Remove the plant from the context
-            _context.SaveChanges(); // Save changes to persist the deletion
+            _context.Pot.Remove(pot); 
+            _context.SaveChanges(); 
 
-            return NoContent(); // Return a 204 No Content response
+            return NoContent(); 
         }
     }
     [Route("api/[controller]")]
@@ -266,7 +266,7 @@ namespace SQLserverFinale
 
         // GET: api/User
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetUser()
+        public ActionResult<IEnumerable<User>> GetUsers()
         {
             return _context.User.ToList();
         }
@@ -294,7 +294,7 @@ namespace SQLserverFinale
             Console.WriteLine(user.UserId);
             _context.User.Add(user);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            return CreatedAtAction(nameof(GetUsers), new { id = user.UserId }, user);
         }
         [HttpPost("{UserId}/{UserPassword}")]
         public async Task<ActionResult<User>> UpdateUserAsync(int UserId,string UserName, string UserPassword)
@@ -330,7 +330,7 @@ namespace SQLserverFinale
             return NoContent(); // Return a 204 No Content response
         }
     }
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] // for uploading or getting the uploaded images work in progress
     [ApiController]
     public class ImageController : ControllerBase
     {
@@ -340,7 +340,6 @@ namespace SQLserverFinale
             if (image == null || image.Length == 0)
                 return BadRequest("No image file was uploaded.");
 
-            // You can save the image to a specific directory
             var directoryPath = Path.Combine("wwwroot", "images");
             if (!Directory.Exists(directoryPath))
             {
@@ -353,7 +352,6 @@ namespace SQLserverFinale
                 await image.CopyToAsync(stream);
             }
 
-            // Optionally, you can return the path of the uploaded image or any other response
             return Ok(new { FilePath = filePath });
         }
         // GET: api/image/{imageName}
@@ -366,11 +364,11 @@ namespace SQLserverFinale
                 return NotFound();
             }
 
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+           var fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "image/jpeg");
         }
     }
-    [ApiController]
+    /*[ApiController]
     [Route("api/[controller]")]
     public class VideoController : ControllerBase
     {
@@ -390,5 +388,5 @@ namespace SQLserverFinale
             Process ffmpegProcess = Process.Start(processInfo);
             return Ok("Stream started");
         }
-    }
+    }*/
 }
