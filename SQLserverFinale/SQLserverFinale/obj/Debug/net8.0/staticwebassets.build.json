@@ -1,11 +1,58 @@
 {
   "Version": 1,
-  "Hash": "PfRJyHsDdQlyVH3KfQy0jf/NrKyZsux0/ckpdJKmj8I=",
+  "Hash": "ROmE3VRreA0pN2Clsvw/Fsh5GFTi3XB/G2HUiJzyMZ4=",
   "Source": "SQLserverFinale",
   "BasePath": "_content/SQLserverFinale",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "SQLserverFinale\\wwwroot",
+      "Source": "SQLserverFinale",
+      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
+      "BasePath": "_content/SQLserverFinale",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\images\\arhiva of.png",
+      "SourceId": "SQLserverFinale",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
+      "BasePath": "_content/SQLserverFinale",
+      "RelativePath": "images/arhiva of.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\arhiva of.png"
+    },
+    {
+      "Identity": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\images\\test.jpg",
+      "SourceId": "SQLserverFinale",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
+      "BasePath": "_content/SQLserverFinale",
+      "RelativePath": "images/test.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\test.jpg"
+    }
+  ]
 }
