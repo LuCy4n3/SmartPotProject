@@ -1453,6 +1453,72 @@
 		)
 		(uuid "fff3001c-67e3-41d1-a9b1-d668789350fd")
 	)
+	(label "GND"
+		(at 168.91 99.06 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "032f4c9b-b1fe-4708-bde3-d9e8f57dbdeb")
+	)
+	(label "SW"
+		(at 133.35 93.98 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "18573b84-f4ae-4d2c-a309-670b57d6e657")
+	)
+	(label "VFB"
+		(at 132.08 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "31bf8282-da04-4194-b6b9-3419b628b128")
+	)
+	(label "VIN"
+		(at 130.81 88.9 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3260852b-f6f7-4984-a876-59efdc6db86b")
+	)
+	(label "VBST"
+		(at 168.91 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4d4799af-30ec-4f51-bbdd-acc2f31c8b80")
+	)
+	(label "EN"
+		(at 130.81 83.82 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6e4ba7a8-0076-4d52-ae50-d2508c21c4f4")
+	)
 	(symbol
 		(lib_id "Device:L")
 		(at 190.5 91.44 90)
