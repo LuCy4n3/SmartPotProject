@@ -1,0 +1,184 @@
+
+(kicad_symbol_lib (version 20211014) (generator kicad_symbol_editor)
+  (symbol "IRFR5505" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "Q" (id 0) (at 7.62 0.0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom left))
+    )
+    (property "Value" "IRFR5505" (id 1) (at 7.62 -2.54 0)
+      (effects (font (size 1.27 1.27)) (justify bottom left))
+    )
+    (property "Footprint" "IRFR5505:DPAK" (id 2) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MF" "Infineon Technologies" (id 4) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Description" "\nP-Channel 55 V 18A (Tc) 57W (Tc) Surface Mount D-Pak\n" (id 5) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Package" "TO-252 Infineon" (id 6) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Price" "None" (id 7) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "SnapEDA_Link" "https://www.snapeda.com/parts/IRFR5505/Infineon+Technologies/view-part/?ref=snap" (id 8) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MP" "IRFR5505" (id 9) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Purchase-URL" "https://www.snapeda.com/api/url_track_click_mouser/?unipart_id=140225&manufacturer=Infineon Technologies&part_name=IRFR5505&search_term=to-252" (id 10) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Availability" "In Stock" (id 11) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Check_prices" "https://www.snapeda.com/parts/IRFR5505/Infineon+Technologies/view-part/?ref=eda" (id 12) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (symbol "IRFR5505_0_0"
+      (polyline
+        (pts (xy -1.1176 2.413) (xy -1.1176 -2.54)) (stroke (width 0.254))
+      )
+      (polyline
+        (pts (xy -1.1176 -2.54) (xy -2.54 -2.54)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.54 1.905) (xy 0.5334 1.905)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.54 0.0) (xy 2.54 -1.905)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 0.508 -1.905) (xy 2.54 -1.905)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.54 2.54) (xy 2.54 1.905)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.54 1.905) (xy 5.08 1.905)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.08 -1.905) (xy 2.54 -1.905)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.54 -1.905) (xy 2.54 -2.54)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.2352 0.0) (xy 2.54 0.0)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 2.286 0.0) (xy 1.016 0.508)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 1.016 0.508) (xy 1.016 -0.508)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 1.016 -0.508) (xy 2.286 0.0)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 1.143 0.0) (xy 0.254 0.0)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 1.143 -0.254) (xy 2.032 0.0)) (stroke (width 0.3048))
+      )
+      (polyline
+        (pts (xy 2.032 0.0) (xy 1.143 0.254)) (stroke (width 0.3048))
+      )
+      (polyline
+        (pts (xy 1.143 0.254) (xy 1.143 0.0)) (stroke (width 0.3048))
+      )
+      (polyline
+        (pts (xy 1.143 0.0) (xy 1.397 0.0)) (stroke (width 0.3048))
+      )
+      (polyline
+        (pts (xy 5.08 -1.905) (xy 5.08 -0.762)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.08 -0.762) (xy 5.6356 0.4763)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.6356 0.4763) (xy 5.08 0.4763)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.08 0.4763) (xy 4.5244 0.4763)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 4.5244 0.4763) (xy 5.08 -0.762)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.715 -0.762) (xy 5.08 -0.762)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.08 -0.762) (xy 4.445 -0.762)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 4.445 -0.762) (xy 4.191 -1.016)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.715 -0.762) (xy 5.969 -0.508)) (stroke (width 0.1524))
+      )
+      (polyline
+        (pts (xy 5.08 0.4763) (xy 5.08 1.905)) (stroke (width 0.1524))
+      )
+      (circle (center 2.54 -1.905) (radius 0.127)
+        (stroke (width 0.4064)) (fill (type none))
+      )
+      (circle (center 2.54 1.905) (radius 0.127)
+        (stroke (width 0.4064)) (fill (type none))
+      )
+      (text "D" (at 1.27 2.54 0)
+        (effects (font (size 0.8128 0.8128)) (justify bottom left))
+      )
+      (text "S" (at 1.27 -3.175 0)
+        (effects (font (size 0.8128 0.8128)) (justify bottom left))
+      )
+      (text "G" (at -2.54 -1.27 0)
+        (effects (font (size 0.8128 0.8128)) (justify bottom left))
+      )
+      (rectangle (start -0.254 -2.54) (end 0.508 -1.27)
+        (stroke (width 0.1)) (fill (type outline))
+      )
+      (rectangle (start -0.254 1.27) (end 0.508 2.54)
+        (stroke (width 0.1)) (fill (type outline))
+      )
+      (rectangle (start -0.254 -0.889) (end 0.508 0.889)
+        (stroke (width 0.1)) (fill (type outline))
+      )
+      (polyline
+        (pts
+          (xy 5.08 -0.635)
+          (xy 5.5562 0.3969)
+          (xy 4.6037 0.3969)
+          (xy 5.08 -0.635)
+        )
+        (stroke (width 0.1524)) (fill (type outline))
+      )
+      (pin passive line (at -2.54 -2.54 0) (length 0)
+        (name "~"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin passive line (at 2.54 5.08 270.0) (length 2.54)
+        (name "~"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "4"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin passive line (at 2.54 -5.08 90.0) (length 2.54)
+        (name "~"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "3"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+    )
+  )
+)

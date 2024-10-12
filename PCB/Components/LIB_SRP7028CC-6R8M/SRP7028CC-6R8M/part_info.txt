@@ -1,0 +1,9 @@
+Manufacturer=Bourns
+PartNumber=SRP7028CC-6R8M
+PartCategory=Inductor
+PackageCategory=Inductors Precision Moulded
+PinCount=2
+Version=2.1
+Released=2023-08-10 03:52:29
+Downloaded=2024-10-11 12:36:39
+3D=Y

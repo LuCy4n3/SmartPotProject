@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "SRP7028CC-6R8M"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2023-08-10-03:52:29)
+    (mountForm default
+        (footprintRef "INDPM7366X300N")
+        (spec "System")
+    )
+)

@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_18436486"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-08-10-03:52:29)
+    (utime 2023-08-10-03:52:29)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "SRP7028CC-6R8M")
+)
+
+
+(pinAssign "ECS_18436486"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-08-10-03:52:29)
+    (utime 2023-08-10-03:52:29)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_18436486")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "SRP7028CC-6R8M")
+)
+
+
+(part "SRP7028CC-6R8M"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-08-10-03:52:29)
+    (utime 2023-08-10-03:52:29)
+    (packageRef "SRP7028CC-6R8M")
+    (pinAssignRef "ECS_18436486")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "L")
+    (property "description" "Ind,7.3x6.6x2.8mm,6.8uH+/-20%,4.5A,shd")
+    (property "Mouser_Part_Number" "652-SRP7028CC-6R8M")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/Bourns/SRP7028CC-6R8M?qs=1Kr7Jg1SGW%252BIPAy4fg1YuQ%3D%3D")
+    (property "Manufacturer_Name" "Bourns")
+    (property "Manufacturer_Part_Number" "SRP7028CC-6R8M")
+    (property "Datasheet_Link" "https://www.bourns.com/docs/Product-Datasheets/SRP7028CC.pdf")
+    (property "compAreaTopHeight" 3)
+)
+
+

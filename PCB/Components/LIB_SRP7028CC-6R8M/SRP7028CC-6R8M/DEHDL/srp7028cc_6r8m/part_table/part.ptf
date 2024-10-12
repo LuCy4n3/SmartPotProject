@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'SRP7028CC_6R8M'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Bourns", "SRP7028CC-6R8M" (!) = "", "INDPM7366X300N", "Inductors Precision Moulded", "652-SRP7028CC-6R8M", "https://www.mouser.co.uk/ProductDetail/Bourns/SRP7028CC-6R8M?qs=1Kr7Jg1SGW%252BIPAy4fg1YuQ%3D%3D", "Ind,7.3x6.6x2.8mm,6.8uH+/-20%,4.5A,shd", "https://www.bourns.com/docs/Product-Datasheets/SRP7028CC.pdf", "3 mm"
+END_PART
+
+END.
