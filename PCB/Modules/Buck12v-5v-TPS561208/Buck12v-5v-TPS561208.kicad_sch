@@ -1145,16 +1145,6 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 83.82) (xy 129.54 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0b7cb652-2374-43f9-b37e-92e09f22fafe")
-	)
-	(wire
-		(pts
 			(xy 213.36 106.68) (xy 213.36 114.3)
 		)
 		(stroke
@@ -1365,6 +1355,16 @@
 	)
 	(wire
 		(pts
+			(xy 129.54 83.82) (xy 133.35 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b475c864-0954-4a0f-8faf-365804d528c3")
+	)
+	(wire
+		(pts
 			(xy 132.08 86.36) (xy 132.08 102.87)
 		)
 		(stroke
@@ -1452,6 +1452,61 @@
 			(type default)
 		)
 		(uuid "fff3001c-67e3-41d1-a9b1-d668789350fd")
+	)
+	(label "EN"
+		(at 132.08 83.82 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4902d411-db13-446d-a77f-eb182f045d99")
+	)
+	(label "VBST"
+		(at 170.18 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5ba8c84f-1f4d-4cc0-a74c-f8889295e00c")
+	)
+	(label "VFB"
+		(at 132.08 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5ed38d8c-b9f5-45e9-8a3e-e2abec53baf3")
+	)
+	(label "SW"
+		(at 133.35 91.44 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6683c5d0-12b7-4046-9d56-19c2c7cc5f5f")
+	)
+	(label "VIN"
+		(at 132.08 88.9 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a04cf9fc-c158-4517-bddb-11f9a20f944c")
 	)
 	(symbol
 		(lib_id "Device:L")

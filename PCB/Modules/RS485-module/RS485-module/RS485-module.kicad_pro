@@ -179,9 +179,8 @@
       ],
       "track_widths": [
         0.0,
-        0.254,
-        0.381,
-        0.635
+        0.1,
+        0.15
       ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
@@ -443,13 +442,11 @@
     }
   },
   "libraries": {
-    "pinned_footprint_libs": [
-      "Components"
-    ],
+    "pinned_footprint_libs": [],
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "Buck12v-5v-TPS561208.kicad_pro",
+    "filename": "RS485-module.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -594,7 +591,7 @@
   },
   "sheets": [
     [
-      "c7a41e94-df1b-4c30-946c-176c6aa5482c",
+      "167dd5ee-ea45-46b3-91ef-4d4814007495",
       "Root"
     ]
   ],
