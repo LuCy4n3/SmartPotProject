@@ -546,7 +546,7 @@
 							)
 						)
 					)
-					(number ""
+					(number "COM"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -564,7 +564,7 @@
 							)
 						)
 					)
-					(number ""
+					(number "OPEN"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -582,7 +582,7 @@
 							)
 						)
 					)
-					(number ""
+					(number "V+"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -600,7 +600,7 @@
 							)
 						)
 					)
-					(number ""
+					(number "V-"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1478,6 +1478,16 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 92.71) (xy 165.1 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81e75a27-3984-4296-a354-36ecdfde4a84")
+	)
+	(wire
+		(pts
 			(xy 130.81 80.01) (xy 134.62 80.01)
 		)
 		(stroke
@@ -1588,16 +1598,6 @@
 	)
 	(wire
 		(pts
-			(xy 160.02 92.71) (xy 165.1 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e3ef8f8e-8f20-418b-b02a-1fafc2dec6ae")
-	)
-	(wire
-		(pts
 			(xy 165.1 100.33) (xy 165.1 95.25)
 		)
 		(stroke
@@ -1638,75 +1638,16 @@
 		)
 		(uuid "c6fda804-1505-4615-9f55-4c8f32a9feb6")
 	)
-	(symbol
-		(lib_id "Connector:Screw_Terminal_01x02")
-		(at 170.18 92.71 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+	(label "OPEN"
+		(at 161.29 92.71 0)
 		(fields_autoplaced yes)
-		(uuid "062fc881-1a42-4fbc-b148-417606095df6")
-		(property "Reference" "J1"
-			(at 172.72 92.7099 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left bottom)
 		)
-		(property "Value" "Screw_Terminal_01x02"
-			(at 172.72 95.2499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TerminalBlock:TerminalBlock_Xinya_XY308-2.54-2P_1x02_P2.54mm_Horizontal"
-			(at 170.18 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 170.18 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 170.18 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "68ffe93c-0a4a-40aa-b4fb-2927ae7d7048")
-		)
-		(pin "2"
-			(uuid "9221e2f4-4b14-4dbc-b8c4-f782f5861f02")
-		)
-		(instances
-			(project ""
-				(path "/d710513c-5f39-4905-b96f-4745a603cd73"
-					(reference "J1")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "da52cd51-5f7a-4fba-a958-5b2cdc3bf4cd")
 	)
 	(symbol
 		(lib_id "Transistor_Array:ULN2003A")
@@ -1907,80 +1848,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Relay:AWHSH112DM00G")
-		(at 149.86 88.9 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "434ec014-33b9-45f8-90b7-d2873d659aae")
-		(property "Reference" "K1"
-			(at 150.1775 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "AWHSH112DM00G "
-			(at 150.1775 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Relay_THT:AWHSH112DM00G"
-			(at 149.86 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 149.86 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 149.86 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin ""
-			(uuid "8763501c-5fdb-4a9e-8b89-3369b8977871")
-		)
-		(pin ""
-			(uuid "fcfb4827-4e06-45a2-be49-9331eaf1424c")
-		)
-		(pin ""
-			(uuid "ce906cb8-6e87-4cbd-ad45-e40f03caee85")
-		)
-		(pin ""
-			(uuid "334eb9ca-6e0c-42f8-a790-e990b7b523ca")
-		)
-		(instances
-			(project ""
-				(path "/d710513c-5f39-4905-b96f-4745a603cd73"
-					(reference "K1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+12V")
 		(at 130.81 74.93 0)
 		(unit 1)
@@ -2047,6 +1914,80 @@
 		)
 	)
 	(symbol
+		(lib_id "Relay:AWHSH112DM00G")
+		(at 149.86 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ac60a690-8f89-4511-9a1b-ffbc3542dad0")
+		(property "Reference" "K1"
+			(at 150.1775 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AWHSH112DM00G "
+			(at 150.1775 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Relay_THT:AWHSH112DM00G"
+			(at 149.86 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 149.86 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 149.86 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "V+"
+			(uuid "3c6c3bac-3793-45ba-82f7-b502d62c1f14")
+		)
+		(pin "V-"
+			(uuid "0ab5bc8a-2071-4a7f-ac77-a1adcaf0bf67")
+		)
+		(pin "OPEN"
+			(uuid "035a397a-43a2-4f73-b0e6-5d265bcce5fb")
+		)
+		(pin "COM"
+			(uuid "9c84a729-aaaa-42e2-bd03-48622f0abb08")
+		)
+		(instances
+			(project ""
+				(path "/d710513c-5f39-4905-b96f-4745a603cd73"
+					(reference "K1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 114.3 107.95 0)
 		(unit 1)
@@ -2107,6 +2048,76 @@
 			(project ""
 				(path "/d710513c-5f39-4905-b96f-4745a603cd73"
 					(reference "#PWR02")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Screw_Terminal_01x02")
+		(at 170.18 92.71 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ff28b719-96b4-4878-8e30-8943edc5c431")
+		(property "Reference" "J2"
+			(at 172.72 92.7099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Screw_Terminal_01x02"
+			(at 172.72 95.2499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TerminalBlock:TerminalBlock_bornier-2_P5.08mm"
+			(at 170.18 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 170.18 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 170.18 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4da0777f-4468-4646-a869-9e765fe4ccac")
+		)
+		(pin "2"
+			(uuid "33677d14-16af-46af-8675-8cab1f0f3637")
+		)
+		(instances
+			(project ""
+				(path "/d710513c-5f39-4905-b96f-4745a603cd73"
+					(reference "J2")
 					(unit 1)
 				)
 			)

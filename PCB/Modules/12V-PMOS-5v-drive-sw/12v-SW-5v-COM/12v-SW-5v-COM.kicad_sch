@@ -1112,7 +1112,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "6f988add-fd0d-4c71-ab5c-ac0e8ac7a14d")
+		(uuid "2b473112-b46b-4b3f-bd01-42bf6f10317b")
 		(property "Reference" "J1"
 			(at 176.53 69.8499 0)
 			(effects
@@ -1131,7 +1131,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TerminalBlock:TerminalBlock_Xinya_XY308-2.54-2P_1x02_P2.54mm_Horizontal"
+		(property "Footprint" "TerminalBlock:TerminalBlock_bornier-2_P5.08mm"
 			(at 173.99 69.85 0)
 			(effects
 				(font
@@ -1159,10 +1159,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "858bd456-4975-4ab3-bd2d-446cae2012b7")
+			(uuid "a798d5dd-5417-400c-94c9-1c507faddcf8")
 		)
 		(pin "2"
-			(uuid "22f2a13d-53a0-4d4f-af12-a959d8327a34")
+			(uuid "fb4fe49c-4fc6-48ab-8ee1-318b1bb7672a")
 		)
 		(instances
 			(project ""
@@ -1183,7 +1183,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "832e721f-0d3e-46f6-a744-29e4a7191a56")
-		(property "Reference" "1"
+		(property "Reference" "Q1"
 			(at 149.86 76.2 90)
 			(effects
 				(font
@@ -1199,7 +1199,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_S-Mini:S-MINI_TOS"
 			(at 157.48 59.69 0)
 			(effects
 				(font
@@ -1240,7 +1240,7 @@
 		(instances
 			(project ""
 				(path "/ff6dfdf3-1cbb-4288-8f19-32c918aa735a"
-					(reference "1")
+					(reference "Q1")
 					(unit 1)
 				)
 			)
