@@ -523,7 +523,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C1"
-			(at -0.075 2.15 360)
+			(at -0.075 2.15 0)
 			(layer "F.SilkS")
 			(uuid "01bd6c48-01e8-4b15-9a91-5ea25a85f6a0")
 			(effects
@@ -534,7 +534,7 @@
 			)
 		)
 		(property "Value" "C"
-			(at 0 1.85 360)
+			(at 0 1.85 0)
 			(layer "F.Fab")
 			(uuid "4e01518d-35c9-4d2a-adef-0ef8a107893f")
 			(effects
@@ -689,7 +689,7 @@
 			(uuid "c73da9aa-bf0c-487a-94c2-c88798e7a070")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "8b405fdb-f6b7-446e-bbb2-92109ffac42a")
 			(effects
@@ -1238,7 +1238,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R1"
-			(at -0.1125 2.2 360)
+			(at -0.1125 2.2 0)
 			(layer "F.SilkS")
 			(uuid "f14b606b-ce45-461e-958d-eed50c6bfc34")
 			(effects
@@ -1249,7 +1249,7 @@
 			)
 		)
 		(property "Value" "10kOhm"
-			(at 0 1.82 360)
+			(at 0 1.82 0)
 			(layer "F.Fab")
 			(uuid "75481f3d-e4a7-41df-a62a-bf7d57511fa0")
 			(effects
@@ -1404,7 +1404,7 @@
 			(uuid "48ebf769-4d6a-4a6e-b26e-dc0e07fb0f2b")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "61990779-0e17-432c-b760-97db81118fa1")
 			(effects
