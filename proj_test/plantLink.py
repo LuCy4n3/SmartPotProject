@@ -1,13 +1,22 @@
 import asyncio
 from bs4 import BeautifulSoup
-from playwright.async_api import async_playwright
-import subprocess
+from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 import time
+import random
+import openpyxl
 
-async def new_page(link,browser):
+listOfNumb = [2, 3, 4, 5, 6, 7]
+
+workbook = openpyxl.Workbook()
+# Select the default sheet (usually named 'Sheet')
+sheetCompl = workbook.create_sheet("completed",1)
+sheetFailed = workbook.create_sheet("failed",2)
+sheetPlants = workbook.create_sheet("plants",3)
+
+
+async def new_page(link, browser, retry_attempts=3):
     context = await browser.new_context()
 
-    # Set the cookies from your Postman request
     await context.add_cookies([
         {
             'name': 'cusess',
@@ -35,10 +44,8 @@ async def new_page(link,browser):
         }
     ])
 
-    # Create a new page
     page = await context.new_page()
 
-    # Set the headers to emulate Postman
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -56,41 +63,57 @@ async def new_page(link,browser):
         'Upgrade-Insecure-Requests': '1'
     }
 
-    # Set extra HTTP headers
     await page.set_extra_http_headers(headers)
 
-    # Navigate to the target URL
-    await page.goto("https://garden.org"+ link)
+    attempt = 0
+    while attempt < retry_attempts:
+        try:
+            await asyncio.wait_for(page.goto("https://garden.org" + link), timeout=5)
+            content = await page.content()
+            await page.close()
+            await context.close()
+            return content
+        except asyncio.TimeoutError:
+            attempt += 1
+            retry_delay = random.uniform(1, 3)
+            print(f"Timeout reached. Retrying in {retry_delay:.2f} seconds...")
+            await asyncio.sleep(retry_delay)
+        except Exception as e:
+            print(f"Exception occurred: {e}. Retrying...")
+            attempt += 1
+            await page.close()
+            page = await context.new_page()  # reopen page for new attempt
 
-    # Print the response content
-    content = await page.content()
-    #print(content)
-    context.close()
-
-    return content
+    await page.close()
+    await context.close()
+    print(f"Failed to fetch {link} after {retry_attempts} attempts.")
+    return None
 
 async def fetch_links(content, link):
+    if content is None:
+        print(f"Skipping link due to failed fetch: {link['href']}")
+        return
 
-    print("https://garden.org" + link)
-    
-    # Process the content with BeautifulSoup
+    print("Processing content for link:", "https://garden.org" + link['href'])
     soup = BeautifulSoup(content, "html.parser")
-    if soup.get_text() != "":
-        holders = soup.find("div", {"id": "_search_and_browse"}).find_next('div')
-        if holders:
-            divLink = holders.find("div", {"class": "card-body"})
-            if divLink:
-                link = divLink.find('a')
-                if link:
-                    print(link['href'])
-
+    holders = soup.find("div", {"id": "_search_and_browse"})
+    if holders:
+        divLink = holders.find_next('div').find("div", {"class": "card-body"})
+        if divLink:
+            inner_link = divLink.find('a')
+            if inner_link:
+                print(inner_link['href'])
+                currentSheet = workbook.get_sheet_by_name('completed')
+                currentSheet.append([link.get_text(),"http://garden.org" + inner_link['href']])
+                #compl.write("https://garden.org" +inner_link['href']+"\n")
+    else:
+        print(f"No '_search_and_browse' section found for link: {link['href']}")
 
 async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
 
-        # Set the cookies from your Postman request
         await context.add_cookies([
             {
                 'name': 'cusess',
@@ -118,10 +141,7 @@ async def main():
             }
         ])
 
-        # Create a new page
         page = await context.new_page()
-
-        # Set the headers to emulate Postman
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -139,28 +159,40 @@ async def main():
             'Upgrade-Insecure-Requests': '1'
         }
 
-        # Set extra HTTP headers
         await page.set_extra_http_headers(headers)
-
-        # Navigate to the target URL
         await page.goto("https://garden.org/plants/group/show_list.php")
 
-        # Print the response content
         content = await page.content()
-        #print(content)
-
         soup = BeautifulSoup(content, "html.parser")
-        context.close()
-        if soup.get_text() != "":
-          #print(soup)
-          print("SEX cu mama lui dragos")
-          for caption in soup.find_all('table'):
-            for links in caption.find_all('a'):
-                content = await new_page(links['href'],browser)
-                await fetch_links(content,links['href'])
-                print(links.get_text() + " http://garden.org" + links['href'])
-        # Close the browser
+        print('got data')
+        time.sleep(0.9)
+        await context.close()
+        
+        if soup.get_text():
+            for caption in soup.find_all('table'):
+                for links in caption.find_all('a'):
+                    print(links['href'])
+                    time.sleep(random.choice(listOfNumb) / 10)
+                    content = await new_page(links['href'], browser)
+                    if content :
+                        time.sleep(random.choice(listOfNumb)/5)
+                        await fetch_links(content,links)
+                        print(links.get_text() + " http://garden.org" + links['href'])
+                        currentSheet = workbook.get_sheet_by_name('plants')
+                        currentSheet.append([links.get_text(),"http://garden.org"+links['href']])
+                        #plants.write(links.get_text()+"\n")
+                    else :
+                        print('got timeout')
+                        currentSheet = workbook.get_sheet_by_name('failed')
+                        currentSheet.append([links.get_text(),"http://garden.org" + links['href']])
+                        #failed.write("http://garden.org" + links['href']+"\n")
+                        exit
         await browser.close()
+        #compl.close()
+        #failed.close()
+        #plants.close()
+        workbook.save("linksForPlants.xlsx")
+        print("file saved!")
 
-# Run the script
+
 asyncio.run(main())
