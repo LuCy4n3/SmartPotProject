@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ROmE3VRreA0pN2Clsvw/Fsh5GFTi3XB/G2HUiJzyMZ4=",
+  "Hash": "cn/JCAO8vBnHv0pFR6ssfombpfGkD4Oh1vRnBCU2ByY=",
   "Source": "SQLserverFinale",
   "BasePath": "_content/SQLserverFinale",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "SQLserverFinale\\wwwroot",
       "Source": "SQLserverFinale",
-      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
+      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
       "BasePath": "_content/SQLserverFinale",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\images\\arhiva of.png",
+      "Identity": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\wwwroot\\images\\arhiva of.png",
       "SourceId": "SQLserverFinale",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
+      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
       "BasePath": "_content/SQLserverFinale",
       "RelativePath": "images/arhiva of.png",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\images\\arhiva of.png"
     },
     {
-      "Identity": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\images\\test.jpg",
+      "Identity": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\wwwroot\\images\\test.jpg",
       "SourceId": "SQLserverFinale",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
+      "ContentRoot": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\wwwroot\\",
       "BasePath": "_content/SQLserverFinale",
       "RelativePath": "images/test.jpg",
       "AssetKind": "All",

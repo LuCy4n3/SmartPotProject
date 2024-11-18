@@ -24,6 +24,7 @@ namespace SQLserverFinale.Migrations
             modelBuilder.Entity("SQLserverFinale.Models.Plant", b =>
                 {
                     b.Property<string>("PlantName")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -32,10 +33,16 @@ namespace SQLserverFinale.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("FlowerTime")
-                        .HasColumnType("int");
+                    b.Property<string>("FlowerTime")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("FruitingTime")
+                    b.Property<string>("FruitingTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Humidity")
                         .HasColumnType("int");
 
                     b.Property<string>("LifeCycle")
@@ -49,10 +56,16 @@ namespace SQLserverFinale.Migrations
                     b.Property<int>("MinTemp")
                         .HasColumnType("int");
 
+                    b.Property<int>("Nitrogen")
+                        .HasColumnType("int");
+
                     b.Property<int>("PhMaxVal")
                         .HasColumnType("int");
 
                     b.Property<int>("PhMinVal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Phosphorus")
                         .HasColumnType("int");
 
                     b.Property<string>("PlantGroup")
@@ -68,13 +81,18 @@ namespace SQLserverFinale.Migrations
                     b.Property<int>("PlantHeight")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlantId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PlantWidth")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantId"));
+                    b.Property<int>("Potassium")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PlantWidth")
+                    b.Property<string>("SoilType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Spacing")
                         .HasColumnType("int");
 
                     b.Property<int>("SunReq")

@@ -5073,11 +5073,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\SQLserverFinale.csproj",
+      "projectUniqueName": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\SQLserverFinale.csproj",
       "projectName": "SQLserverFinale",
-      "projectPath": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\SQLserverFinale.csproj",
+      "projectPath": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\SQLserverFinale.csproj",
       "packagesPath": "C:\\Users\\simon\\.nuget\\packages\\",
-      "outputPath": "C:\\WORK\\Proiect\\ProiectGhiveci\\SQLserverFinale\\SQLserverFinale\\obj\\",
+      "outputPath": "C:\\WORK\\Proiect\\ProiectGhiveci\\SmartPotProject\\SQLserverFinale\\SQLserverFinale\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

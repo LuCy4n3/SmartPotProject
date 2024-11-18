@@ -14,6 +14,7 @@ sheetFailed = workbook.create_sheet("failed",2)
 sheetPlants = workbook.create_sheet("plants",3)
 
 
+
 async def new_page(link, browser, retry_attempts=3):
     context = await browser.new_context()
 
@@ -104,7 +105,7 @@ async def fetch_links(content, link):
             if inner_link:
                 print(inner_link['href'])
                 currentSheet = workbook.get_sheet_by_name('completed')
-                currentSheet.append([link.get_text(),"http://garden.org" + inner_link['href']])
+                currentSheet.append([link.get_text(),"https://garden.org" + inner_link['href']])
                 #compl.write("https://garden.org" +inner_link['href']+"\n")
     else:
         print(f"No '_search_and_browse' section found for link: {link['href']}")
@@ -160,11 +161,13 @@ async def main():
         }
 
         await page.set_extra_http_headers(headers)
-        await page.goto("https://garden.org/plants/group/show_list.php")
+        await page.goto("https://garden.org/plants/browse/plants/children/181473/")
 
         content = await page.content()
+        await page.close()
         soup = BeautifulSoup(content, "html.parser")
         print('got data')
+        print(content)
         time.sleep(0.9)
         await context.close()
         

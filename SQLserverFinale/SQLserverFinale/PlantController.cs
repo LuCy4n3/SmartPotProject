@@ -1,4 +1,4 @@
-﻿    using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLserverFinale.Models;
 using System.Diagnostics;
@@ -59,21 +59,21 @@ namespace SQLserverFinale
             }
             _context.Plant.Add(plant);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPlants), new { id = plant.PlantId }, plant);
+            return CreatedAtAction(nameof(GetPlants), plant);
         }
-        [HttpDelete("{id}")] // id has to be plantName
-        public ActionResult<Plant> DelPlant(string id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePlant(string id)
         {
-            var plant = _context.Plant.Find(id);
+            var plant = await _context.Plant.FindAsync(id);
             if (plant == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Plant not found" });
             }
 
-            _context.Plant.Remove(plant); 
-            _context.SaveChanges(); 
+            _context.Plant.Remove(plant);
+            await _context.SaveChangesAsync();
 
-            return NoContent(); 
+            return Ok(new { message = "Plant deleted successfully" });
         }
     }
     [Route("api/[controller]")]
