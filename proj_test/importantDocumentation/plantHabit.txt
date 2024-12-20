@@ -1,0 +1,28 @@
+Here’s a simple list of plant habits:
+
+1.Trees – Tall plants with a single woody trunk.
+Examples: Oak (Quercus), Pine (Pinus).
+
+2.Shrubs – Shorter plants with multiple woody stems.
+Examples: Rose (Rosa), Lavender (Lavandula).
+
+3.Herbs (Herbaceous Plants) – Non-woody, soft, green plants.
+Examples: Mint (Mentha), Basil (Ocimum).
+
+4.Climbers – Plants that climb by twining or using tendrils for support.
+Examples: Ivy (Hedera), Grape (Vitis).
+
+5.Creepers – Plants that grow horizontally along the ground.
+Examples: Strawberry (Fragaria), Sweet Potato (Ipomoea batatas).
+
+6.Succulents – Plants with thick, fleshy parts for water storage.
+Examples: Aloe (Aloe vera), Cactus (Cactaceae).
+
+7.Aquatic Plants – Plants adapted to live in or on water.
+Examples: Lotus (Nelumbo), Water Lily (Nymphaea).
+
+8.Epiphytes – Plants that grow on other plants for support (not parasitic).
+Examples: Orchids (Orchidaceae), Ferns (Pteridophyta).
+
+9.Grasses – Narrow-leaved plants, often forming turf.
+Examples: Wheat (Triticum), Bamboo (Bambusoideae).

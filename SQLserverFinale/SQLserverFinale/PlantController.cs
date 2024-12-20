@@ -38,28 +38,31 @@ namespace SQLserverFinale
             
             return Ok(plant);
         }
-       /* [HttpGet("{id}")]
-        public ActionResult<Plant> GetPlant(int id)
-        {
-            var plant = _context.Plant.Find(id);
-            if (plant == null)
-            {
-                return NotFound();
-            }
-            return plant;
-        }*/
+        /* [HttpGet("{id}")]
+         public ActionResult<Plant> GetPlant(int id)
+         {
+             var plant = _context.Plant.Find(id);
+             if (plant == null)
+             {
+                 return NotFound();
+             }
+             return plant;
+         }*/
 
         // POST: api/plant
-        [HttpPost] // create a new plant
-        public async Task<IActionResult> CreatePlant(Plant plant)
+        [HttpPost]
+        public async Task<IActionResult> CreatePlants([FromBody] List<Plant> plants)
         {
-            if (plant == null)
+            if (plants == null || !plants.Any())
             {
-                return BadRequest();
+                return BadRequest("No plants were provided.");
             }
-            _context.Plant.Add(plant);
+
+            // Add all plants to the database
+            _context.Plant.AddRange(plants);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPlants), plant);
+
+            return Ok(new { message = $"{plants.Count} plants created successfully." });
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlant(string id)

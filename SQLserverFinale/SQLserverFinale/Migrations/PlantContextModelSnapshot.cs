@@ -59,11 +59,11 @@ namespace SQLserverFinale.Migrations
                     b.Property<int>("Nitrogen")
                         .HasColumnType("int");
 
-                    b.Property<int>("PhMaxVal")
-                        .HasColumnType("int");
+                    b.Property<float>("PhMaxVal")
+                        .HasColumnType("real");
 
-                    b.Property<int>("PhMinVal")
-                        .HasColumnType("int");
+                    b.Property<float>("PhMinVal")
+                        .HasColumnType("real");
 
                     b.Property<int>("Phosphorus")
                         .HasColumnType("int");

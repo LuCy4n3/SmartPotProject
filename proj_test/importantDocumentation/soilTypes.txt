@@ -1,0 +1,43 @@
+Here’s a list of soil types:
+
+1.Sandy Soil
+
+Light, well-drained, and low in nutrients.
+Poor water retention.
+Examples: Found in deserts, coastal areas.
+
+2.Clay Soil
+
+Heavy, compact, and rich in nutrients.
+Retains water but drains poorly.
+Examples: Common in wetlands.
+
+3.Silt Soil
+
+Smooth, fine particles that hold moisture well.
+Fertile but prone to erosion.
+Examples: Found in river valleys.
+
+4.Loamy Soil
+
+A mix of sand, silt, and clay.
+Fertile, well-drained, and good for most plants.
+Examples: Ideal for gardens and crops.
+
+5.Peaty Soil
+
+Dark, rich in organic matter, and acidic.
+Retains water well but may lack nutrients.
+Examples: Found in bogs.
+
+6.Chalky Soil
+
+Alkaline, stony, and poor in nutrients.
+Drains well but not ideal for acid-loving plants.
+Examples: Found in limestone regions.
+
+7.Saline Soil
+
+High salt content, often in arid or coastal areas.
+Poor for most plants unless salt-tolerant.
+Examples: Found in deserts or coastal lands.

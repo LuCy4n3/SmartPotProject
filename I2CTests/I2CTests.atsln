@@ -7,20 +7,34 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "I2CTests", "I2CTests\I2CTes
 EndProject
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "SHT32Test", "SHT32Test\SHT32Test.cppproj", "{F0D08291-BBA4-4A0D-8E72-139A33579CA3}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "drona TestMCU", "..\..\..\..\drona TestMCU\drona TestMCU.cproj", "{11AC6A64-4527-4E84-9674-4FCABFCE8237}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
 		Debug|AVR = Debug|AVR
+		Release|ARM = Release|ARM
 		Release|AVR = Release|AVR
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|ARM.ActiveCfg = Debug|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|AVR.ActiveCfg = Debug|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|AVR.Build.0 = Debug|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|ARM.ActiveCfg = Release|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|AVR.ActiveCfg = Release|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|AVR.Build.0 = Release|AVR
+		{F0D08291-BBA4-4A0D-8E72-139A33579CA3}.Debug|ARM.ActiveCfg = Debug|AVR
 		{F0D08291-BBA4-4A0D-8E72-139A33579CA3}.Debug|AVR.ActiveCfg = Debug|AVR
 		{F0D08291-BBA4-4A0D-8E72-139A33579CA3}.Debug|AVR.Build.0 = Debug|AVR
+		{F0D08291-BBA4-4A0D-8E72-139A33579CA3}.Release|ARM.ActiveCfg = Release|AVR
 		{F0D08291-BBA4-4A0D-8E72-139A33579CA3}.Release|AVR.ActiveCfg = Release|AVR
 		{F0D08291-BBA4-4A0D-8E72-139A33579CA3}.Release|AVR.Build.0 = Release|AVR
+		{11AC6A64-4527-4E84-9674-4FCABFCE8237}.Debug|ARM.ActiveCfg = Debug|ARM
+		{11AC6A64-4527-4E84-9674-4FCABFCE8237}.Debug|ARM.Build.0 = Debug|ARM
+		{11AC6A64-4527-4E84-9674-4FCABFCE8237}.Debug|AVR.ActiveCfg = Debug|ARM
+		{11AC6A64-4527-4E84-9674-4FCABFCE8237}.Release|ARM.ActiveCfg = Release|ARM
+		{11AC6A64-4527-4E84-9674-4FCABFCE8237}.Release|ARM.Build.0 = Release|ARM
+		{11AC6A64-4527-4E84-9674-4FCABFCE8237}.Release|AVR.ActiveCfg = Release|ARM
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,8 +29,8 @@ namespace SQLserverFinale.Models
         [MaxLength(100)]
         public string FlowerColor { get; set; }
 
-        public int PhMinVal { get; set; }
-        public int PhMaxVal { get; set; }
+        public float PhMinVal { get; set; }
+        public float PhMaxVal { get; set; }
         public int MinTemp { get; set; }
         public int MaxTemp { get; set; }
         public int SunReq { get; set; }

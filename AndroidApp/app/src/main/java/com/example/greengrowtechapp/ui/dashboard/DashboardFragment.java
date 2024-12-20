@@ -163,7 +163,7 @@ public class DashboardFragment extends Fragment {
                     public boolean onQueryTextChange(String newText) {
                         if(!newText.equals("") && networkHandler!=null) {
                             if(dashViewModel.getURL().getValue() != null ) {
-                                String aux = dashViewModel.getURL().getValue() + newText;
+                                String aux = dashViewModel.getURL().getValue() +"'" + newText + "'";
                                 NetworkCallback networkCallback = new NetworkCallback() {
                                     @Override
                                     public void onSuccess() {
