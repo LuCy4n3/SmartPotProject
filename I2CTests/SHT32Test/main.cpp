@@ -1,6 +1,6 @@
 #include <atmel_start.h>
 #include <util/delay.h>
-#include <util/atomic.h>
+#include <utils/atomic.h>
 #include "MyCode/Sensors/SHT31.h"
 #define INDEX 1
 #define TYPE 2
@@ -90,7 +90,7 @@ SHT31Class SHT31;
 int main(void)
 {
 	/* Initializes MCU, drivers and middleware */
-	//ENABLE_INTERRUPTS();
+	ENABLE_INTERRUPTS();
 	atmel_start_init();
 	
 	PORTA_set_pin_dir(4,PORT_DIR_OUT);

@@ -1,0 +1,687 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>7.0</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
+    <ProjectGuid>{81cb5068-3b07-4a0e-8807-40ba0a96a85b}</ProjectGuid>
+    <avrdevice>AVR32DA32</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>CPP</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>SmartPotV4_Cpp</AssemblyName>
+    <Name>SmartPotV4_Cpp</Name>
+    <RootNamespace>SmartPotV4_Cpp</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress />
+    <UncachedRange />
+    <preserveEEPROM>true</preserveEEPROM>
+    <OverrideVtorValue />
+    <BootSegment>2</BootSegment>
+    <ResetRule>0</ResetRule>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <EraseKey />
+    <AsfFrameworkConfig>
+      <framework-data xmlns="">
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <offline-documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
+  </dependencies>
+</framework-data>
+    </AsfFrameworkConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <AvrGccCpp>
+  <avrgcc.common.Device>-mmcu=avr32da32 -B "%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\gcc\dev\avr32da32"</avrgcc.common.Device>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>NDEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\include\</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>NDEBUG</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\include\</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize for size (-Os)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </avrgcccpp.linker.libraries.Libraries>
+  <avrgcccpp.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\include\</Value>
+    </ListValues>
+  </avrgcccpp.assembler.general.IncludePaths>
+</AvrGccCpp>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <AvrGccCpp>
+  <avrgcc.common.Device>-mmcu=avr32da32 -B "%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\gcc\dev\avr32da32"</avrgcc.common.Device>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\include\</Value>
+      <Value>../Config</Value>
+      <Value>../</Value>
+      <Value>../utils/assembler</Value>
+      <Value>../utils</Value>
+      <Value>../include</Value>
+      <Value>../examples/include</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\include\</Value>
+      <Value>../examples/include</Value>
+      <Value>../include</Value>
+      <Value>../utils</Value>
+      <Value>../utils/assembler</Value>
+      <Value>../</Value>
+      <Value>../Config</Value>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\include\</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.miscellaneous.OtherFlags>-std=c++11</avrgcccpp.compiler.miscellaneous.OtherFlags>
+  <avrgcccpp.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </avrgcccpp.linker.libraries.Libraries>
+  <avrgcccpp.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.4.286\include\</Value>
+    </ListValues>
+  </avrgcccpp.assembler.general.IncludePaths>
+  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+</AvrGccCpp>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="atmel_start.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="atmel_start.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Config\clock_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Config\RTE_Components.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="driver_isr.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\include\i2c_master_example.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\include\pwm_basic_example.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\include\spi_basic_example.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\include\usart_basic_example.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\src\i2c_master_example.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\src\pwm_basic_example.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\src\spi_basic_example.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="examples\src\usart_basic_example.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\atmel_start_pins.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\bod.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\ccp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\clkctrl.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\cpuint.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\driver_init.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\i2c_master.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\i2c_simple_master.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\i2c_types.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\port.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\protected_io.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\pwm_basic.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\rstctrl.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\slpctrl.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\spi_basic.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\system.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\tcb.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\usart.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\usart_basic.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="main.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MyCode\I2CManager\I2CManager.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MyCode\I2CManager\I2CManager.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MyCode\Sensors\SHT31.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MyCode\Sensors\SHT31.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="smartpot\CallbackFun.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="smartpot\srcFiles\CallbackFun.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\bod.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\clkctrl.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\cpuint.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\driver_init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\i2c_master.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\i2c_simple_master.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\i2c_types.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\protected_io.S">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\pwm_basic.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\slpctrl.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\spi_basic.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\tcb.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\usart.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\usart_basic.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\assembler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\assembler\gas.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\assembler\iar.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\atomic.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\compiler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\interrupt_avr8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\utils.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="utils\utils_assert.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".atmelstart\" />
+    <Folder Include=".project-backup\" />
+    <Folder Include="Config\" />
+    <Folder Include="Debug\" />
+    <Folder Include="Debug\Config\" />
+    <Folder Include="Debug\doxygen\" />
+    <Folder Include="Debug\doxygen\generator\" />
+    <Folder Include="Debug\examples\" />
+    <Folder Include="Debug\examples\include\" />
+    <Folder Include="Debug\examples\src\" />
+    <Folder Include="Debug\include\" />
+    <Folder Include="Debug\modules\" />
+    <Folder Include="Debug\modules\bod\" />
+    <Folder Include="Debug\modules\bod\doc\" />
+    <Folder Include="Debug\modules\clkctrl\" />
+    <Folder Include="Debug\modules\clkctrl\doc\" />
+    <Folder Include="Debug\modules\cpuint\" />
+    <Folder Include="Debug\modules\cpuint\doc\" />
+    <Folder Include="Debug\modules\slpctrl\" />
+    <Folder Include="Debug\modules\slpctrl\doc\" />
+    <Folder Include="Debug\modules\spi\" />
+    <Folder Include="Debug\modules\spi\doc\" />
+    <Folder Include="Debug\modules\timer\" />
+    <Folder Include="Debug\modules\timer\doc\" />
+    <Folder Include="Debug\modules\twi\" />
+    <Folder Include="Debug\modules\twi\doc\" />
+    <Folder Include="Debug\modules\usart\" />
+    <Folder Include="Debug\modules\usart\doc\" />
+    <Folder Include="Debug\MyCode\" />
+    <Folder Include="Debug\MyCode\I2CManager\" />
+    <Folder Include="Debug\MyCode\Sensors\" />
+    <Folder Include="Debug\smartpot\" />
+    <Folder Include="Debug\smartpot\srcFiles\" />
+    <Folder Include="Debug\src\" />
+    <Folder Include="Debug\utils\" />
+    <Folder Include="Debug\utils\assembler\" />
+    <Folder Include="doxygen\" />
+    <Folder Include="doxygen\generator\" />
+    <Folder Include="examples\" />
+    <Folder Include="examples\include\" />
+    <Folder Include="examples\src\" />
+    <Folder Include="include\" />
+    <Folder Include="modules\" />
+    <Folder Include="modules\bod\" />
+    <Folder Include="modules\bod\doc\" />
+    <Folder Include="modules\clkctrl\" />
+    <Folder Include="modules\clkctrl\doc\" />
+    <Folder Include="modules\cpuint\" />
+    <Folder Include="modules\cpuint\doc\" />
+    <Folder Include="modules\slpctrl\" />
+    <Folder Include="modules\slpctrl\doc\" />
+    <Folder Include="modules\spi\" />
+    <Folder Include="modules\spi\doc\" />
+    <Folder Include="modules\timer\" />
+    <Folder Include="modules\timer\doc\" />
+    <Folder Include="modules\twi\" />
+    <Folder Include="modules\twi\doc\" />
+    <Folder Include="modules\usart\" />
+    <Folder Include="modules\usart\doc\" />
+    <Folder Include="MyCode\" />
+    <Folder Include="MyCode\I2CManager\" />
+    <Folder Include="MyCode\Sensors\" />
+    <Folder Include="smartpot\" />
+    <Folder Include="smartpot\srcFiles\" />
+    <Folder Include="src\" />
+    <Folder Include="utils\" />
+    <Folder Include="utils\assembler\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".atmelstart\AtmelStart.env_conf">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".atmelstart\AtmelStart.gpdsc">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".atmelstart\atmel_start_config.atstart">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".project-backup\SmartPotV4_1.zip">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".project-backup\SmartPotV4_2.zip">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".project-backup\SmartPotV4_3.zip">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".project-backup\SmartPotV4_4.zip">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".project-backup\SmartPotV4_5.zip">
+      <SubType>compile</SubType>
+    </None>
+    <None Include=".project-backup\SmartPotV4_6.zip">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug.xml">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\atmel_start.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\atmel_start.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\driver_isr.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\driver_isr.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\i2c_master_example.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\i2c_master_example.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\pwm_basic_example.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\pwm_basic_example.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\spi_basic_example.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\spi_basic_example.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\usart_basic_example.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\examples\src\usart_basic_example.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\main.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\main.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\makedep.mk">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\Makefile">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\SmartPotV4.eep">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\SmartPotV4.elf">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\SmartPotV4.hex">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\SmartPotV4.lss">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\SmartPotV4.map">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\SmartPotV4.srec">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\smartpot\srcFiles\CallbackFun.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\smartpot\srcFiles\CallbackFun.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\bod.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\bod.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\clkctrl.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\clkctrl.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\cpuint.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\cpuint.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\driver_init.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\driver_init.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\i2c_master.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\i2c_master.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\i2c_simple_master.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\i2c_simple_master.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\i2c_types.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\i2c_types.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\protected_io.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\protected_io.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\pwm_basic.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\pwm_basic.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\slpctrl.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\slpctrl.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\spi_basic.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\spi_basic.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\tcb.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\tcb.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\usart.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\usart.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\usart_basic.d">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Debug\src\usart_basic.o">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Default.xml">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\generator\doxyfile.doxygen">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\generator\DoxygenLayout.xml">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\i2c.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\i2c_master.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\mainpage.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\pwm.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\pwm_basic.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\spi.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\spi_basic.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\system.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\timer.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\usart.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\usart_basic.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="doxygen\usart_init.dox">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\bod\doc\bod.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\clkctrl\doc\clkctrl.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\cpuint\doc\cpuint.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\slpctrl\doc\slpctrl.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\spi\doc\spi_basic.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\timer\doc\tca.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\timer\doc\tcb.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\twi\doc\twi.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\usart\doc\usart.rst">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="modules\usart\doc\usart_basic.rst">
+      <SubType>compile</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>

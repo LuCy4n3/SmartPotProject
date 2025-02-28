@@ -173,4 +173,5 @@ void system_init()
 	I2C_0_initialization();
 
 	BOD_init();
+	
 }

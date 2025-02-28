@@ -15,7 +15,7 @@ int main(void)
 {
 	/* Initializes MCU, drivers and middleware */
 	atmel_start_init();
-	ENABLE_INTERRUPTS();
+	
 	PORTA_set_pin_dir(4,PORT_DIR_OUT);
 	/* Replace with your application code */
 	while (1) {

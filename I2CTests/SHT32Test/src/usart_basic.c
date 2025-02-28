@@ -275,7 +275,7 @@ int8_t USART_0_init()
 	
 	ENABLE_INTERRUPTS();
 	
-	USART1.BAUD = (uint16_t)USART1_BAUD_RATE(2400); /* set baud rate register */
+	USART1.BAUD = (uint16_t)USART1_BAUD_RATE(9600); /* set baud rate register */
 
 	USART1.CTRLA = 0 << USART_ABEIE_bp      /* Auto-baud Error Interrupt Enable: disabled */
 	               | 0 << USART_DREIE_bp    /* Data Register Empty Interrupt Enable: disabled */
