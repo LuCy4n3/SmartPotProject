@@ -8,4 +8,5 @@ public interface NetworkCallback {
     void onSuccess();
     void onListGetSucces(List<Plant> plants);
     void onFailure();
+
 }

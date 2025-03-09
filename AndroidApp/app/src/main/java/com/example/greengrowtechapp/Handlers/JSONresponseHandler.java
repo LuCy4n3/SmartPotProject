@@ -26,23 +26,29 @@ public class JSONresponseHandler implements Serializable {
             JSONObject plantObject = jsonArray.getJSONObject(i);
 
             Plant plant = new Plant(
-                    plantObject.getInt("plantId"),
-                    plantObject.getString("plantName"),
-                    plantObject.getString("plantGroup"),
-                    plantObject.getString("waterPref"),
-                    plantObject.getString("lifeCycle"),
-                    plantObject.getString("plantHabit"),
-                    plantObject.getString("flowerColor"),
-                    plantObject.getInt("phMinVal"),
-                    plantObject.getInt("phMaxVal"),
-                    plantObject.getInt("minTemp"),
-                    plantObject.getInt("maxTemp"),
-                    plantObject.getInt("sunReq"),
-                    plantObject.getInt("plantHeight"),
-                    plantObject.getInt("plantWidth"),
-                    plantObject.getInt("fruitingTime"),
-                    plantObject.getInt("flowerTime")
+                    plantObject.optString("plantName", ""),
+                    plantObject.optString("plantGroup", ""),
+                    plantObject.optString("waterPref", ""),
+                    plantObject.optString("lifeCycle", ""),
+                    plantObject.optString("plantHabit", ""),
+                    plantObject.optString("flowerColor", ""),
+                    plantObject.optInt("phMinVal", 0),
+                    plantObject.optInt("phMaxVal", 0),
+                    plantObject.optInt("minTemp", 0),
+                    plantObject.optInt("maxTemp", 0),
+                    plantObject.optInt("sunReq", 0),
+                    plantObject.optInt("plantHeight", 0),
+                    plantObject.optInt("plantWidth", 0),
+                    plantObject.optInt("fruitingTime", 0),
+                    plantObject.optInt("flowerTime", 0),
+                    plantObject.optString("soilType", ""),
+                    plantObject.optInt("nitrogen", 0),
+                    plantObject.optInt("phosphorus", 0),
+                    plantObject.optInt("potassium", 0),
+                    plantObject.optInt("spacing", 0),
+                    plantObject.optInt("humidity", 0)
             );
+
 
             plantList.add(plant);
         }
@@ -52,55 +58,29 @@ public class JSONresponseHandler implements Serializable {
 
 
 
-    public void parsePotData(JSONObject response) throws JSONException  {
-        try {
-            if (response != null) {
-                if (response.has("potId")) {
-                    index = response.getInt("potId");
-                }
-                if (response.has("plantName")) {
-                    plantName = response.getString("plantName");
-                }
-                if (response.has("potType")) {
-                    type = response.getInt("potType");
-                }
-                if (response.has("hasCamera")) {
-                    camera = response.getBoolean("hasCamera");
-                }
-                if (response.has("pumpStatus")) {
-                    pompa = response.getBoolean("pumpStatus");
-                }
-                if (response.has("greenHouseStatus")) {
-                    sera = response.getBoolean("greenHouseStatus");
-                }
-                if (response.has("temp")) {
-                    temp = response.getDouble("temp");
-                }
-                if (response.has("humidity")) {
-                    hum = response.getDouble("humidity");
-                }
-                if (response.has("potassium")) {
-                    pot = response.getDouble("potassium");
-                }
-                if (response.has("phosphor")) {
-                    pho = response.getDouble("phosphor");
-                }
-                if (response.has("nitrogen")) {
-                    ni = response.getDouble("nitrogen");
-                }
-                if (response.has("greenHouseTemperature")) {
-                    tempExt = response.getDouble("greenHouseTemperature");
-                }
-                if (response.has("greenHouseHumidity")) {
-                    humExt = response.getDouble("greenHouseHumidity");
-                }
-        }
-            int a =0;
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+    public void parsePotData(JSONObject response) {
+        if (response == null) return; // Avoid null pointer exceptions
 
+        try {
+            index = response.optInt("potId", -1); // Default to -1 if missing
+            plantName = response.optString("plantName", "Unknown");
+            type = response.optInt("potType", 0);
+            camera = response.optBoolean("hasCamera", false);
+            pompa = response.optBoolean("pumpStatus", false);
+            sera = response.optBoolean("greenHouseStatus", false);
+            temp = response.optDouble("temp", 0.0);
+            hum = response.optDouble("humidity", 0.0);
+            pot = response.optDouble("potassium", 0.0);
+            pho = response.optDouble("phosphor", 0.0);
+            ni = response.optDouble("nitrogen", 0.0);
+            tempExt = response.optDouble("greenHouseTemperature", 0.0);
+            humExt = response.optDouble("greenHouseHumidity", 0.0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error parsing pot data", e);
+        }
     }
+
 
     public String getPlantName() {
         return plantName;

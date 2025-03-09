@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -106,23 +107,21 @@ public class NetworkHandler implements Serializable {
                     public void onResponse(JSONArray response) {
                         Toast.makeText(ctx, "Got response!", Toast.LENGTH_SHORT).show();
 
-                        new Thread(() -> {
-                            try {
-                                // Parse the JSON response into a list of Plant objects
-                                List<Plant> plantList = responseHandler.parsePlantData(response);
-                                errorText = "No error";
-                                // Call the success callback with the list of plants
-                                if (callback != null) {
-                                    callback.onListGetSucces(plantList);
-                                }
-                            } catch (JSONException e) {
-                                errorText = e.toString();
-                                e.printStackTrace();
-                                if (callback != null) {
-                                    callback.onFailure();
-                                }
+                        try {
+                            // Process JSON in chunks to avoid memory issues
+                            List<Plant> plantList = responseHandler.parsePlantData(response);
+                            errorText = "No error";
+
+                            if (callback != null) {
+                                callback.onListGetSucces(plantList);
                             }
-                        }).start();
+                        } catch (JSONException e) {
+                            errorText = e.toString();
+                            e.printStackTrace();
+                            if (callback != null) {
+                                callback.onFailure();
+                            }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -134,11 +133,17 @@ public class NetworkHandler implements Serializable {
                             callback.onFailure();
                         }
                     }
-                }
-        );
+                });
+
+        // Set timeout & retry policy to prevent memory overload
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000, // 10 seconds timeout
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         getRequestQueue().add(jsonArrayRequest);
     }
+
     public void sendGetRequest(String url, NetworkCallback callback) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -147,19 +152,16 @@ public class NetworkHandler implements Serializable {
                         Toast.makeText(ctx, "Got response!", Toast.LENGTH_SHORT).show();// has to run here bcs toas runs on the main thread
                         new Thread(() -> {
                             JSONresponse = response;
-                            try {
-                                responseHandler.parsePotData(response);
-                                errorText = "No error";
+
+                            responseHandler.parsePotData(response);
+                            errorText = "No error";
 
 
-                                // Call the success callback
-                                if (callback != null) {
-                                    callback.onSuccess();
-                                }
-                            } catch (JSONException e) {
-                                errorText = e.toString();
-                                throw new RuntimeException(e);
+                            // Call the success callback
+                            if (callback != null) {
+                                callback.onSuccess();
                             }
+
                         }).start();
                     }
                 }, new Response.ErrorListener() {

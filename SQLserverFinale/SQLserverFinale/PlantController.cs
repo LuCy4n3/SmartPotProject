@@ -38,6 +38,21 @@ namespace SQLserverFinale
             
             return Ok(plant);
         }
+        [HttpGet("{PlantName}/{maxSearch}/{offset}")]
+        public async Task<IActionResult> SearchPlantNameOffset(string PlantName,int maxSearch, int offset)
+        {
+
+            var plant = await _context.SearchRecordsWithOffset(PlantName, maxSearch, offset);
+
+            // Check if any records were found
+            if (plant == null || plant.Count == 0)
+            {
+                return NotFound("No matching records found.");
+            }
+
+
+            return Ok(plant);
+        }
         /* [HttpGet("{id}")]
          public ActionResult<Plant> GetPlant(int id)
          {
@@ -288,16 +303,30 @@ namespace SQLserverFinale
 
         // POST: api/User
         [HttpPut("{UserId}/{UserName}/{UserPassword}")]
-        public async Task<IActionResult> CreateUser(User user)
+        public async Task<IActionResult> CreateUser(int UserId, string UserName, string UserPassword)
         {
-            if (user == null)
+            var user = _context.User.Find(UserId);
+            if(user != null)
             {
                 return BadRequest();
             }
-            Console.WriteLine(user.UserId);
-            _context.User.Add(user);
+            User auxUser = new User();
+            
+            auxUser.UserName = UserName;
+            auxUser.UserPassword = UserPassword;
+
+           
+
+            // Add to DB
+            _context.User.Add(auxUser);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUsers), new { id = user.UserId }, user);
+
+            return CreatedAtAction(nameof(GetUsers), new
+            {
+                id = auxUser.UserId,
+                userName = auxUser.UserName,
+                userPassword = auxUser.UserPassword
+            }, auxUser);
         }
         [HttpPost("{UserId}/{UserPassword}")]
         public async Task<ActionResult<User>> UpdateUserAsync(int UserId,string UserName, string UserPassword)

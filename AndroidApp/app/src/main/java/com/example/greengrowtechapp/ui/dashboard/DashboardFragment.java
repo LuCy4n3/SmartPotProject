@@ -2,18 +2,18 @@ package com.example.greengrowtechapp.ui.dashboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.greengrowtechapp.Handlers.JSONresponseHandler;
 import com.example.greengrowtechapp.Handlers.NetworkHandler;
@@ -30,202 +30,141 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
     private DashboardViewModel dashViewModel;
     private HomeViewModel homeViewModel;
-
     private JSONresponseHandler responseHandler = null;
     private NetworkHandler networkHandler = null;
-    private List<Plant> plantArray;
+    private PlantAdapter adapter;
+    private List<Plant> plantArray = new ArrayList<>();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-        Toast.makeText(getContext(), "Dash Fragment created!", Toast.LENGTH_SHORT).show();
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+    private boolean isLoading = false;
+    private int offset = 0;
+    private static final int LIMIT = 10; // Load 50 items per request
 
-        //binding.searchViewDashBoard.setQuery("", false);
-
-
-        View root = binding.getRoot();
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashViewModel = new ViewModelProvider(requireActivity()).get(DashboardViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
+        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-        binding.searchViewDashBoard.clearFocus();
-        dashboardViewModel.getPlantArray().observe(getViewLifecycleOwner(), new Observer<List<Plant>>() {
+        Toast.makeText(getContext(), "Dash Fragment created!", Toast.LENGTH_SHORT).show();
+
+        setupRecyclerView();
+        observeViewModels();
+
+        binding.searchViewDashBoard.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onChanged(List<Plant> plants) {
-                plantArray = plants;
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
-        });
-        dashViewModel.getIndexOfCurrentPot().observe(getViewLifecycleOwner(), new Observer<Integer>() {
 
             @Override
-            public void onChanged(Integer integer) {
-                //Toast.makeText(getContext(), "got the indexof pot!", Toast.LENGTH_SHORT).show();
-                dashViewModel.setIndexOfCurrentPot(integer);
-            }
-        });
-
-        dashViewModel.getIndexOfCurrentUser().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-
-            @Override
-            public void onChanged(Integer integer) {
-                //Toast.makeText(getContext(), "got the indexof user!", Toast.LENGTH_SHORT).show();
-                dashViewModel.setIndexOfCurrentUser(integer);
-            }
-        });
-        dashViewModel.getResponseHandler().observe(getViewLifecycleOwner(), new Observer<JSONresponseHandler>() {
-
-            @Override
-            public void onChanged(JSONresponseHandler jsoNresponseHandler) {
-                responseHandler = jsoNresponseHandler;
-                //Toast.makeText(getContext(), "got the shared data!", Toast.LENGTH_SHORT).show();
-                if (responseHandler == null) {
-                    Toast.makeText(getContext(), "Error: Response handler not found!", Toast.LENGTH_SHORT).show();
+            public boolean onQueryTextChange(String newText) {
+                if (!newText.isEmpty() && networkHandler != null) {
+                    offset = 0; // Reset offset on new search
+                    plantArray.clear(); // Clear old data
+                    adapter.notifyDataSetChanged();
+                    fetchPlants(newText);
+                } else {
+                    plantArray.clear();
+                    adapter.notifyDataSetChanged();
                 }
-            }
-
-        });
-
-        dashViewModel.getNetworkHandler().observe(getViewLifecycleOwner(), new Observer<NetworkHandler>() {
-            @Override
-            public void onChanged(NetworkHandler netHandler) {
-                networkHandler = netHandler;
+                return true;
             }
         });
 
-        binding.listViewDashBoard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        String plantName = plantArray.get(position).getPlantName();
-                        dashViewModel.setText(plantName);
-                        binding.textDashboard.setText(plantName);
-
-                        if (networkHandler != null && homeViewModel != null && homeViewModel.getURL().getValue() != null) {
-                            String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() + "/" + dashViewModel.getIndexOfCurrentPot().getValue();
-                            Toast.makeText(getContext(), "Req put on the new url" + url + "!", Toast.LENGTH_SHORT).show();
-                            networkHandler.sendPutRequest(url, "PlantName:"+plantName);
-                        }
-
-                    });
-                }
-            }
-        });
-
-        binding.buttonUpdate.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "set new index of pot!", Toast.LENGTH_SHORT).show();
-            networkHandler.sendGetRequestList("http://192.168.201.1:3000/api/Plant/", new NetworkCallback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onListGetSucces(List<Plant> plants) {
-//                    if (getActivity() != null) {
-//                        getActivity().runOnUiThread(() ->
-//                                Toast.makeText(getContext(), "got the list data!", Toast.LENGTH_SHORT).show()
-//                        );
-//                    }
-                }
-
-                @Override
-                public void onFailure() {
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() ->
-                                Toast.makeText(getContext(), "ERROR didnt get the list data!", Toast.LENGTH_SHORT).show()
-                        );
-                    }
-                }
-            });
-        });
-
-        dashViewModel.getAdapter().observe(getViewLifecycleOwner(), new Observer<ArrayAdapter<String>>() {
-            @Override
-            public void onChanged(ArrayAdapter<String> stringArrayAdapter) {
-                binding.listViewDashBoard.setVisibility(View.VISIBLE);
-                binding.listViewDashBoard.setAdapter(stringArrayAdapter);
-            }
-        });
-
-        //binding.searchViewDashBoard.clearFocus();
-        binding.searchViewDashBoard.setOnQueryTextListener(
-                new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        if(!newText.equals("") && networkHandler!=null) {
-                            if(dashViewModel.getURL().getValue() != null ) {
-                                String aux = dashViewModel.getURL().getValue() +"'" + newText + "'";
-                                NetworkCallback networkCallback = new NetworkCallback() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onListGetSucces(List<Plant> plants) {
-                                        dashboardViewModel.setPlantArray(plants);
-                                        List<String> listViewItems = new ArrayList<>();
-                                        for (Plant plant : plants) {
-                                            String listItem = "Plant sun req: " + plant.getSunReq() + "\n" +
-                                                    "Plant Name: " + plant.getPlantName() + "\n\n";
-                                            listViewItems.add(listItem);
-                                        }
-                                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, listViewItems);
-                                        dashViewModel.setAdapter(adapter);
-//                                        if (getActivity() != null) {
-//                                            getActivity().runOnUiThread(() ->
-//                                                    Toast.makeText(getContext(), "got the list data!", Toast.LENGTH_SHORT).show()
-//                                            );
-//                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure() {
-                                        if (getActivity() != null) {
-                                            getActivity().runOnUiThread(() ->
-                                                    Toast.makeText(getContext(), "ERROR didnt get the list data!", Toast.LENGTH_SHORT).show()
-                                            );
-                                        }
-                                    }
-                                };
-                                networkHandler.sendGetRequestList(aux, networkCallback);
-                            }
-                        }
-                        else
-                        {
-                            binding.listViewDashBoard.setVisibility(View.INVISIBLE);
-                            if(plantArray != null)
-                                plantArray.clear();
-                        }
-
-                        return true;
-                    }
-                }
-        );
-
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                binding.textDashboard.setText(s);
-            }
-        });
         return root;
+    }
+
+
+    private void setupRecyclerView() {
+        adapter = new PlantAdapter(plantArray);
+        binding.recyclerViewDashBoard.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerViewDashBoard.setAdapter(adapter);
+
+
+        binding.recyclerViewDashBoard.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (!isLoading && layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == plantArray.size() - 1) {
+                    fetchPlants(binding.searchViewDashBoard.getQuery().toString());
+                }
+            }
+        });
+        binding.recyclerViewDashBoard.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+
+                RecyclerView.ViewHolder viewHolder = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (viewHolder != null) {
+                    int position = viewHolder.getAdapterPosition();  // Get the position of the clicked item
+                    if (position != RecyclerView.NO_POSITION) {
+                        // Get the clicked item (use your adapter to fetch data from the list)
+                        Plant clickedPlant = plantArray.get(position);  // Get the Plant object based on position
+                        // Handle the click event, e.g., open a detailed view or show a toast
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() ->
+                                    Toast.makeText(getContext(), "Click plant" + clickedPlant.getPlantName(), Toast.LENGTH_LONG).show()
+                            );
+                        }                    }
+                }
+
+
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean b) {
+
+            }
+        });
+    }
+
+    private void observeViewModels() {
+        dashViewModel.getNetworkHandler().observe(getViewLifecycleOwner(), netHandler -> networkHandler = netHandler);
+        dashViewModel.getResponseHandler().observe(getViewLifecycleOwner(), jsoNresponseHandler -> responseHandler = jsoNresponseHandler);
+    }
+
+    private void fetchPlants(String query) {
+        if (isLoading) return;
+        isLoading = true;
+
+        String url = dashViewModel.getURL().getValue() + query + "/" + LIMIT + "/" + offset;
+
+        networkHandler.sendGetRequestList(url, new NetworkCallback() {
+            @Override
+            public void onSuccess() {}
+
+            @Override
+            public void onListGetSucces(List<Plant> plants) {
+                if (!plants.isEmpty()) {
+                    plantArray.addAll(plants);
+                    adapter.notifyDataSetChanged();
+                    offset += LIMIT; // Increase offset for next request
+                }
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure() {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), "Error fetching data!", Toast.LENGTH_SHORT).show()
+                    );
+                }
+                isLoading = false;
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
-//        binding.searchViewDashBoard.setQuery("", false);
-//        binding.searchViewDashBoard.clearFocus();
         super.onDestroyView();
         binding = null;
     }

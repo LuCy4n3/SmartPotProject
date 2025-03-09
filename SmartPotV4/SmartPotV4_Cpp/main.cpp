@@ -129,7 +129,7 @@ int main(void)
 	//aux = (uint8_t*)temp;
 	while (1) {
 		PORTF_set_pin_level(5,true);
-		//writeOneByte(0x15);
+		writeOneByte(0x15);
 		//writeOneByte(SPI_ADC_test_spi());
 		
 		//writeOneByte(aux[3]);

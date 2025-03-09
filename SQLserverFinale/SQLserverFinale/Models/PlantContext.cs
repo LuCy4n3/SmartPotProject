@@ -21,6 +21,16 @@ namespace SQLserverFinale.Models
                                .ToListAsync();
           
         }
+        public async Task<List<Plant>> SearchRecordsWithOffset(string searchString, int maxResult, int offset)
+        {
+            return await Plant
+                .FromSqlRaw("EXEC SearchPlantByNameWithOffset @SearchString, @MaxResults, @Offset",
+                    new SqlParameter("@SearchString", searchString),
+                    new SqlParameter("@MaxResults", maxResult),
+                    new SqlParameter("@Offset", offset))
+                .ToListAsync();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Plant>(entity => {
