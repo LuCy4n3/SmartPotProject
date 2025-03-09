@@ -25,7 +25,7 @@ import com.example.greengrowtechapp.ui.home.HomeViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements PlantAdapter.OnItemClickListener {
 
     private FragmentDashboardBinding binding;
     private DashboardViewModel dashViewModel;
@@ -75,53 +75,29 @@ public class DashboardFragment extends Fragment {
         return root;
     }
 
-
     private void setupRecyclerView() {
-        adapter = new PlantAdapter(plantArray);
+        adapter = new PlantAdapter(plantArray, this); // Pass 'this' as the listener
         binding.recyclerViewDashBoard.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewDashBoard.setAdapter(adapter);
-
 
         binding.recyclerViewDashBoard.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (!isLoading && layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == plantArray.size() - 1) {
-                    fetchPlants(binding.searchViewDashBoard.getQuery().toString());
+                if (layoutManager != null && !isLoading) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                    // Check if the user has scrolled to the end of the list
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalItemCount >= LIMIT) {
+                        fetchPlants(binding.searchViewDashBoard.getQuery().toString());
+                    }
                 }
-            }
-        });
-        binding.recyclerViewDashBoard.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-
-                RecyclerView.ViewHolder viewHolder = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
-                if (viewHolder != null) {
-                    int position = viewHolder.getAdapterPosition();  // Get the position of the clicked item
-                    if (position != RecyclerView.NO_POSITION) {
-                        // Get the clicked item (use your adapter to fetch data from the list)
-                        Plant clickedPlant = plantArray.get(position);  // Get the Plant object based on position
-                        // Handle the click event, e.g., open a detailed view or show a toast
-                        if (getActivity() != null) {
-                            getActivity().runOnUiThread(() ->
-                                    Toast.makeText(getContext(), "Click plant" + clickedPlant.getPlantName(), Toast.LENGTH_LONG).show()
-                            );
-                        }                    }
-                }
-
-
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean b) {
-
             }
         });
     }
@@ -161,6 +137,14 @@ public class DashboardFragment extends Fragment {
                 isLoading = false;
             }
         });
+    }
+
+    @Override
+    public void onItemClick(Plant plant) {
+        // Handle the item click, e.g., show a toast with the plant name
+        Toast.makeText(getContext(), "Clicked plant: " + plant.getPlantName(), Toast.LENGTH_SHORT).show();
+        String aux = homeViewModel.getURL().getValue()+"1/1";
+        networkHandler.sendPutRequest(aux,"PlantName:"+plant.getPlantName());
     }
 
     @Override

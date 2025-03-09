@@ -7,28 +7,43 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.greengrowtechapp.Handlers.Plant;
+import com.example.greengrowtechapp.R;
+
 import java.util.List;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
     private List<Plant> plantList;
+    private OnItemClickListener listener;
 
-    public PlantAdapter(List<Plant> plantList) {
+    public interface OnItemClickListener {
+        void onItemClick(Plant plant);
+    }
+
+    public PlantAdapter(List<Plant> plantList, OnItemClickListener listener) {
         this.plantList = plantList;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public PlantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+        // Use the new item_plant.xml layout
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_plant, parent, false);
         return new PlantViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlantViewHolder holder, int position) {
         Plant plant = plantList.get(position);
-        String listItem = "Plant sun req: " + plant.getSunReq() + "\n" +
-                "Plant Name: " + plant.getPlantName();
-        holder.textView.setText(listItem);
+        holder.textViewPlantName.setText("Plant Name: " + plant.getPlantName());
+        holder.textViewSunReq.setText("Sun Requirement: " + plant.getSunReq());
+
+        // Set the click listener for the item
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(plant);
+            }
+        });
     }
 
     @Override
@@ -37,11 +52,13 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     }
 
     static class PlantViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView textViewPlantName;
+        TextView textViewSunReq;
 
         PlantViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(android.R.id.text1);
+            textViewPlantName = itemView.findViewById(R.id.textViewPlantName);
+            textViewSunReq = itemView.findViewById(R.id.textViewSunReq);
         }
     }
 }
