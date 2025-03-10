@@ -122,6 +122,23 @@ namespace SQLserverFinale
             }
             return pot;
         }
+        [HttpGet("{UserId}")] // Get specific pots for user
+        public async Task<ActionResult<List<Pot>>> GetUserPotsAsync(int UserId)
+        {
+            // Fetch all pots for the specified UserId
+            var pots = await _context.Pot
+                .Where(p => p.UserId == UserId) // Filter by UserId
+                .ToListAsync(); // Fetch all matching records as a list
+
+            // Check if the list is empty
+            if (pots == null || !pots.Any())
+            {
+                return NotFound("No pots found for the specified user.");
+            }
+
+            // Return the list of pots
+            return pots;
+        }
 
         // POST: api/Pot
         [HttpPost]

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.greengrowtechapp.Handlers.JSONresponseHandler;
 import com.example.greengrowtechapp.Handlers.NetworkHandler;
 import com.example.greengrowtechapp.Handlers.Plant;
+import com.example.greengrowtechapp.Handlers.Pot;
 import com.example.greengrowtechapp.NetworkCallback;
 import com.example.greengrowtechapp.databinding.FragmentHomeBinding;
 
@@ -165,9 +166,15 @@ public class HomeFragment extends Fragment {
 
                         }
                         @Override
-                        public void onListGetSucces(List<Plant> plants) {
+                        public void onPlantListGetSucces(List<Plant> plants) {
 
                         }
+
+                        @Override
+                        public void onPotListGetSucces(List<Pot> pots) {
+
+                        }
+
                         @Override
                         public void onFailure() {
                             Toast.makeText(getContext(), "Network request failed for index "+homeViewModel.getIndexOfCurrentPot().getValue() +" !", Toast.LENGTH_SHORT).show();
@@ -206,9 +213,15 @@ public class HomeFragment extends Fragment {
                     }
 
                     @Override
-                    public void onListGetSucces(List<Plant> plants) {
+                    public void onPlantListGetSucces(List<Plant> plants) {
                         int a = 0;
                     }
+
+                    @Override
+                    public void onPotListGetSucces(List<Pot> pots) {
+
+                    }
+
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "Network request failed!", Toast.LENGTH_SHORT).show();
@@ -226,7 +239,12 @@ public class HomeFragment extends Fragment {
                         }
 
                         @Override
-                        public void onListGetSucces(List<Plant> plants) {
+                        public void onPlantListGetSucces(List<Plant> plants) {
+
+                        }
+
+                        @Override
+                        public void onPotListGetSucces(List<Pot> pots) {
 
                         }
 
@@ -297,7 +315,12 @@ public class HomeFragment extends Fragment {
                 }
 
                 @Override
-                public void onListGetSucces(List<Plant> plants) {
+                public void onPlantListGetSucces(List<Plant> plants) {
+
+                }
+
+                @Override
+                public void onPotListGetSucces(List<Pot> pots) {
 
                 }
 

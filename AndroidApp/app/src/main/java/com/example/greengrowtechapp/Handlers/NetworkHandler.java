@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,13 +33,33 @@ public class NetworkHandler implements Serializable {
     private JSONObject JSONresponse;
     private JSONresponseHandler responseHandler;
 
-    private String errorText;
+    private MutableLiveData<String> errorText = new MutableLiveData<>(); // Use LiveData
+    private  MutableLiveData<Integer> errorCode = new MutableLiveData<>();
     public NetworkHandler(Context context,JSONresponseHandler responseHandler) throws JSONException {
         ctx = context;
         this.responseHandler = responseHandler;
         requestQueue = getRequestQueue();
         JSONresponse = new JSONObject("{}");
-        errorText = "No error";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.0.199:3000/api/Plant/a/15/0",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle the response
+                        //errorText.postValue("Ping successful!"); // Update LiveData
+                        errorCode.postValue(0);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle the error
+                        errorText.postValue("Ping failed!"); // Update LiveData
+                        errorCode.postValue(-1);
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        requestQueue.add(stringRequest);
     }
     public void sendImageRequest(String url, final ImageView imageView, final NetworkCallback callback) {
         // Create an ImageRequest
@@ -57,7 +79,8 @@ public class NetworkHandler implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(ctx, "ERROR! " + error.toString(), Toast.LENGTH_SHORT).show();
-                        errorText = error.toString();
+                        errorText.postValue(error.toString());
+                        errorCode.postValue(-2);
                         // Call the failure callback
                         if (callback != null) {
                             callback.onFailure();
@@ -85,14 +108,15 @@ public class NetworkHandler implements Serializable {
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                errorText = "No error";
+                //errorText.postValue("No error");
                 //todo:add response handler
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorText = error.toString();
+                errorText.postValue(error.toString());
+                errorCode.postValue(-3);
                 //TODO: add response handler
             }
         };
@@ -100,7 +124,7 @@ public class NetworkHandler implements Serializable {
         Toast.makeText(ctx, "Sent "+url+"/"+header+" PUT req", Toast.LENGTH_SHORT).show();
         getRequestQueue().add(stringRequest);
     }
-    public void sendGetRequestList(String url, NetworkCallback callback) {
+    public void sendGetRequestListPlant(String url, NetworkCallback callback) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -109,14 +133,15 @@ public class NetworkHandler implements Serializable {
 
                         try {
                             // Process JSON in chunks to avoid memory issues
-                            List<Plant> plantList = responseHandler.parsePlantData(response);
-                            errorText = "No error";
+                            List<Plant> plantList = responseHandler.parsePlantDataList(response);
+                            //errorText.postValue("No error");
 
                             if (callback != null) {
-                                callback.onListGetSucces(plantList);
+                                callback.onPlantListGetSucces(plantList);
                             }
                         } catch (JSONException e) {
-                            errorText = e.toString();
+                            errorText.postValue(e.toString());
+                            errorCode.postValue(-5);
                             e.printStackTrace();
                             if (callback != null) {
                                 callback.onFailure();
@@ -128,7 +153,8 @@ public class NetworkHandler implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(ctx, "ERROR " + url + " !", Toast.LENGTH_SHORT).show();
-                        errorText = error.toString();
+                        errorText.postValue(error.toString());
+                        errorCode.postValue(-6);
                         if (callback != null) {
                             callback.onFailure();
                         }
@@ -144,6 +170,52 @@ public class NetworkHandler implements Serializable {
         getRequestQueue().add(jsonArrayRequest);
     }
 
+    public void sendGetRequestListPot(String url, NetworkCallback callback) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Toast.makeText(ctx, "Got pot response!", Toast.LENGTH_SHORT).show();
+
+                        try {
+                            // Process JSON response into a list of Pot objects
+                            List<Pot> potList = responseHandler.parsePotDataList(response);
+
+                            if (callback != null) {
+                                callback.onPotListGetSucces(potList);
+                            }
+                        } catch (JSONException e) {
+                            errorText.postValue(e.toString());
+                            errorCode.postValue(-5);
+                            e.printStackTrace();
+                            if (callback != null) {
+                                callback.onFailure();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx, "ERROR " + url + " !", Toast.LENGTH_SHORT).show();
+                        errorText.postValue(error.toString());
+                        errorCode.postValue(-6);
+                        if (callback != null) {
+                            callback.onFailure();
+                        }
+                    }
+                });
+
+        // Set timeout & retry policy to prevent memory overload
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000, // 10 seconds timeout
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        getRequestQueue().add(jsonArrayRequest);
+    }
+
+
     public void sendGetRequest(String url, NetworkCallback callback) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -154,7 +226,7 @@ public class NetworkHandler implements Serializable {
                             JSONresponse = response;
 
                             responseHandler.parsePotData(response);
-                            errorText = "No error";
+                            //errorText.postValue("No error");
 
 
                             // Call the success callback
@@ -169,6 +241,7 @@ public class NetworkHandler implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(ctx, "ERROR!"+error.toString(), Toast.LENGTH_SHORT).show();
                 responseHandler.setError(error.toString());
+                errorCode.postValue(-7);
                 // Call the failure callback
                 if (callback != null) {
                     callback.onFailure();
@@ -182,5 +255,6 @@ public class NetworkHandler implements Serializable {
     public JSONObject getJSONresponse() {
         return JSONresponse;
     }
-    public String getErrorText(){return errorText;}
+    public MutableLiveData<String> getErrorText(){return errorText;}
+    public MutableLiveData<Integer> getErrorCode(){return errorCode;}
 }

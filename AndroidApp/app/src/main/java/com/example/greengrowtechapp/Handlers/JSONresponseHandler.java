@@ -15,11 +15,12 @@ public class JSONresponseHandler implements Serializable {
     private String plantName;
     private String error = "no error";
 
+
     public void setError(String error) {
         this.error = error;
     }
 
-    public List<Plant> parsePlantData(JSONArray jsonArray) throws JSONException {
+    public List<Plant> parsePlantDataList(JSONArray jsonArray) throws JSONException {
         List<Plant> plantList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -54,6 +55,35 @@ public class JSONresponseHandler implements Serializable {
         }
 
         return plantList;
+    }
+    public List<Pot> parsePotDataList(JSONArray jsonArray) throws JSONException {
+        List<Pot> potList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject potObject = jsonArray.getJSONObject(i);
+
+            Pot pot = new Pot(
+                    potObject.optInt("potId", 0), // Index
+                    potObject.optString("potName",""),
+                    potObject.optInt("potType", 0), // Pot type
+                    potObject.optString("plantName", "Unknown"), // Plant name
+                    potObject.optInt("userId",0),
+                    potObject.optBoolean("hasCamera", false), // Camera presence
+                    potObject.optBoolean("pictReq",false),
+                    potObject.optBoolean("pumpStatus", false), // Pump status
+                    potObject.optBoolean("greenHouseStatus", false), // Greenhouse status
+                    potObject.optDouble("potPotassium", 0.0), // Potassium level
+                    potObject.optDouble("potPhosphor", 0.0), // Phosphor level
+                    potObject.optDouble("potNitrogen", 0.0), // Nitrogen level
+                    potObject.optDouble("greenHouseTemperature", 0.0), // External temperature
+                    potObject.optDouble("greenHouseHumidity", 0.0), // External humidity
+                    potObject.optDouble("greenHousePressure",0.0)
+            );
+
+            potList.add(pot);
+        }
+
+        return potList;
     }
 
 

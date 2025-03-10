@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.greengrowtechapp.Handlers.JSONresponseHandler;
 import com.example.greengrowtechapp.Handlers.NetworkHandler;
 import com.example.greengrowtechapp.Handlers.Plant;
+import com.example.greengrowtechapp.Handlers.Pot;
 import com.example.greengrowtechapp.databinding.ActivityMainBinding;
 import com.example.greengrowtechapp.ui.dashboard.DashboardViewModel;
 import com.example.greengrowtechapp.ui.home.HomeViewModel;
@@ -30,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static Integer indexOfCurrentPot = new Integer(1);
     private static Integer indexOfCurrentUser = new Integer(1);
+    private static String Url = "http://192.168.0.199:3000/api/";
     //private static String URLpot = new String("http://roka.go.ro:3000/api/Pot/");
-    private static String URLpot = new String("http://192.168.0.199:3000/api/Pot/");
+    private static String URLpot = new String(Url+"Pot/");
     //private static String URLplant = new String("http://roka.go.ro:3000/api/Plant/");
-    private static String URLplant = new String("http://192.168.0.199:3000/api/Plant/");
+    private static String URLplant = new String(Url+"Plant/");
     //private static String URLimage = new String("http://roka.go.ro:3000/api/image/test.jpg");
-    private static String URLimage = new String("http://192.168.0.199:3000/api/image/test.jpg");
+    private static String URLimage = new String(Url+"image/test.jpg");
     private static boolean pumpStat,hasCamera;
 
     @Override
@@ -132,7 +134,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onListGetSucces(List<Plant> plants) {
+            public void onPlantListGetSucces(List<Plant> plants) {
+
+            }
+
+            @Override
+            public void onPotListGetSucces(List<Pot> pots) {
 
             }
 

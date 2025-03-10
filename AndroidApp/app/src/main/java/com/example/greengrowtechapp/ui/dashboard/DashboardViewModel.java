@@ -24,7 +24,7 @@ public class DashboardViewModel extends ViewModel {
     private final MutableLiveData<List<Plant>> mPlantArray = new MutableLiveData<>();
     public DashboardViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("Update pot.");
         mResponseHandler.postValue(null);
 
         mNetworkHandler.postValue(null);
