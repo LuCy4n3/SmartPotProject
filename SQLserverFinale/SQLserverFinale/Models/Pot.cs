@@ -10,7 +10,7 @@ namespace SQLserverFinale.Models
     public class Pot
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PotId { get; set; }
         [Required,NotNull]
         public string PotName { get; set; }

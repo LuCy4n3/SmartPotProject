@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.greengrowtechapp.Handlers.NetworkHandler;
 import com.example.greengrowtechapp.Handlers.Pot;
 import com.example.greengrowtechapp.R;
+import com.example.greengrowtechapp.ui.home.HomeViewModel;
+
 import java.util.List;
 
 public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
@@ -20,6 +22,7 @@ public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
     private OnItemClickListener itemClickListener;
     private OnButtonClickListener buttonClickListener;
     private NetworkHandler networkHandler;
+    private HomeViewModel homeViewModel;
 
     // Interfaces for click events
     public interface OnItemClickListener {
@@ -31,11 +34,12 @@ public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
     }
 
     // Constructor
-    public PotAdapter(List<Pot> potList, OnItemClickListener itemClickListener, OnButtonClickListener buttonClickListener, NetworkHandler networkHandler) {
+    public PotAdapter(List<Pot> potList, OnItemClickListener itemClickListener, OnButtonClickListener buttonClickListener, NetworkHandler networkHandler,HomeViewModel homeViewModel) {
         this.potList = potList;
         this.itemClickListener = itemClickListener;
         this.buttonClickListener = buttonClickListener;
         this.networkHandler = networkHandler;
+        this.homeViewModel = homeViewModel;
     }
 
     @NonNull
@@ -64,7 +68,8 @@ public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
         holder.buttonAction.setOnClickListener(v -> {
             if (buttonClickListener != null) {
                 buttonClickListener.onButtonClick(pot);
-                Toast.makeText(holder.buttonAction.getContext() ,"Clicked button form menu!",Toast.LENGTH_SHORT).show();
+                //networkHandler.sendDeleteRequest(homeViewModel.getURL().getValue(),pot.getPotName(),pot.getPotId());
+                Toast.makeText(holder.buttonAction.getContext() ,"Clicked button form menu!"+pot.getPotName(),Toast.LENGTH_LONG).show();
             }
         });
     }

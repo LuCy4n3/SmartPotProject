@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
     private boolean isLoading = false;
     private int offset = 0;
     private static final int LIMIT = 10; // Load 50 items per request
+    private static String[] types = {"No pot","Simple Pot","Advanced Pot","Advanced Pot with GreenHouse","GreenHouse"};
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashViewModel = new ViewModelProvider(requireActivity()).get(DashboardViewModel.class);
@@ -53,7 +56,28 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
         Toast.makeText(getContext(), "Dash Fragment created!", Toast.LENGTH_SHORT).show();
         TextView dashText = binding.textDashboard;
         dashText.setText("Trying to connect to server...");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, types);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerTypeSel.setAdapter(adapter);
 
+
+        if(dashViewModel.getmTextAddBtn().getValue().equals("Add Pot."))
+        {
+
+            binding.recyclerViewDashBrdForPots.setVisibility(View.VISIBLE);
+            binding.buttonAddPot.setVisibility(View.INVISIBLE);
+            binding.editNamePot.setVisibility(View.INVISIBLE);
+            binding.spinnerTypeSel.setVisibility(View.INVISIBLE);
+        }
+        else if(dashViewModel.getmTextAddBtn().getValue().equals("Back."))
+        {
+
+            binding.recyclerViewDashBrdForPots.setVisibility(View.INVISIBLE);
+            binding.buttonAddPot.setVisibility(View.VISIBLE);
+            binding.editNamePot.setVisibility(View.VISIBLE);
+            binding.spinnerTypeSel.setVisibility(View.VISIBLE);
+        }
 
 
         setupRecyclerView();
@@ -99,12 +123,26 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
                 return true;
             }
         });
+        binding.spinnerTypeSel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getContext(), "Changed pot index to "+(position)+" !", Toast.LENGTH_SHORT).show();
+                dashViewModel.setIndexOfCurrentPot(position);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         binding.buttonUpdate.setOnClickListener(v->fetchPots());
         binding.buttonAdd.setOnClickListener(v->changeTextAddBtn());
+        binding.buttonAddPot.setOnClickListener(v->addNewPot());
 
         return root;
     }
+
+
 
     private void setupRecyclerView() {
         plantAdapter = new PlantAdapter(plantArray, this); // Pass 'this' as the listener
@@ -123,10 +161,21 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
             public void onButtonClick(Pot pot) {
                 // Handle button click
                 Toast.makeText(getContext(), "Button clicked for pot: " + pot.getPotName(), Toast.LENGTH_SHORT).show();
-                String url = homeViewModel.getURL().getValue() + "1/"+pot.getPotId();
-                networkHandler.sendDeleteRequest(url,pot.getPotName());
+                String url = homeViewModel.getURL().getValue();
+                networkHandler.sendDeleteRequest(url, pot.getPotName(), pot.getPotId(), new NetworkHandler.DeleteRequestCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        binding.buttonUpdate.performClick();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+
+                    }
+                });
+
             }
-        },networkHandler);
+        },networkHandler,homeViewModel);
 
         binding.recyclerViewDashBrdForPots.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewDashBrdForPots.setAdapter(potAdapter);
@@ -181,10 +230,10 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
             if (networkHandler != null) {
                 networkHandler.getErrorText().observe(getViewLifecycleOwner(), errorMessage -> {
                     binding.textDashboard.setText(errorMessage); // Update TextView
-                    if(networkHandler.getErrorCode().getValue() >= 0 )
-                        dashViewModel.setText("update pot.");
-                    else
+                    if(networkHandler.getErrorCode() != null && networkHandler.getErrorCode().getValue() < 0 )
                         dashViewModel.setText(String.valueOf(networkHandler.getErrorCode().getValue()));
+                    else if(networkHandler.getErrorCode() == null)
+                        dashViewModel.setText("Cant communicate with server.");
                 });
             }
         });
@@ -280,13 +329,47 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
         if(dashViewModel.getmTextAddBtn().getValue().equals("Add Pot."))
         {
             binding.recyclerViewDashBrdForPots.setVisibility(View.INVISIBLE);
+            binding.buttonAddPot.setVisibility(View.VISIBLE);
+            binding.editNamePot.setVisibility(View.VISIBLE);
+            binding.spinnerTypeSel.setVisibility(View.VISIBLE);
             dashViewModel.setmTextAddBtn("Back.");
         }
         else
         {
             binding.recyclerViewDashBrdForPots.setVisibility(View.VISIBLE);
+            binding.buttonAddPot.setVisibility(View.INVISIBLE);
+            binding.editNamePot.setVisibility(View.INVISIBLE);
+            binding.spinnerTypeSel.setVisibility(View.INVISIBLE);
             dashViewModel.setmTextAddBtn("Add Pot.");
         }
+    }
+    private void addNewPot() {
+        if(binding.editNamePot.getText()!=null)
+        {
+            Toast.makeText(getContext(),binding.editNamePot.getText().toString()+" selection for type "+
+                    dashViewModel.getIndexOfCurrentPot().getValue(),Toast.LENGTH_LONG).show();
+            Pot pot = new Pot(
+                    0, // potId (will be generated by the server)
+                    binding.editNamePot.getText().toString(), // potName
+                    dashViewModel.getIndexOfCurrentPot().getValue(), // potType
+                    "Test", // plantName
+                    1, // userId
+                    false, // hasCamera
+                    true, // pictReq
+                    false, // pumpStatus
+                    false, // greenHouseStatus
+                    0, // greenHouseTemperature
+                    0, // greenHouseHumidity
+                    0, // greenHousePressure
+                    0, // potPotassium
+                    0, // potPhosphorus
+                    0 // potNitrogen
+            );
+
+            networkHandler.createPot(pot,homeViewModel.getURL().getValue());
+        }
+        else
+            Toast.makeText(getContext(),"Please add a name for the pot!",Toast.LENGTH_LONG).show();
     }
     @Override
     public void onDestroyView() {

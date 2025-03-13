@@ -34,7 +34,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.postValue("This is home fragment");
+        mText.postValue("Loading...");
 
         mButtonText = new MutableLiveData<>();
         mButtonText.postValue("Click ME 2"); // Initial button text

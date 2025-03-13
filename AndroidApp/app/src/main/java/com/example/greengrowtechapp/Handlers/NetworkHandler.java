@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.greengrowtechapp.NetworkCallback;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,15 +62,54 @@ public class NetworkHandler implements Serializable {
         // Add the request to the RequestQueue
         requestQueue.add(stringRequest);
     }
-    public void sendDeleteRequest(String url,String name) {
-        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, url,
+    public void createPot(Pot pot,String url) {
+        // Define the URL for the POST request
+         // Replace with your actual endpoint
+
+        // Convert the Pot object to JSON using Gson
+        Gson gson = new Gson();
+        String potJson = gson.toJson(pot);
+
+        // Create a StringRequest for the POST request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle the successful response
+                        System.out.println("Pot created successfully: " + response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle the error
+                        System.out.println("Error creating pot: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            public byte[] getBody() {
+                // Return the JSON representation of the Pot object as the request body
+                return potJson.getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                // Specify the content type as JSON
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        // Add the request to the RequestQueue
+        requestQueue.add(stringRequest);
+    }
+    public void sendDeleteRequest(String url, String name, int id, DeleteRequestCallback callback) {
+        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, url + id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         errorCode.postValue(0); // Indicate success
-                        Toast.makeText(ctx, "Deleted the pot "+name , Toast.LENGTH_SHORT).show();
-
-                        //Log.d("DELETE_REQUEST", "DELETE request successful");
+                        Toast.makeText(ctx, "Deleted the pot " + name, Toast.LENGTH_SHORT).show();
+                        callback.onSuccess(response); // Notify the caller of success
                     }
                 },
                 new Response.ErrorListener() {
@@ -77,7 +117,7 @@ public class NetworkHandler implements Serializable {
                     public void onErrorResponse(VolleyError error) {
                         errorText.postValue("DELETE request failed: " + error.toString());
                         errorCode.postValue(-1); // Indicate failure
-                        //Log.e("DELETE_REQUEST", "DELETE request failed: " + error.toString());
+                        callback.onFailure(error.toString()); // Notify the caller of failure
                     }
                 });
 
@@ -270,15 +310,20 @@ public class NetworkHandler implements Serializable {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404)
+                if(error!= null && error.networkResponse!=null&& error.networkResponse.statusCode == 404)
                 {
                     errorText.postValue("No pots found!");
                     Toast.makeText(ctx, "ERROR no pots found", Toast.LENGTH_SHORT).show();
                 }
-                else if(errorCode.getValue()>=0)
+                else if(errorCode.getValue()!= null && errorCode.getValue()>=0)
                 {
                     responseHandler.setError(error.toString());
                     errorCode.postValue(-7);
+                }
+                else if(errorCode.getValue() == null)
+                {
+                    responseHandler.setError("cant communicate with server ");
+                    errorCode.postValue(-20);
                 }
 
                 // Call the failure callback
@@ -296,4 +341,8 @@ public class NetworkHandler implements Serializable {
     }
     public MutableLiveData<String> getErrorText(){return errorText;}
     public MutableLiveData<Integer> getErrorCode(){return errorCode;}
+    public interface DeleteRequestCallback {
+        void onSuccess(String response); // Called when the request is successful
+        void onFailure(String error);    // Called when the request fails
+    }
 }

@@ -16,11 +16,13 @@ namespace SQLserverFinale.Models
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Pot>(entity => {
+            modelBuilder.Entity<Pot>(entity =>
+            {
                 entity.HasKey(k => k.PotId);
+                entity.Property(p => p.PotId).ValueGeneratedOnAdd(); // Ensure the database generates the value
             });
-          
-            
+
+
             modelBuilder.Entity<Pot>()
          .HasOne<Plant>() // Specify the type of the navigation property
          .WithMany()      // No navigation property in the Plant class

@@ -195,6 +195,15 @@ public class HomeFragment extends Fragment {
             }
 
         });
+        if (networkHandler != null) {
+            networkHandler.getErrorText().observe(getViewLifecycleOwner(), errorMessage -> {
+                binding.textHome.setText(errorMessage); // Update TextView
+                if(networkHandler.getErrorCode() != null && networkHandler.getErrorCode().getValue() < 0 )
+                    homeViewModel.setText(String.valueOf(networkHandler.getErrorCode().getValue()));
+                else if(networkHandler.getErrorCode() == null)
+                    homeViewModel.setText("Cant communicate with server.");
+            });
+        }
 
         if(networkHandler!=null)
             networkHandler.getErrorText().observe(getViewLifecycleOwner(), new Observer<String>() {
