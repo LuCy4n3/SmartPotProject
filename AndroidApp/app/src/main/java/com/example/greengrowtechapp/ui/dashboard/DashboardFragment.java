@@ -58,7 +58,12 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
 
         setupRecyclerView();
         observeViewModels();
-
+        dashViewModel.getmTextAddBtn().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                binding.buttonAdd.setText(s);
+            }
+        });
         dashViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -96,7 +101,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
         });
 
         binding.buttonUpdate.setOnClickListener(v->fetchPots());
-
+        binding.buttonAdd.setOnClickListener(v->changeTextAddBtn());
 
         return root;
     }
@@ -118,8 +123,10 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
             public void onButtonClick(Pot pot) {
                 // Handle button click
                 Toast.makeText(getContext(), "Button clicked for pot: " + pot.getPotName(), Toast.LENGTH_SHORT).show();
+                String url = homeViewModel.getURL().getValue() + "1/"+pot.getPotId();
+                networkHandler.sendDeleteRequest(url,pot.getPotName());
             }
-        });
+        },networkHandler);
 
         binding.recyclerViewDashBrdForPots.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewDashBrdForPots.setAdapter(potAdapter);
@@ -267,10 +274,24 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
         String aux = homeViewModel.getURL().getValue()+"1/1";
         networkHandler.sendPutRequest(aux,"PlantName:"+plant.getPlantName());
     }
+    public void changeTextAddBtn()
+    {
 
+        if(dashViewModel.getmTextAddBtn().getValue().equals("Add Pot."))
+        {
+            binding.recyclerViewDashBrdForPots.setVisibility(View.INVISIBLE);
+            dashViewModel.setmTextAddBtn("Back.");
+        }
+        else
+        {
+            binding.recyclerViewDashBrdForPots.setVisibility(View.VISIBLE);
+            dashViewModel.setmTextAddBtn("Add Pot.");
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 }

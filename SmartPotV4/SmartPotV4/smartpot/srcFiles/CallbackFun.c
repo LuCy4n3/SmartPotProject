@@ -69,7 +69,7 @@ void newCbRx(void)
 		USART_RADIO_rxbuf[tmphead] = data;
 		writeOneByte(data);
 		writeOneByte(data);
-		PWM_LED_load_duty_cycle_ch0(data<<8|data);
+		PWM_LED_load_duty_cycle_ch0(0);
 		USART_RADIO_rx_elements++;
 		
 	}

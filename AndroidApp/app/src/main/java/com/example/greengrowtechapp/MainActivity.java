@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static Integer indexOfCurrentPot = new Integer(1);
     private static Integer indexOfCurrentUser = new Integer(1);
-    private static String Url = "http://192.168.0.199:3000/api/";
+    private static String Url = "http://192.168.0.192:3000/api/";
     //private static String URLpot = new String("http://roka.go.ro:3000/api/Pot/");
     private static String URLpot = new String(Url+"Pot/");
     //private static String URLplant = new String("http://roka.go.ro:3000/api/Plant/");
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
+
+
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.setResponseHandler(responseHandler);
         homeViewModel.setNetworkHandler(networkHandler);
@@ -82,8 +84,34 @@ public class MainActivity extends AppCompatActivity {
                 dashViewModel.setIndexOfCurrentPot(newPotIndex);
             }
         });
+        NetworkHandler finalNetworkHandler = networkHandler;
+        networkHandler.sendGetRequestListPot(URLpot + "1", new NetworkCallback() {
+            @Override
+            public void onSuccess() {
 
-        updatePumpStatusBeforeFragmentStart(networkHandler,responseHandler, homeViewModel, notViewModel, dashViewModel);
+            }
+
+            @Override
+            public void onPlantListGetSucces(List<Plant> plants) {
+
+            }
+
+            @Override
+            public void onPotListGetSucces(List<Pot> pots) {
+                Pot aux = pots.get(0);
+                indexOfCurrentPot = aux.getPotId();
+                updatePumpStatusBeforeFragmentStart(finalNetworkHandler,responseHandler, homeViewModel, notViewModel, dashViewModel);
+
+            }
+
+            @Override
+            public void onFailure() {
+                int a = 0;
+                updatePumpStatusBeforeFragmentStart(finalNetworkHandler,responseHandler, homeViewModel, notViewModel, dashViewModel);
+
+            }
+        });
+
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -94,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+
+
     }
     private void updatePumpStatusBeforeFragmentStart(NetworkHandler networkHandler,JSONresponseHandler responseHandler, HomeViewModel homeViewModel, NotificationsViewModel notViewModel, DashboardViewModel dashViewModel) {
         String url = URLpot + indexOfCurrentUser + "/" + indexOfCurrentPot;
@@ -146,6 +177,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure() {
                 //Toast.makeText(MainActivity.this, "Failed to update pump status!", Toast.LENGTH_SHORT).show();
+                homeViewModel.setNetworkHandler(networkHandler);
+                homeViewModel.setResponseHandler(responseHandler);
+                homeViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                homeViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
+                homeViewModel.setURL(URLpot);
+                homeViewModel.setURLimage(URLimage);
+
+                notViewModel.setNetworkHandler(networkHandler);
+                notViewModel.setResponseHandler(responseHandler);
+                notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                notViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
+                notViewModel.setURL(URLpot);
+
+                dashViewModel.setNetworkHandler(networkHandler);
+                dashViewModel.setResponseHandler(responseHandler);
+                dashViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                dashViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
+                dashViewModel.setURL(URLplant);
             }
 
 

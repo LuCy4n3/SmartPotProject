@@ -113,6 +113,7 @@ uint8_t readSpiADC(uint8_t channel)
 {
 	uint8_t readData = 0;
 	bool setState;
+	//channel = channel << 1; // make sure the actual data that can be between 0 and 3, is placed in the bits that are of interest
 	//write
 	PORTA_set_pin_level(6,false);
 	PORTA_set_pin_level(7,false);
@@ -124,39 +125,44 @@ uint8_t readSpiADC(uint8_t channel)
 	//_delay_ms(100);
 	//PORTA_set_pin_level(6,true);
 	//_delay_ms(100);
+	newClock(6);
 	//newClock(6);
-	//newClock(6);
-	for(uint8_t i = 6; i > 0; i--)
+	//writeOneByte(0xA);
+	for(uint8_t i = 7; i > 0; i--)
 	{
-		uint8_t aux = i-1;
+		
 		//PORTA_toggle_pin_level(6);
-		PORTA_set_pin_level(4,converToBool(channel&(1<<aux)));
+		PORTA_set_pin_level(4,converToBool(channel&(1<<i)));
+		_delay_ms(20);
 		newClock(6);
 		//PORTA_toggle_pin_level(4);
 		
-		setState = i<=2 ? true : false;
+		//setState = i<=2 ? true : false;
 		//PORTA_set_pin_level(4,setState);
 		//writeOneByte(converToBool(channel&(1<<aux)) == true? 1 : 0);
 		readData = (readData<<1) | PORTA_get_pin_level(5);
+		//writeOneByte(readData);
 		//writeOneByte(PORTA_get_pin_level(5));
 		//_delay_ms(100);
 	}
 	//_delay_ms(100);
 	PORTA_set_pin_level(4,false);
 	
-	writeOneByte(0xC);
+	//writeOneByte(0xC);
 	
 	//readData = PORTA_get_pin_level(5);
 	//read
 	//_delay_ms(200);
-	for(uint8_t i = 0; i < 7; i++)
+	for(uint8_t i = 0; i < 4; i++)
 	{
 		//PORTA_toggle_pin_level(6);
 		newClock(6);
 		readData = (readData<<1) | PORTA_get_pin_level(5);
 		//writeOneByte(PORTA_get_pin_level(5));
+		//writeOneByte(readData);
 		//_delay_ms(100);
 	}
+	//writeOneByte(0xA);
 	PORTA_set_pin_level(7,true);
 	return readData;
 	
@@ -178,12 +184,14 @@ int main(void)
 	PWM_LED_load_duty_cycle_ch0(0x0);
 	//TIMER_0_enable();
 	while (1) {
-		//PORTF_set_pin_level(5,true);
-		writeOneByte(readSpiADC(3));
+		PORTF_set_pin_level(5,true);
+		writeOneByte(0xB);
+		//writeOneByte(0x0);
+		//writeOneByte(0xB);
 		//readSpiADC(0);
 		_delay_ms(1000);
-		//PORTF_set_pin_level(5,false);
+		PORTF_set_pin_level(5,false);
 		_delay_ms(1000);
-		writeOneByte(0xB);
+		writeOneByte(readSpiADC(0xFF));
 	}
 }

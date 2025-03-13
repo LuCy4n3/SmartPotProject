@@ -79,6 +79,21 @@ namespace SQLserverFinale
 
             return Ok(new { message = $"{plants.Count} plants created successfully." });
         }
+        [HttpPost("one")]
+        public async Task<IActionResult> CreatePlant([FromBody] Plant plant)
+        {
+            // Check if the Plant object is null
+            if (plant == null)
+            {
+                return BadRequest("No plant was provided.");
+            }
+
+            // Add the plant to the database
+            _context.Plant.Add(plant);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Plant created successfully.", plantName = plant.PlantName });
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlant(string id)
         {
@@ -233,8 +248,10 @@ namespace SQLserverFinale
             }
             if(PictReq!=null && pot!=null)
                 pot.PictReq = PictReq;
-
-            _context.Pot.Update(pot);
+            if(pot!= null)
+                _context.Pot.Update(pot);
+            else 
+                return BadRequest();
             await _context.SaveChangesAsync();
 
             return NoContent();

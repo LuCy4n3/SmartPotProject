@@ -5,8 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.greengrowtechapp.Handlers.NetworkHandler;
 import com.example.greengrowtechapp.Handlers.Pot;
 import com.example.greengrowtechapp.R;
 import java.util.List;
@@ -15,6 +19,7 @@ public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
     private List<Pot> potList;
     private OnItemClickListener itemClickListener;
     private OnButtonClickListener buttonClickListener;
+    private NetworkHandler networkHandler;
 
     // Interfaces for click events
     public interface OnItemClickListener {
@@ -26,10 +31,11 @@ public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
     }
 
     // Constructor
-    public PotAdapter(List<Pot> potList, OnItemClickListener itemClickListener, OnButtonClickListener buttonClickListener) {
+    public PotAdapter(List<Pot> potList, OnItemClickListener itemClickListener, OnButtonClickListener buttonClickListener, NetworkHandler networkHandler) {
         this.potList = potList;
         this.itemClickListener = itemClickListener;
         this.buttonClickListener = buttonClickListener;
+        this.networkHandler = networkHandler;
     }
 
     @NonNull
@@ -58,6 +64,7 @@ public class PotAdapter extends RecyclerView.Adapter<PotAdapter.PotViewHolder> {
         holder.buttonAction.setOnClickListener(v -> {
             if (buttonClickListener != null) {
                 buttonClickListener.onButtonClick(pot);
+                Toast.makeText(holder.buttonAction.getContext() ,"Clicked button form menu!",Toast.LENGTH_SHORT).show();
             }
         });
     }

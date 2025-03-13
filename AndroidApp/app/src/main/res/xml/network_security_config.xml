@@ -3,6 +3,8 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">10.132.88.231</domain>
         <domain includeSubdomains="true">192.168.0.199</domain>
+        <domain includeSubdomains="true">192.168.0.192</domain>
+
         <domain includeSubdomains="true">roka.go.ro</domain>
 
     </domain-config>

@@ -22,6 +22,10 @@ public class DashboardViewModel extends ViewModel {
     private final MutableLiveData<NetworkHandler> mNetworkHandler = new MutableLiveData<>();
     private final MutableLiveData<ArrayAdapter<String>> mAdapter = new MutableLiveData<>();
     private final MutableLiveData<List<Plant>> mPlantArray = new MutableLiveData<>();
+    private final MutableLiveData<String> mTextAddBtn = new MutableLiveData<>();
+
+
+
     public DashboardViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("Update pot.");
@@ -37,6 +41,7 @@ public class DashboardViewModel extends ViewModel {
         mAdapter.postValue(null);
 
         mPlantArray.postValue(null);
+        mTextAddBtn.postValue("Add Pot.");
     }
     public void setPlantArray(List<Plant> array)
     {
@@ -94,5 +99,12 @@ public class DashboardViewModel extends ViewModel {
     }
     public LiveData<String> getText() {
         return mText;
+    }
+    public MutableLiveData<String> getmTextAddBtn() {
+        return mTextAddBtn;
+    }
+    public void setmTextAddBtn(String s)
+    {
+        mTextAddBtn.postValue(s);
     }
 }

@@ -22,6 +22,7 @@ import com.example.greengrowtechapp.Handlers.Pot;
 import com.example.greengrowtechapp.NetworkCallback;
 import com.example.greengrowtechapp.databinding.FragmentHomeBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,8 +35,8 @@ public class HomeFragment extends Fragment {
 
     private JSONresponseHandler responseHandler = null;
     private NetworkHandler networkHandler = null;
-    private static final String[] paths = {"Dispozitiv 1", "Dispozitiv 2", "Dispozitiv 3", "Dispozitiv 4", "Dispozitiv 5"};
-
+    private static String[] paths = {"Dispozitiv 1", "Dispozitiv 2", "Dispozitiv 3", "Dispozitiv 4", "Dispozitiv 5"};
+    private Integer[] idPaths = new Integer[0]; // Initialize as an empty array
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,10 +49,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, paths);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spinner.setAdapter(adapter);
+
 
         homeViewModel.getURLimage().observe(getViewLifecycleOwner(), url->{
             homeViewModel.setURLimage(url);
@@ -59,6 +57,8 @@ public class HomeFragment extends Fragment {
 
         homeViewModel.getURL().observe(getViewLifecycleOwner(), text -> {
             homeViewModel.setURL(text);
+//            if(networkHandler!= null&&homeViewModel.getURL().getValue()!=null)
+//                updateSpinner();
         });
         homeViewModel.getmButtonPump().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
@@ -154,6 +154,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(NetworkHandler netHandler) {
                 networkHandler = netHandler;
+                if (networkHandler != null && homeViewModel.getURL().getValue() != null) {
+                    updateSpinner(); // Call updateSpinner() when networkHandler is initialized
+                }
                 if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null)
                 {
                     String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
@@ -163,7 +166,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onSuccess() {
                             homeViewModel.updateTextView(); // Execute this after the network request completes successfully
-
+                            //updateSpinner();
                         }
                         @Override
                         public void onPlantListGetSucces(List<Plant> plants) {
@@ -178,15 +181,28 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onFailure() {
                             Toast.makeText(getContext(), "Network request failed for index "+homeViewModel.getIndexOfCurrentPot().getValue() +" !", Toast.LENGTH_SHORT).show();
-                            homeViewModel.handleError();
+                            homeViewModel.setText(networkHandler.getErrorText().getValue());
+                            //homeViewModel.handleError();
                         }
                     });
 
 
                 }
+//                else if(homeViewModel.getURL().getValue()!=null && networkHandler!=null)
+//                {
+//                    updateSpinner();
+//                }
             }
 
         });
+
+        if(networkHandler!=null)
+            networkHandler.getErrorText().observe(getViewLifecycleOwner(), new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    homeViewModel.setText(s);
+                }
+            });
 
         // Observing LiveData from HomeViewModel
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -199,10 +215,10 @@ public class HomeFragment extends Fragment {
 
         binding.buttonUpdate.setOnClickListener(v -> {
             //Toast.makeText(getContext(), "Button HOME FRAGMENT clicked!", Toast.LENGTH_SHORT).show();
+            int a = 0;
             if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null) {
-                String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
+                String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+(idPaths[homeViewModel.getIndexOfCurrentPot().getValue()-1]);
 
-                int a = 0;
                 networkHandler.sendGetRequest(aux, new NetworkCallback() {
                     @Override
                     public void onSuccess() {
@@ -225,7 +241,9 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "Network request failed!", Toast.LENGTH_SHORT).show();
-                        homeViewModel.handleError();
+                        homeViewModel.setText(networkHandler.getErrorText().getValue());
+
+                        //homeViewModel.handleError();
                     }
                 });
 
@@ -251,7 +269,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onFailure() {
                             Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
-                            homeViewModel.handleError();
+                            //homeViewModel.handleError();
                         }
                     });
 
@@ -327,9 +345,60 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onFailure() {
                     Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
-                    homeViewModel.handleError();
+                    homeViewModel.setText(networkHandler.getErrorText().getValue());
+
+                    //homeViewModel.handleError();
                 }
             });
+
+    }
+    public void updateSpinner()
+    {
+        networkHandler.sendGetRequestListPot(homeViewModel.getURL().getValue() + "1", new NetworkCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onPlantListGetSucces(List<Plant> plants) {
+
+            }
+
+            @Override
+            public void onPotListGetSucces(List<Pot> pots) {
+                List<String> aux = new ArrayList<>();
+                List<Integer> auxId = new ArrayList<>();
+
+                pots.forEach(pot -> aux.add(pot.getPotName()));
+                pots.forEach(pot -> auxId.add(pot.getPotId()));
+
+// Convert the List<String> to a String[]
+                String[] paths = aux.toArray(new String[0]);
+                idPaths = auxId.toArray(new Integer[0]);
+// Create the ArrayAdapter
+                try {
+                    requireActivity().runOnUiThread(() -> {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                android.R.layout.simple_spinner_item, paths);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        binding.spinner.setAdapter(adapter);
+                        binding.buttonUpdate.performClick();
+                    });
+
+                }
+                catch (RuntimeException e)
+                {
+                    Toast.makeText(getContext() ,e.toString(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
 
     }
 }

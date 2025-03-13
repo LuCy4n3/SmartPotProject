@@ -40,7 +40,7 @@ public class NetworkHandler implements Serializable {
         this.responseHandler = responseHandler;
         requestQueue = getRequestQueue();
         JSONresponse = new JSONObject("{}");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.0.199:3000/api/Plant/a/15/0",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.0.192:3000/api/Plant/a/15/0",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -60,6 +60,29 @@ public class NetworkHandler implements Serializable {
 
         // Add the request to the RequestQueue
         requestQueue.add(stringRequest);
+    }
+    public void sendDeleteRequest(String url,String name) {
+        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        errorCode.postValue(0); // Indicate success
+                        Toast.makeText(ctx, "Deleted the pot "+name , Toast.LENGTH_SHORT).show();
+
+                        //Log.d("DELETE_REQUEST", "DELETE request successful");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        errorText.postValue("DELETE request failed: " + error.toString());
+                        errorCode.postValue(-1); // Indicate failure
+                        //Log.e("DELETE_REQUEST", "DELETE request failed: " + error.toString());
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        requestQueue.add(deleteRequest);
     }
     public void sendImageRequest(String url, final ImageView imageView, final NetworkCallback callback) {
         // Create an ImageRequest
@@ -115,8 +138,12 @@ public class NetworkHandler implements Serializable {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorText.postValue(error.toString());
-                errorCode.postValue(-3);
+                if(errorCode.getValue() >= 0)
+                {
+                    errorText.postValue(error.toString());
+                    errorCode.postValue(-3);
+                }
+
                 //TODO: add response handler
             }
         };
@@ -198,8 +225,12 @@ public class NetworkHandler implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(ctx, "ERROR " + url + " !", Toast.LENGTH_SHORT).show();
-                        errorText.postValue(error.toString());
-                        errorCode.postValue(-6);
+                        if(errorCode.getValue() >=0)
+                        {
+                            errorText.postValue(error.toString());
+                            errorCode.postValue(-6);
+                        }
+
                         if (callback != null) {
                             callback.onFailure();
                         }
@@ -239,9 +270,17 @@ public class NetworkHandler implements Serializable {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx, "ERROR!"+error.toString(), Toast.LENGTH_SHORT).show();
-                responseHandler.setError(error.toString());
-                errorCode.postValue(-7);
+                if(error.networkResponse.statusCode == 404)
+                {
+                    errorText.postValue("No pots found!");
+                    Toast.makeText(ctx, "ERROR no pots found", Toast.LENGTH_SHORT).show();
+                }
+                else if(errorCode.getValue()>=0)
+                {
+                    responseHandler.setError(error.toString());
+                    errorCode.postValue(-7);
+                }
+
                 // Call the failure callback
                 if (callback != null) {
                     callback.onFailure();
