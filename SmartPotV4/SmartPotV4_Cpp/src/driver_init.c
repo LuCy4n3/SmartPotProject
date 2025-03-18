@@ -183,136 +183,6 @@ void I2C_Module_initialization(void)
 	I2C_Module_init();
 }
 
-/* configure pins and initialize registers */
-void I2C_Sensor_initialization(void)
-{
-
-	PF3_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	PF3_set_dir(
-	    // <y> Pin direction
-	    // <id> pad_dir
-	    // <PORT_DIR_OFF"> Off
-	    // <PORT_DIR_IN"> In
-	    // <PORT_DIR_OUT"> Out
-	    PORT_DIR_OUT);
-
-	PF3_set_pull_mode(
-	    // <y> Pull configuration
-	    // <id> pad_pull_config
-	    // <PORT_PULL_OFF"> Off
-	    // <PORT_PULL_UP"> Pull-up
-	    PORT_PULL_OFF);
-
-	PF3_set_inverted(
-	    // <y> Invert I/O on pin
-	    // <id> pad_invert
-	    // <false"> Not inverted
-	    // <true"> Inverted
-	    false);
-
-	PF3_set_isc(
-	    // <y> Pin Input/Sense Configuration
-	    // <id> pad_isc
-	    // <PORT_ISC_INTDISABLE_gc"> Interrupt disabled but input buffer enabled
-	    // <PORT_ISC_BOTHEDGES_gc"> Sense Both Edges
-	    // <PORT_ISC_RISING_gc"> Sense Rising Edge
-	    // <PORT_ISC_FALLING_gc"> Sense Falling Edge
-	    // <PORT_ISC_INPUT_DISABLE_gc"> Digital Input Buffer disabled
-	    // <PORT_ISC_LEVEL_gc"> Sense low Level
-	    PORT_ISC_INTDISABLE_gc);
-
-	/* set the alternate pin mux */
-
-	PF2_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	PF2_set_dir(
-	    // <y> Pin direction
-	    // <id> pad_dir
-	    // <PORT_DIR_OFF"> Off
-	    // <PORT_DIR_IN"> In
-	    // <PORT_DIR_OUT"> Out
-	    PORT_DIR_OUT);
-
-	PF2_set_pull_mode(
-	    // <y> Pull configuration
-	    // <id> pad_pull_config
-	    // <PORT_PULL_OFF"> Off
-	    // <PORT_PULL_UP"> Pull-up
-	    PORT_PULL_OFF);
-
-	PF2_set_inverted(
-	    // <y> Invert I/O on pin
-	    // <id> pad_invert
-	    // <false"> Not inverted
-	    // <true"> Inverted
-	    false);
-
-	PF2_set_isc(
-	    // <y> Pin Input/Sense Configuration
-	    // <id> pad_isc
-	    // <PORT_ISC_INTDISABLE_gc"> Interrupt disabled but input buffer enabled
-	    // <PORT_ISC_BOTHEDGES_gc"> Sense Both Edges
-	    // <PORT_ISC_RISING_gc"> Sense Rising Edge
-	    // <PORT_ISC_FALLING_gc"> Sense Falling Edge
-	    // <PORT_ISC_INPUT_DISABLE_gc"> Digital Input Buffer disabled
-	    // <PORT_ISC_LEVEL_gc"> Sense low Level
-	    PORT_ISC_INTDISABLE_gc);
-
-	/* set the alternate pin mux */
-
-	I2C_Sensor_init();
-}
-
-/* configure the pins and initialize the registers */
-void SPI_ADC_initialization(void)
-{
-
-	// Set pin direction to input
-	PA5_set_dir(PORT_DIR_IN);
-
-	PA5_set_pull_mode(
-	    // <y> Pull configuration
-	    // <id> pad_pull_config
-	    // <PORT_PULL_OFF"> Off
-	    // <PORT_PULL_UP"> Pull-up
-	    PORT_PULL_OFF);
-
-	// Set pin direction to output
-
-	PA4_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	PA4_set_dir(PORT_DIR_OUT);
-
-	// Set pin direction to output
-
-	PA6_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	PA6_set_dir(PORT_DIR_OUT);
-
-	SPI_ADC_init();
-}
-
 void PWM_LED_initialization(void)
 {
 
@@ -330,10 +200,25 @@ void PWM_LED_initialization(void)
 	PWM_LED_init();
 }
 
-void TIMER_0_initialization(void)
+void PWM_0_initialization(void)
 {
 
-	TIMER_0_init();
+	// Set pin direction to output
+
+	PF4_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	PF4_set_dir(PORT_DIR_OUT);
+
+	/* set the alternate pin mux */
+
+	PORTMUX.TCBROUTEA |= PORTMUX_TCB0_bm;
+
+	PWM_0_init();
 }
 
 /**
@@ -355,13 +240,9 @@ void system_init()
 
 	I2C_Module_initialization();
 
-	I2C_Sensor_initialization();
-
-	SPI_ADC_initialization();
-
 	PWM_LED_initialization();
 
-	TIMER_0_initialization();
+	PWM_0_initialization();
 
 	BOD_init();
 }

@@ -26,6 +26,4 @@ void drive_slave_select_low_custom(void);
 
 
 
-
-
 #endif /* CALLBACKFUN_H_ */

@@ -258,51 +258,6 @@ drivers:
           external_frequency: 0
         configuration:
           twi_clock_source: Main Clock (CLK_MAIN)
-  I2C_Sensor:
-    user_label: I2C_Sensor
-    definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::TWI1::driver_config_definition::Interrupt::Drivers:I2C:Master
-    functionality: I2C
-    api: Drivers:I2C:Master
-    configuration:
-      f_scl: 100000
-      t_rise: 0
-      twi_advanced_config: false
-      twi_ctrla_fmpen: false
-      twi_ctrla_sdahold: SDA hold time off
-      twi_ctrla_sdasetup: SDA setup time is 4 clock cycles
-      twi_dbgctrl_dbgrun: false
-      twi_mctrla_enable: true
-      twi_mctrla_qcen: false
-      twi_mctrla_rien: true
-      twi_mctrla_smen: false
-      twi_mctrla_timeout: Bus Timeout Disabled
-      twi_mctrla_wien: true
-      twi_mstatus_busstate: Bus is Idle
-    optional_signals:
-    - identifier: I2C_Sensor:SCL
-      pad: PF3
-      mode: Enabled
-      configuration: null
-      definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::optional_signal_definition::TWI1.SCL
-      name: TWI1/SCL
-      label: SCL
-    - identifier: I2C_Sensor:SDA
-      pad: PF2
-      mode: Enabled
-      configuration: null
-      definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::optional_signal_definition::TWI1.SDA
-      name: TWI1/SDA
-      label: SDA
-    variant: null
-    clocks:
-      domain_group:
-        nodes:
-        - name: TWI
-          input: Main Clock (CLK_MAIN)
-          external: false
-          external_frequency: 0
-        configuration:
-          twi_clock_source: Main Clock (CLK_MAIN)
   PWM_LED:
     user_label: PWM_LED
     definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::TCA0::driver_config_definition::Single.Slope.~28Fast~29.Programmable.TOP::Drivers:PWM:Basic
@@ -350,31 +305,38 @@ drivers:
           external_frequency: 0
         configuration:
           tca_clock_source: Main Clock (CLK_MAIN)
-  TIMER_0:
-    user_label: TIMER_0
-    definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::TCB1::driver_config_definition::Init::Drivers:TCB:Init
-    functionality: Timer
-    api: Drivers:TCB:Init
+  PWM_0:
+    user_label: PWM_0
+    definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::TCB0::driver_config_definition::Single.Slope.~28Fast~29.Programmable.TOP::Drivers:PWM:Basic
+    functionality: PWM
+    api: Drivers:PWM:Basic
     configuration:
-      inc_isr_harness: true
-      tcb_ccmp: 4095
+      callback_rate: 0
+      inc_overflow_irq: true
+      tcb_ccmph: 15
+      tcb_ccmpl: 255
       tcb_cnt: 0
-      tcb_ctrla_cascade: false
-      tcb_ctrla_clksel: CLK_PER/2
+      tcb_ctrla_clksel: CLK_PER
       tcb_ctrla_enable: true
       tcb_ctrla_runstdby: false
       tcb_ctrla_syncupd: false
       tcb_ctrlb_async: false
-      tcb_ctrlb_ccmpen: false
+      tcb_ctrlb_ccmpen: true
       tcb_ctrlb_ccmpinit: false
-      tcb_ctrlb_cntmode: Periodic Interrupt
+      tcb_ctrlb_cntmode: 8-bit PWM
       tcb_dbgctrl_dbgrun: false
       tcb_evctrl_captei: false
       tcb_evctrl_edge: false
       tcb_evctrl_filter: false
-      tcb_intctrl_capt: true
-      tcb_intctrl_ovf: true
-    optional_signals: []
+      tcb_intctrl_capt: false
+    optional_signals:
+    - identifier: PWM_0:WO/0
+      pad: PF4
+      mode: Enable
+      configuration: null
+      definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::optional_signal_definition::TCB0.WO.0
+      name: TCB0/WO/0
+      label: WO/0
     variant: null
     clocks:
       domain_group:
@@ -431,17 +393,11 @@ pads:
     mode: Digital input
     user_label: PF1
     configuration: null
-  PF2:
-    name: PF2
-    definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::pad::PF2
-    mode: Advanced
-    user_label: PF2
-    configuration: null
-  PF3:
-    name: PF3
-    definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::pad::PF3
-    mode: Advanced
-    user_label: PF3
+  PF4:
+    name: PF4
+    definition: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::pad::PF4
+    mode: Digital output
+    user_label: PF4
     configuration: null
   PA0:
     name: PA0
@@ -457,6 +413,13 @@ pads:
     configuration: null
 toolchain_options:
 - definition:
+    identifier: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::environment_definition::All:Microchip.Studio.gcc:7.0.0
+  configuration:
+    compiler_config:
+      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
+    linker_config:
+      avrgcc_linker_miscellaneous_LinkerFlags: ''
+- definition:
     identifier: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::environment_definition::All:Atmel.Studio:7.0.0
   configuration:
     compiler_config:
@@ -470,11 +433,4 @@ toolchain_options:
       xc8_compiler_miscellaneous_OtherFlags: -std=gnu99
     linker_config:
       xc8_linker_miscellaneous_LinkerFlags: ''
-- definition:
-    identifier: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::environment_definition::All:Microchip.Studio.gcc:7.0.0
-  configuration:
-    compiler_config:
-      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
-    linker_config:
-      avrgcc_linker_miscellaneous_LinkerFlags: ''
 static_files: []

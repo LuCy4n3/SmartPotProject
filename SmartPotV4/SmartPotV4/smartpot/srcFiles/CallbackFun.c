@@ -30,6 +30,82 @@ void initCB(void)
 	USART_RADIO_tx_head     = x;
 	USART_RADIO_tx_elements = x;
 }
+void resetRxCB(void)
+{
+	uint8_t x = 0;
+
+	USART_RADIO_rx_tail     = x;
+	USART_RADIO_rx_head     = x;
+	USART_RADIO_rx_elements = x;
+}
+void errorGenerator(uint8_t index, uint8_t value)
+{
+	switch (index)
+	{
+		case 1:
+		writeOneByte(0x22);
+		writeOneByte(value);
+		break;
+
+		case 2:
+		writeOneByte(0x23);
+		writeOneByte(value);
+		break;
+
+		case 3:
+		writeOneByte(0x24);
+		writeOneByte(value);
+		break;
+
+		default:
+		// Optional: Handle unexpected index values
+		writeOneByte(0xFF); // Indicating an unknown error
+		writeOneByte(index);
+		break;
+	}
+}
+
+void testHeader()
+{
+	if (USART_RADIO_rxbuf[1] == 0x15)
+	{
+		if (USART_RADIO_rxbuf[2] == 0x3)
+		{
+			switch (USART_RADIO_rxbuf[3])
+			{
+				case 0x2:
+				writeOneByte(PORTA_get_pin_level(1) == true ? 0x0 : 0xFF);
+				break;
+
+				case 0x3:
+				PORTA_set_pin_level(1, USART_RADIO_rxbuf[4] == 0x1 ? true : false);
+				break;
+
+				case 0x4:
+				PWM_0_load_duty_cycle_ch0(USART_RADIO_rxbuf[4] << 8 | USART_RADIO_rxbuf[4]);
+				break;
+
+				case 0x5:
+				PWM_LED_load_duty_cycle_ch0(USART_RADIO_rxbuf[4] << 8 | USART_RADIO_rxbuf[4]);
+				break;
+
+				default:
+				errorGenerator(3, USART_RADIO_rxbuf[3]);
+				break;
+			}
+		}
+		else
+		{
+			errorGenerator(2, USART_RADIO_rxbuf[2]);
+		}
+	}
+	else
+	{
+		errorGenerator(1, USART_RADIO_rxbuf[1]);
+	}
+
+
+}
 void newCbTx(void)
 {
 	uint8_t tmptail;
@@ -67,10 +143,18 @@ void newCbRx(void)
 
 		/* Store received data in buffer */
 		USART_RADIO_rxbuf[tmphead] = data;
-		writeOneByte(data);
-		writeOneByte(data);
-		PWM_LED_load_duty_cycle_ch0(0);
+		
+		
+		
 		USART_RADIO_rx_elements++;
+		if(USART_RADIO_rx_elements == 4)
+		{
+			
+			testHeader(USART_RADIO_rxbuf);
+			
+			resetRxCB();
+		}
+		
 		
 	}
 }

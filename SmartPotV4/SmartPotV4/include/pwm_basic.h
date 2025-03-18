@@ -71,6 +71,29 @@ void PWM_LED_load_duty_cycle_ch2(PWM_LED_register_t duty_value);
 
 void PWM_LED_register_callback(pwm_irq_cb_t f);
 
+#define PWM_0_INTERRUPT_CB_RATE 0
+
+/** The datatype matching the bitwidth of the PWM hardware */
+typedef uint8_t PWM_0_register_t;
+
+int8_t PWM_0_init(void);
+
+void PWM_0_enable();
+
+void PWM_0_disable();
+
+void PWM_0_enable_output_ch0();
+
+void PWM_0_disable_output_ch0();
+
+void PWM_0_load_counter(PWM_0_register_t counter_value);
+
+void PWM_0_load_top(PWM_0_register_t top_value);
+
+void PWM_0_load_duty_cycle_ch0(PWM_0_register_t duty_value);
+
+void PWM_0_register_callback(pwm_irq_cb_t f);
+
 #ifdef __cplusplus
 }
 #endif

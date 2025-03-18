@@ -62,7 +62,6 @@
         <file category="other" condition="GCC, XC8, IAR" name="doxygen/pwm.dox"/>
         <file category="other" condition="GCC, XC8, IAR" name="doxygen/pwm_basic.dox"/>
         <file category="other" condition="GCC, XC8, IAR" name="doxygen/system.dox"/>
-        <file category="other" condition="GCC, XC8, IAR" name="doxygen/timer.dox"/>
         <file category="other" condition="GCC, XC8, IAR" name="doxygen/usart.dox"/>
         <file category="other" condition="GCC, XC8, IAR" name="doxygen/usart_basic.dox"/>
         <file category="other" condition="GCC, XC8, IAR" name="doxygen/usart_init.dox"/>
@@ -85,7 +84,6 @@
         <file category="header" condition="GCC, XC8, IAR" name="include/rstctrl.h"/>
         <file category="header" condition="GCC, XC8, IAR" name="include/slpctrl.h"/>
         <file category="header" condition="GCC, XC8, IAR" name="include/system.h"/>
-        <file category="header" condition="GCC, XC8, IAR" name="include/tcb.h"/>
         <file category="header" condition="GCC, XC8, IAR" name="include/usart.h"/>
         <file category="header" condition="GCC, XC8, IAR" name="include/usart_basic.h"/>
         <file category="source" condition="GCC, XC8, IAR" name="src/bod.c"/>
@@ -97,7 +95,6 @@
         <file category="source" condition="GCC, XC8, IAR" name="src/protected_io.S"/>
         <file category="source" condition="GCC, XC8, IAR" name="src/pwm_basic.c"/>
         <file category="source" condition="GCC, XC8, IAR" name="src/slpctrl.c"/>
-        <file category="source" condition="GCC, XC8, IAR" name="src/tcb.c"/>
         <file category="source" condition="GCC, XC8, IAR" name="src/usart.c"/>
         <file category="source" condition="GCC, XC8, IAR" name="src/usart_basic.c"/>
         <file category="header" condition="GCC, XC8, IAR" name="utils/assembler.h"/>

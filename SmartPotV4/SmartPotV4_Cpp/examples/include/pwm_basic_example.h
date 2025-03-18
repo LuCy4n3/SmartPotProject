@@ -30,4 +30,6 @@
 
 uint8_t PWM_LED_test_pwm_basic(void);
 
+uint8_t PWM_0_test_pwm_basic(void);
+
 #endif /* PWM_BASIC_EXAMPLE_H */

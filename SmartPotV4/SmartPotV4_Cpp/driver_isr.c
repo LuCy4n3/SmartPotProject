@@ -35,8 +35,6 @@
 
 #include <driver_init.h>
 #include <compiler.h>
-#include <tcb.h>
-#include "smartpot/CallbackFun.h"
 
 ISR(USART1_RXC_vect)
 
@@ -59,19 +57,4 @@ ISR(USART1_TXC_vect)
 	 *
 	 * The interrupt flag will be automatically cleared
 	 */
-}
-
-ISR(TCB1_INT_vect)
-{
-
-	TCB1.INTFLAGS = TCB_CAPT_bm;
-
-	TCB1.INTFLAGS = TCB_OVF_bm;
-	//writeOneByte(0xDD);
-	//drive_slave_select_low_custom();
-	PORTA_set_pin_level(7,false);
-	
-	TCB1.CNT = 0;
-	TIMER_0_disable();
-	
 }

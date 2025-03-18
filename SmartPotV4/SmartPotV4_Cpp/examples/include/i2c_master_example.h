@@ -30,6 +30,4 @@
 
 uint8_t I2C_Module_test_i2c_master(void);
 
-uint8_t I2C_Sensor_test_i2c_master(void);
-
 #endif /* I2C_MASTER_EXAMPLE_H */

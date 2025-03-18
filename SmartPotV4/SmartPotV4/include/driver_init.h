@@ -52,13 +52,11 @@
 
 #include <i2c_master.h>
 
-#include <i2c_master.h>
-
 #include <interrupt_avr8.h>
 #include <pwm_basic.h>
 
 #include <interrupt_avr8.h>
-#include <tcb.h>
+#include <pwm_basic.h>
 
 #include <bod.h>
 

@@ -18,12 +18,12 @@ typedef struct {
 	uint8_t  size;
 } transfer_descriptor_t;
 
-i2c_operations_t I2C_Sensor_read_handler(void *d)
+i2c_operations_t I2C_Module_read_handler(void *d)
 {
 	transfer_descriptor_t *desc = (transfer_descriptor_t *)d;
-	I2C_Sensor_set_buffer((void *)desc->data, desc->size);
+	I2C_Module_set_buffer((void *)desc->data, desc->size);
 	// Set callback to terminate transfer and send STOP after read is complete
-	I2C_Sensor_set_data_complete_callback(i2c_cb_return_stop, NULL);
+	I2C_Module_set_data_complete_callback(i2c_cb_return_stop, NULL);
 	return i2c_restart_read; // Send REPEATED START before read
 }
 
@@ -55,7 +55,7 @@ void I2CManagerClass::Init()
 	if(!isInitialized)
 	{
 		isInitialized = true;
-		I2C_Sensor_init();
+		I2C_Module_init();
 	}
 }
 
@@ -83,13 +83,13 @@ i2c_error_t I2CManagerClass::WriteRegister(uint8_t address,uint8_t reg,uint8_t f
 This transfer sequence is typically done to first write to the slave the address in
 the slave to read from, thereafter to read N bytes from this address.
 */
-i2c_error_t I2C_Sensor_do_transfer(uint8_t addr,uint8_t *data, uint8_t countToWrite,uint8_t countToRead)
+i2c_error_t I2C_Module_do_transfer(uint8_t addr,uint8_t *data, uint8_t countToWrite,uint8_t countToRead)
 {
 	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
 	uint16_t              timeout = I2C_TIMEOUT;
 	transfer_descriptor_t readDescriptor       = {data, countToRead};
 
-	while (I2C_BUSY == I2C_Sensor_open(addr) && --timeout)
+	while (I2C_BUSY == I2C_Module_open(addr) && --timeout)
 	; // sit here until we get the bus..
 	if (!timeout)
 	return I2C_BUSY;
@@ -97,16 +97,16 @@ i2c_error_t I2C_Sensor_do_transfer(uint8_t addr,uint8_t *data, uint8_t countToWr
 	// This callback specifies what to do after the first write operation has completed
 	// The parameters to the callback are bundled together in the aggregate data type d.
 	if(countToRead>0)
-	I2C_Sensor_set_data_complete_callback(I2C_Sensor_read_handler, &readDescriptor);
+	I2C_Module_set_data_complete_callback(I2C_Module_read_handler, &readDescriptor);
 	// If we get an address NACK, then try again by sending SLA+W
-	I2C_Sensor_set_address_nack_callback(i2c_cb_restart_write, NULL);
+	I2C_Module_set_address_nack_callback(i2c_cb_restart_write, NULL);
 	// Transmit specified number of bytes
-	I2C_Sensor_set_buffer((void *)data, countToWrite);
+	I2C_Module_set_buffer((void *)data, countToWrite);
 	// Start a Write operation
-	I2C_Sensor_master_operation(false);
+	I2C_Module_master_operation(false);
 	timeout = I2C_TIMEOUT;
 	
-	while (I2C_BUSY == I2C_Sensor_close() && --timeout)
+	while (I2C_BUSY == I2C_Module_close() && --timeout)
 	; // sit here until finished.
 	if (!timeout)
 	return I2C_FAIL;
@@ -122,7 +122,7 @@ i2c_error_t I2CManagerClass::WriteRegisterFromInternalBuffer(uint8_t address, ui
 	//i2c_m_sync_set_slaveaddr(&I2C_0,address,I2C_M_SEVEN);
 	//return io_write(&I2C_0.io,WriteBuffer,count+1);
 	
-	i2c_error_t returnVal = I2C_Sensor_do_transfer(address,WriteBuffer,countToWrite,countToRead);
+	i2c_error_t returnVal = I2C_Module_do_transfer(address,WriteBuffer,countToWrite,countToRead);
 	for(uint8_t i = 0;i<8;i++)
 	{
 		ReadBuffer[i] = WriteBuffer[i];
@@ -133,16 +133,16 @@ i2c_error_t I2CManagerClass::WriteRegisterFromInternalBuffer(uint8_t address, ui
 	
 	
 	//uint16_t              timeout = I2C_TIMEOUT;
-	//while (I2C_BUSY == I2C_Sensor_open(address) && --timeout)	; // sit here until we get the bus..
+	//while (I2C_BUSY == I2C_Module_open(address) && --timeout)	; // sit here until we get the bus..
 	//if (!timeout)
 	//return I2C_BUSY;
 	
 }
 
-static i2c_operations_t I2C_Sensor_rd2RegCompleteHandler(void *p)
+static i2c_operations_t I2C_Module_rd2RegCompleteHandler(void *p)
 {
-	I2C_Sensor_set_buffer(p, 2);
-	I2C_Sensor_set_data_complete_callback(NULL, NULL);
+	I2C_Module_set_buffer(p, 2);
+	I2C_Module_set_data_complete_callback(NULL, NULL);
 	return i2c_restart_read;
 }
 
@@ -158,13 +158,13 @@ i2c_error_t I2CManagerClass::ReadAmount(uint8_t address, uint8_t amount)
 	//}
 	//return I2C_NOERR;
 	
-	//I2C_Sensor_status.address = address;
-	I2C_Sensor_open (address);
-	I2C_Sensor_set_buffer(ReadBuffer, amount);
-	I2C_Sensor_master_read();
+	//I2C_Module_status.address = address;
+	I2C_Module_open (address);
+	I2C_Module_set_buffer(ReadBuffer, amount);
+	I2C_Module_master_read();
 	
 	uint16_t timeout = I2C_TIMEOUT;
-	while (I2C_BUSY == I2C_Sensor_close() && --timeout)
+	while (I2C_BUSY == I2C_Module_close() && --timeout)
 	; // sit here until finished.
 	if (!timeout)
 	{

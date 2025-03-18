@@ -58,11 +58,3 @@ ISR(USART1_TXC_vect)
 	 * The interrupt flag will be automatically cleared
 	 */
 }
-
-ISR(TCB1_INT_vect)
-{
-
-	TCB1.INTFLAGS = TCB_CAPT_bm;
-
-	TCB1.INTFLAGS = TCB_OVF_bm;
-}

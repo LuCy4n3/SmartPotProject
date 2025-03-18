@@ -41,6 +41,17 @@ void PWM_LED_pwm_handler_cb(void)
 	PWM_LED_isr_executed_counter++;
 }
 
+volatile uint16_t         PWM_0_isr_executed_counter = 0;
+volatile PWM_0_register_t PWM_0_duty;
+
+void PWM_0_pwm_handler_cb(void)
+{
+	PWM_0_duty++;
+	// Output duty cycle on PWM CH0
+	PWM_0_load_duty_cycle_ch0(PWM_0_duty);
+	PWM_0_isr_executed_counter++;
+}
+
 uint8_t PWM_LED_test_pwm_basic(void)
 {
 
@@ -61,6 +72,31 @@ uint8_t PWM_LED_test_pwm_basic(void)
 
 	// Wait for ISR to be executed 65000 times
 	while (PWM_LED_isr_executed_counter < 65000)
+		;
+
+	return 1;
+}
+
+uint8_t PWM_0_test_pwm_basic(void)
+{
+
+	// Enable pin output
+	PWM_0_enable_output_ch0();
+
+	// Set channel 0 duty cycle value register value to specified value
+	PWM_0_load_duty_cycle_ch0(0x3f);
+
+	// Set counter register value
+	PWM_0_load_counter(0);
+
+	// Test IRQ mode
+
+	ENABLE_INTERRUPTS();
+
+	PWM_0_register_callback(PWM_0_pwm_handler_cb);
+
+	// Wait for ISR to be executed 65000 times
+	while (PWM_0_isr_executed_counter < 65000)
 		;
 
 	return 1;

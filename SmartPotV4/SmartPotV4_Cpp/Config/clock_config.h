@@ -25,15 +25,6 @@
 
 // </h>
 
-// <h> SPI Clock Settings
-// <y> SPI Clock source
-// <CLK_MAIN"> Main Clock (CLK_MAIN)
-// <i> This defines the clock source for the SPI module
-// <id> spi_clock_source
-#define CONF_SPI_SRC CLK_MAIN
-
-// </h>
-
 // <<< end of configuration section >>>
 
 #endif // CLOCK_CONFIG_H

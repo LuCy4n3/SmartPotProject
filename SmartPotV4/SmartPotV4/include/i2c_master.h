@@ -69,38 +69,6 @@ void I2C_Module_set_data_nack_callback(i2c_callback cb, void *p);
 
 void I2C_Module_set_timeout_callback(i2c_callback cb, void *p);
 
-#define TWI1_BAUD(F_SCL, T_RISE) ((((((float)4000000 / (float)F_SCL)) - 10 - ((float)4000000 * T_RISE / 1000000))) / 2)
-
-void I2C_Sensor_init(void);
-
-i2c_error_t I2C_Sensor_open(i2c_address_t address);
-
-i2c_error_t I2C_Sensor_close(void);
-
-i2c_error_t I2C_Sensor_master_operation(bool read);
-
-i2c_error_t I2C_Sensor_master_write(void); // to be depreciated
-
-i2c_error_t I2C_Sensor_master_read(void); // to be depreciated
-
-void I2C_Sensor_set_timeout(uint8_t to);
-
-void I2C_Sensor_set_baud_rate(uint32_t baud);
-
-void I2C_Sensor_set_buffer(void *buffer, size_t bufferSize);
-
-// Event Callback functions.
-
-void I2C_Sensor_set_data_complete_callback(i2c_callback cb, void *p);
-
-void I2C_Sensor_set_write_collision_callback(i2c_callback cb, void *p);
-
-void I2C_Sensor_set_address_nack_callback(i2c_callback cb, void *p);
-
-void I2C_Sensor_set_data_nack_callback(i2c_callback cb, void *p);
-
-void I2C_Sensor_set_timeout_callback(i2c_callback cb, void *p);
-
 #ifdef __cplusplus
 }
 #endif

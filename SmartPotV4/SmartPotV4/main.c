@@ -172,7 +172,12 @@ int main(void)
 {
 	/* Initializes MCU, drivers and middleware */
 	atmel_start_init();
+	PWM_LED_init();
 	PWM_LED_enable();
+	PWM_0_init();
+	PWM_0_enable();
+	PWM_0_load_top(0xff);
+	PWM_0_enable_output_ch0();
 	USART_RADIO_enable();
 	initCB();
 	USART_RADIO_set_ISR_cb(&newCbTx,UDRE_CB);
@@ -181,17 +186,26 @@ int main(void)
 	enableSPI_soft();
 	/* Replace with your application code */
 	PORTF_set_pin_dir(5,PORT_DIR_OUT);
+	PORTF_set_pin_dir(3,PORT_DIR_OUT);
+	PORTA_set_pin_dir(1,PORT_DIR_OUT);
+	PORTA_set_pin_level(1,false);
 	PWM_LED_load_duty_cycle_ch0(0x0);
+	PWM_0_load_duty_cycle_ch0(0x0f);
+	//PWM_0_load_duty_cycle_ch0(0xf);
+
 	//TIMER_0_enable();
 	while (1) {
 		PORTF_set_pin_level(5,true);
+		PORTF_set_pin_level(3,true);
 		writeOneByte(0xB);
 		//writeOneByte(0x0);
 		//writeOneByte(0xB);
 		//readSpiADC(0);
 		_delay_ms(1000);
 		PORTF_set_pin_level(5,false);
+		PORTF_set_pin_level(3,false);
 		_delay_ms(1000);
-		writeOneByte(readSpiADC(0xFF));
+		//writeOneByte(readSpiADC(0xFF));
+		I2C_Module_close();
 	}
 }

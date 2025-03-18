@@ -50,19 +50,6 @@ i2c_error_t I2C_Module_writeNBytes(i2c_address_t address, void *data, size_t len
 i2c_error_t I2C_Module_readDataBlock(i2c_address_t address, uint8_t reg, void *data, size_t len);
 i2c_error_t I2C_Module_readNBytes(i2c_address_t address, void *data, size_t len);
 
-#define I2C_TIMEOUT 10000
-
-#define TWI1_BAUD(F_SCL, T_RISE) ((((((float)4000000 / (float)F_SCL)) - 10 - ((float)4000000 * T_RISE / 1000000))) / 2)
-
-uint8_t     I2C_Sensor_read1ByteRegister(i2c_address_t address, uint8_t reg);
-uint16_t    I2C_Sensor_read2ByteRegister(i2c_address_t address, uint8_t reg);
-i2c_error_t I2C_Sensor_write1ByteRegister(i2c_address_t address, uint8_t reg, uint8_t data);
-i2c_error_t I2C_Sensor_write2ByteRegister(i2c_address_t address, uint8_t reg, uint16_t data);
-
-i2c_error_t I2C_Sensor_writeNBytes(i2c_address_t address, void *data, size_t len);
-i2c_error_t I2C_Sensor_readDataBlock(i2c_address_t address, uint8_t reg, void *data, size_t len);
-i2c_error_t I2C_Sensor_readNBytes(i2c_address_t address, void *data, size_t len);
-
 #ifdef __cplusplus
 }
 #endif

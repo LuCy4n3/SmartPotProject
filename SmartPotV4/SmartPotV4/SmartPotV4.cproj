@@ -53,42 +53,40 @@
         </TopLevelComponents>
         <AcmeActionInfos>
           <AcmeProjectActionInfo Action="File" Source="main.c" IsConfig="false" Hash="k0AH7j+BrmdFhBPzCCMptA" />
-          <AcmeProjectActionInfo Action="File" Source="src/driver_init.c" IsConfig="false" Hash="K5kTAMD35/UaJKZEYp7nnw" />
-          <AcmeProjectActionInfo Action="File" Source="include/driver_init.h" IsConfig="false" Hash="Q7A/3bAdqrLxF8bcf2FMTw" />
-          <AcmeProjectActionInfo Action="File" Source="include/atmel_start_pins.h" IsConfig="false" Hash="anEcoeEUcvZiLbSC0xFm/w" />
-          <AcmeProjectActionInfo Action="File" Source="driver_isr.c" IsConfig="false" Hash="D6D80d2XLDokQJnpmzYtow" />
-          <AcmeProjectActionInfo Action="File" Source="examples/include/i2c_master_example.h" IsConfig="false" Hash="fcEREdcTmmAgjkDr3z/cCw" />
-          <AcmeProjectActionInfo Action="File" Source="examples/include/pwm_basic_example.h" IsConfig="false" Hash="kHJh9SvbK1eKY0Om78WqSw" />
+          <AcmeProjectActionInfo Action="File" Source="src/driver_init.c" IsConfig="false" Hash="CDalunvAWWqDdtS9RH81vQ" />
+          <AcmeProjectActionInfo Action="File" Source="include/driver_init.h" IsConfig="false" Hash="i5jIR4GBUweD+gAHfBDoAA" />
+          <AcmeProjectActionInfo Action="File" Source="include/atmel_start_pins.h" IsConfig="false" Hash="E1epLBdRTJkt55Ufw5nZWg" />
+          <AcmeProjectActionInfo Action="File" Source="driver_isr.c" IsConfig="false" Hash="QJJhV+EgKFg7m86G+A8iWg" />
+          <AcmeProjectActionInfo Action="File" Source="examples/include/i2c_master_example.h" IsConfig="false" Hash="vRqNtxWVSl/I/7U8ks/3rA" />
+          <AcmeProjectActionInfo Action="File" Source="examples/include/pwm_basic_example.h" IsConfig="false" Hash="G3cqGYEr6CsOpxHzK3kl0w" />
           <AcmeProjectActionInfo Action="File" Source="examples/include/usart_basic_example.h" IsConfig="false" Hash="yqF73rOJSKyi2yoWM3fWkA" />
-          <AcmeProjectActionInfo Action="File" Source="examples/src/i2c_master_example.c" IsConfig="false" Hash="I4/mtOyHQpNZI7vWyoH7Gg" />
-          <AcmeProjectActionInfo Action="File" Source="examples/src/pwm_basic_example.c" IsConfig="false" Hash="6CXPGLDjdjXh4AH+Ryc6Jw" />
+          <AcmeProjectActionInfo Action="File" Source="examples/src/i2c_master_example.c" IsConfig="false" Hash="R/AyYekIuMMgmVTS/fMkmg" />
+          <AcmeProjectActionInfo Action="File" Source="examples/src/pwm_basic_example.c" IsConfig="false" Hash="WdIy67cS43GeDzzy5zKZnw" />
           <AcmeProjectActionInfo Action="File" Source="examples/src/usart_basic_example.c" IsConfig="false" Hash="wpRCHGXaLfjXWAxuBDliFA" />
           <AcmeProjectActionInfo Action="File" Source="include/bod.h" IsConfig="false" Hash="ZLQQMk2tvecp7+/rnFJ88w" />
           <AcmeProjectActionInfo Action="File" Source="include/ccp.h" IsConfig="false" Hash="5tZzJbuv1SnHXckp4Dkw+w" />
           <AcmeProjectActionInfo Action="File" Source="include/clkctrl.h" IsConfig="false" Hash="zM1JGmuFxSf4GSXRFGmwTg" />
           <AcmeProjectActionInfo Action="File" Source="include/cpuint.h" IsConfig="false" Hash="B9ieKCbk0a2E+V1R0rNoCQ" />
-          <AcmeProjectActionInfo Action="File" Source="include/i2c_master.h" IsConfig="false" Hash="HJDbYMZFpjwaIGg60vhDug" />
-          <AcmeProjectActionInfo Action="File" Source="include/i2c_simple_master.h" IsConfig="false" Hash="dUNX2wx71sU/E+q1yBVzCQ" />
+          <AcmeProjectActionInfo Action="File" Source="include/i2c_master.h" IsConfig="false" Hash="QwucxOFVjNjguu0QhFa3sQ" />
+          <AcmeProjectActionInfo Action="File" Source="include/i2c_simple_master.h" IsConfig="false" Hash="VD6HcUJqX+ZlITHBtlLzFg" />
           <AcmeProjectActionInfo Action="File" Source="include/i2c_types.h" IsConfig="false" Hash="ntzVd/ufPkanQjPgFeDxrA" />
           <AcmeProjectActionInfo Action="File" Source="include/port.h" IsConfig="false" Hash="CGWxOyvH+oD25UlJrLM+7A" />
           <AcmeProjectActionInfo Action="File" Source="include/protected_io.h" IsConfig="false" Hash="kBH1k8wuaJhV5U4694Cbvg" />
-          <AcmeProjectActionInfo Action="File" Source="include/pwm_basic.h" IsConfig="false" Hash="XGDUTL9CRl7wuKQh6ZXfsQ" />
+          <AcmeProjectActionInfo Action="File" Source="include/pwm_basic.h" IsConfig="false" Hash="OKNIqinYu1aDb+v4AcBm5Q" />
           <AcmeProjectActionInfo Action="File" Source="include/rstctrl.h" IsConfig="false" Hash="QzSR3iFGzImWwhFxG4W8ag" />
           <AcmeProjectActionInfo Action="File" Source="include/slpctrl.h" IsConfig="false" Hash="RmK0UGftfBRePkRJ8R5ifw" />
           <AcmeProjectActionInfo Action="File" Source="include/system.h" IsConfig="false" Hash="IkFlZv+9/YKsV53/K0FiwA" />
-          <AcmeProjectActionInfo Action="File" Source="include/tcb.h" IsConfig="false" Hash="elm5nTwLHt46ZQWur/RDuA" />
           <AcmeProjectActionInfo Action="File" Source="include/usart.h" IsConfig="false" Hash="wZGnM6vi/HIDVIOCPDJhIA" />
           <AcmeProjectActionInfo Action="File" Source="include/usart_basic.h" IsConfig="false" Hash="aL5Zs3s9TF0rdQIT8Kjjow" />
           <AcmeProjectActionInfo Action="File" Source="src/bod.c" IsConfig="false" Hash="vImbYMKH5/8OtCuOiBVR6g" />
           <AcmeProjectActionInfo Action="File" Source="src/clkctrl.c" IsConfig="false" Hash="RBfcZ5a/jWRGsoQOC+Sp4g" />
           <AcmeProjectActionInfo Action="File" Source="src/cpuint.c" IsConfig="false" Hash="L3e6Af5pnSS+o6YQ/UWcvw" />
-          <AcmeProjectActionInfo Action="File" Source="src/i2c_master.c" IsConfig="false" Hash="PY9zQsgHX3vtRg4XCWWCWQ" />
-          <AcmeProjectActionInfo Action="File" Source="src/i2c_simple_master.c" IsConfig="false" Hash="fi/vcR1WalbUZmlt2Sqr+w" />
+          <AcmeProjectActionInfo Action="File" Source="src/i2c_master.c" IsConfig="false" Hash="OYfTpnsTb96rnV5xISisUg" />
+          <AcmeProjectActionInfo Action="File" Source="src/i2c_simple_master.c" IsConfig="false" Hash="wT2VI5dVlOvsENdyEGxOMA" />
           <AcmeProjectActionInfo Action="File" Source="src/i2c_types.c" IsConfig="false" Hash="jlTp/yIkaAmgGnOwQG7kqw" />
           <AcmeProjectActionInfo Action="File" Source="src/protected_io.S" IsConfig="false" Hash="sgFkmFP7h1y8L07bVZahaQ" />
-          <AcmeProjectActionInfo Action="File" Source="src/pwm_basic.c" IsConfig="false" Hash="s5VQY85tkS2rxB8s1+8G1Q" />
+          <AcmeProjectActionInfo Action="File" Source="src/pwm_basic.c" IsConfig="false" Hash="gruEMT0UNKqj3vNM3NCZow" />
           <AcmeProjectActionInfo Action="File" Source="src/slpctrl.c" IsConfig="false" Hash="QkIqUubBLg6fH7ESMxxauQ" />
-          <AcmeProjectActionInfo Action="File" Source="src/tcb.c" IsConfig="false" Hash="VdS/E3fvThi+m80OWLpRyw" />
           <AcmeProjectActionInfo Action="File" Source="src/usart.c" IsConfig="false" Hash="+rTBEvt4A2VAj0doG06hOA" />
           <AcmeProjectActionInfo Action="File" Source="src/usart_basic.c" IsConfig="false" Hash="QSMGjBFPTtVaTHd3jZKySQ" />
           <AcmeProjectActionInfo Action="File" Source="utils/assembler.h" IsConfig="false" Hash="jaaWqpCXnRJMciuXpjSfgQ" />
@@ -317,9 +315,6 @@
     <Compile Include="include\system.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="include\tcb.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="include\usart.h">
       <SubType>compile</SubType>
     </Compile>
@@ -363,9 +358,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\slpctrl.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\tcb.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\usart.c">
@@ -422,9 +414,6 @@
       <SubType>compile</SubType>
     </None>
     <None Include="doxygen\system.dox">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="doxygen\timer.dox">
       <SubType>compile</SubType>
     </None>
     <None Include="doxygen\usart.dox">

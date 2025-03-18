@@ -662,20 +662,20 @@ static inline bool PF1_get_level()
 }
 
 /**
- * \brief Set PF2 pull mode
+ * \brief Set PF4 pull mode
  *
  * Configure pin to pull up, down or disable pull mode, supported pull
  * modes are defined by device used
  *
  * \param[in] pull_mode Pin pull mode
  */
-static inline void PF2_set_pull_mode(const enum port_pull_mode pull_mode)
+static inline void PF4_set_pull_mode(const enum port_pull_mode pull_mode)
 {
-	PORTF_set_pin_pull_mode(2, pull_mode);
+	PORTF_set_pin_pull_mode(4, pull_mode);
 }
 
 /**
- * \brief Set PF2 data direction
+ * \brief Set PF4 data direction
  *
  * Select if the pin data direction is input, output or disabled.
  * If disabled state is not possible, this function throws an assert.
@@ -685,15 +685,15 @@ static inline void PF2_set_pull_mode(const enum port_pull_mode pull_mode)
  *                      PORT_DIR_OFF = Disables the pin
  *                      (low power state)
  */
-static inline void PF2_set_dir(const enum port_dir dir)
+static inline void PF4_set_dir(const enum port_dir dir)
 {
-	PORTF_set_pin_dir(2, dir);
+	PORTF_set_pin_dir(4, dir);
 }
 
 /**
- * \brief Set PF2 input/sense configuration
+ * \brief Set PF4 input/sense configuration
  *
- * Enable/disable PF2 digital input buffer and pin change interrupt,
+ * Enable/disable PF4 digital input buffer and pin change interrupt,
  * select pin interrupt edge/level sensing mode
  *
  * \param[in] isc PORT_ISC_INTDISABLE_gc    = Iterrupt disabled but input buffer enabled
@@ -703,148 +703,55 @@ static inline void PF2_set_dir(const enum port_dir dir)
  *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
  *                PORT_ISC_LEVEL_gc         = Sense low Level
  */
-static inline void PF2_set_isc(const PORT_ISC_t isc)
+static inline void PF4_set_isc(const PORT_ISC_t isc)
 {
-	PORTF_pin_set_isc(2, isc);
+	PORTF_pin_set_isc(4, isc);
 }
 
 /**
- * \brief Set PF2 inverted mode
+ * \brief Set PF4 inverted mode
  *
  * Enable or disable inverted I/O on a pin
  *
- * \param[in] inverted true  = I/O on PF2 is inverted
- *                     false = I/O on PF2 is not inverted
+ * \param[in] inverted true  = I/O on PF4 is inverted
+ *                     false = I/O on PF4 is not inverted
  */
-static inline void PF2_set_inverted(const bool inverted)
+static inline void PF4_set_inverted(const bool inverted)
 {
-	PORTF_pin_set_inverted(2, inverted);
+	PORTF_pin_set_inverted(4, inverted);
 }
 
 /**
- * \brief Set PF2 level
+ * \brief Set PF4 level
  *
  * Sets output level on a pin
  *
  * \param[in] level true  = Pin level set to "high" state
  *                  false = Pin level set to "low" state
  */
-static inline void PF2_set_level(const bool level)
+static inline void PF4_set_level(const bool level)
 {
-	PORTF_set_pin_level(2, level);
+	PORTF_set_pin_level(4, level);
 }
 
 /**
- * \brief Toggle output level on PF2
+ * \brief Toggle output level on PF4
  *
  * Toggle the pin level
  */
-static inline void PF2_toggle_level()
+static inline void PF4_toggle_level()
 {
-	PORTF_toggle_pin_level(2);
+	PORTF_toggle_pin_level(4);
 }
 
 /**
- * \brief Get level on PF2
+ * \brief Get level on PF4
  *
  * Reads the level on a pin
  */
-static inline bool PF2_get_level()
+static inline bool PF4_get_level()
 {
-	return PORTF_get_pin_level(2);
-}
-
-/**
- * \brief Set PF3 pull mode
- *
- * Configure pin to pull up, down or disable pull mode, supported pull
- * modes are defined by device used
- *
- * \param[in] pull_mode Pin pull mode
- */
-static inline void PF3_set_pull_mode(const enum port_pull_mode pull_mode)
-{
-	PORTF_set_pin_pull_mode(3, pull_mode);
-}
-
-/**
- * \brief Set PF3 data direction
- *
- * Select if the pin data direction is input, output or disabled.
- * If disabled state is not possible, this function throws an assert.
- *
- * \param[in] direction PORT_DIR_IN  = Data direction in
- *                      PORT_DIR_OUT = Data direction out
- *                      PORT_DIR_OFF = Disables the pin
- *                      (low power state)
- */
-static inline void PF3_set_dir(const enum port_dir dir)
-{
-	PORTF_set_pin_dir(3, dir);
-}
-
-/**
- * \brief Set PF3 input/sense configuration
- *
- * Enable/disable PF3 digital input buffer and pin change interrupt,
- * select pin interrupt edge/level sensing mode
- *
- * \param[in] isc PORT_ISC_INTDISABLE_gc    = Iterrupt disabled but input buffer enabled
- *                PORT_ISC_BOTHEDGES_gc     = Sense Both Edges
- *                PORT_ISC_RISING_gc        = Sense Rising Edge
- *                PORT_ISC_FALLING_gc       = Sense Falling Edge
- *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
- *                PORT_ISC_LEVEL_gc         = Sense low Level
- */
-static inline void PF3_set_isc(const PORT_ISC_t isc)
-{
-	PORTF_pin_set_isc(3, isc);
-}
-
-/**
- * \brief Set PF3 inverted mode
- *
- * Enable or disable inverted I/O on a pin
- *
- * \param[in] inverted true  = I/O on PF3 is inverted
- *                     false = I/O on PF3 is not inverted
- */
-static inline void PF3_set_inverted(const bool inverted)
-{
-	PORTF_pin_set_inverted(3, inverted);
-}
-
-/**
- * \brief Set PF3 level
- *
- * Sets output level on a pin
- *
- * \param[in] level true  = Pin level set to "high" state
- *                  false = Pin level set to "low" state
- */
-static inline void PF3_set_level(const bool level)
-{
-	PORTF_set_pin_level(3, level);
-}
-
-/**
- * \brief Toggle output level on PF3
- *
- * Toggle the pin level
- */
-static inline void PF3_toggle_level()
-{
-	PORTF_toggle_pin_level(3);
-}
-
-/**
- * \brief Get level on PF3
- *
- * Reads the level on a pin
- */
-static inline bool PF3_get_level()
-{
-	return PORTF_get_pin_level(3);
+	return PORTF_get_pin_level(4);
 }
 
 #endif /* ATMEL_START_PINS_H_INCLUDED */
