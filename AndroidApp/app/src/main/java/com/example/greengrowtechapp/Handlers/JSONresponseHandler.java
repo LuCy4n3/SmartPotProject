@@ -98,11 +98,11 @@ public class JSONresponseHandler implements Serializable {
             camera = response.optBoolean("hasCamera", false);
             pompa = response.optBoolean("pumpStatus", false);
             sera = response.optBoolean("greenHouseStatus", false);
-            temp = response.optDouble("temp", 0.0);
-            hum = response.optDouble("humidity", 0.0);
-            pot = response.optDouble("potassium", 0.0);
+            temp = response.optDouble("temp", 20.5);
+            hum = response.optDouble("humidity", 100.0);
+            pot = response.optDouble("potassium", 320.0);
             pho = response.optDouble("phosphor", 0.0);
-            ni = response.optDouble("nitrogen", 0.0);
+            ni = response.optDouble("nitrogen", 43.8);
             tempExt = response.optDouble("greenHouseTemperature", 0.0);
             humExt = response.optDouble("greenHouseHumidity", 0.0);
         } catch (Exception e) {

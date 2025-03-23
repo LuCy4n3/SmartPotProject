@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static Integer indexOfCurrentPot = new Integer(1);
     private static Integer indexOfCurrentUser = new Integer(1);
-    private static String Url = "http://192.168.0.192:3000/api/";
+    private static String Url = "http://192.168.0.200:3000/api/";
     //private static String URLpot = new String("http://roka.go.ro:3000/api/Pot/");
     private static String URLpot = new String(Url+"Pot/");
     //private static String URLplant = new String("http://roka.go.ro:3000/api/Plant/");

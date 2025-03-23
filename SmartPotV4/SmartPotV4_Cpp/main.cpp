@@ -10,7 +10,7 @@
 #include <util/delay.h>
 #include <smartpot/CallbackFun.h>
 #include "MyCode/Sensors/SHT31.h"
-#define INDEX 1
+#define INDEX 4
 #define TYPE 2
 
 static uint8_t *bufferToSend;
@@ -210,7 +210,7 @@ int main(void)
 		//writeOneByte(errorCode);
 		errorCode = SHT31.readBoth(&temp,&hum);
 		sendTemp(temp,1);
-		_delay_ms(100);
+		_delay_ms(1000);
 		sendHum(hum,2);
 		//PORTF_set_pin_level(3,true);
 		//writeOneByte(0xB);

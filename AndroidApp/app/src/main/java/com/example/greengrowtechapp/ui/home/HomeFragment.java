@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment {
         binding.buttonUpdate.setOnClickListener(v -> {
             //Toast.makeText(getContext(), "Button HOME FRAGMENT clicked!", Toast.LENGTH_SHORT).show();
             int a = 0;
-            if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null) {
+            if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null && idPaths.length> 0) {
                 String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+(idPaths[homeViewModel.getIndexOfCurrentPot().getValue()-1]);
 
                 networkHandler.sendGetRequest(aux, new NetworkCallback() {
@@ -262,7 +262,7 @@ public class HomeFragment extends Fragment {
                     networkHandler.sendImageRequest(imageUrl, binding.imageViewHome, new NetworkCallback() {
                         @Override
                         public void onSuccess() {
-
+                            Toast.makeText(getContext() ,"getting image!",Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -313,7 +313,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 homeViewModel.setmButtonPumpPress(!homeViewModel.getmButtonPumpPress().getValue());
                 if (networkHandler != null && homeViewModel != null && homeViewModel.getURL().getValue() != null) {
-                    String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() + "/" + homeViewModel.getIndexOfCurrentPot().getValue();
+                    String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() + "/" + idPaths[homeViewModel.getIndexOfCurrentPot().getValue()-1];
                     networkHandler.sendPutRequest(url, "PumpStatus:" + !homeViewModel.getmButtonPumpPress().getValue());
                 }
                 else

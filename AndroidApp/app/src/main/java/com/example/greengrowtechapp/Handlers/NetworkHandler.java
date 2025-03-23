@@ -196,7 +196,7 @@ public class NetworkHandler implements Serializable {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Toast.makeText(ctx, "Got response!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ctx, "Got response!", Toast.LENGTH_SHORT).show();
 
                         try {
                             // Process JSON in chunks to avoid memory issues
@@ -242,7 +242,7 @@ public class NetworkHandler implements Serializable {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Toast.makeText(ctx, "Got pot response!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ctx, "Got pot response!", Toast.LENGTH_SHORT).show();
 
                         try {
                             // Process JSON response into a list of Pot objects
@@ -265,11 +265,15 @@ public class NetworkHandler implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(ctx, "ERROR " + url + " !", Toast.LENGTH_SHORT).show();
-                        if(errorCode.getValue() >=0)
+                        if(errorCode.getValue()!=null && errorCode.getValue() >=0)
                         {
                             errorText.postValue(error.toString());
                             errorCode.postValue(-6);
                         }
+                        else if(errorCode.getValue() == null)
+                            errorText.postValue("Could not connect!");
+
+
 
                         if (callback != null) {
                             callback.onFailure();
@@ -292,7 +296,7 @@ public class NetworkHandler implements Serializable {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(ctx, "Got response!", Toast.LENGTH_SHORT).show();// has to run here bcs toas runs on the main thread
+                        //Toast.makeText(ctx, "Got response!", Toast.LENGTH_SHORT).show();// has to run here bcs toas runs on the main thread
                         new Thread(() -> {
                             JSONresponse = response;
 

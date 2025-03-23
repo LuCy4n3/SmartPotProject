@@ -4,9 +4,9 @@ import serial
 from time import sleep
 import os
 
-ser = serial.Serial ("/dev/ttyS0", 2400)    # Open port with baud rate
+ser = serial.Serial ("/dev/ttyAMA0", 9600)    # Open port with baud rate
 while True:
-    received_data = ser.read(2)              # Read serial port
+    received_data = ser.read(3)              # Read serial port
     sleep(0.3)
     data_left = ser.inWaiting()              # Check for remaining bytes
     received_data += ser.read(data_left)

@@ -45,6 +45,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
     private int offset = 0;
     private static final int LIMIT = 10; // Load 50 items per request
     private static String[] types = {"No pot","Simple Pot","Advanced Pot","Advanced Pot with GreenHouse","GreenHouse"};
+    private static Pot clickPot = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashViewModel = new ViewModelProvider(requireActivity()).get(DashboardViewModel.class);
@@ -155,6 +156,8 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
             public void onItemClick(Pot pot) {
                 // Handle item click
                 Toast.makeText(getContext(), "Clicked pot: " + pot.getPotName(), Toast.LENGTH_SHORT).show();
+                dashViewModel.setText("Selected "+pot.getPotName());
+                clickPot = pot;
             }
         }, new PotAdapter.OnButtonClickListener() {
             @Override
@@ -320,7 +323,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
     public void onItemClick(Plant plant) {
         // Handle the item click, e.g., show a toast with the plant name
         Toast.makeText(getContext(), "Clicked plant: " + plant.getPlantName(), Toast.LENGTH_SHORT).show();
-        String aux = homeViewModel.getURL().getValue()+"1/1";
+        String aux = homeViewModel.getURL().getValue()+"1/"+clickPot.getPotId();
         networkHandler.sendPutRequest(aux,"PlantName:"+plant.getPlantName());
     }
     public void changeTextAddBtn()

@@ -14,7 +14,7 @@ using System.Diagnostics.CodeAnalysis;
 
 class Program
 {
-    private SerialPortStream serialPortStream = new SerialPortStream("COM4", 2400);
+    private SerialPortStream serialPortStream = new SerialPortStream("COM22", 9600);
     private bool statusPompa = false, statusSera = false,statusPic = false;
     private int temp = 0, hum = 0;
     private byte type = 0;
@@ -105,7 +105,7 @@ class Program
     {
         if ((data[0] == 15) && data.Length >= 4)
         {
-            if (data[1] >= 1 && data[1] <= 2 )
+            if (data[2] >= 1 && data[2] <= 2 )
                 ParseSensorData(data);
             else
                 Console.WriteLine("Invalid type header: " + ToHexByte(data[1]));
@@ -179,16 +179,16 @@ class Program
 
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {   
-            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
+            httpClient.BaseAddress = new Uri("http://192.168.0.200:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {
-                _ = GetPotAsync(potMain.PotId, potMain);
+                await GetPotAsync(potMain.PotId, potMain);
 
             }
             finally
             {
-                pot = new Pot { PotId = potMain.PotId, UserId = 1, PlantName = potMain.PlantName, PotName = potMain.PlantName, PotType = potMain.PotType, GreenHouseTemperature = (double)temp / 100, GreenHouseHumidity = (double)hum / 100, PumpStatus = potMain.PumpStatus, PictReq = potMain.PictReq, HasCamera = potMain.HasCamera };
+                pot = new Pot { PotId = potMain.PotId, UserId = 1, PlantName = potMain.PlantName, PotName = potMain.PotName, PotType = potMain.PotType, GreenHouseTemperature = (double)temp / 100, GreenHouseHumidity = (double)hum / 100, PumpStatus = potMain.PumpStatus, PictReq = potMain.PictReq, HasCamera = potMain.HasCamera };
 
                 var response = await httpClient.PutAsJsonAsync("/api/Pot/"+USER+"/" + potMain.PotId, pot);
 
@@ -212,7 +212,7 @@ class Program
 
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {
-            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
+            httpClient.BaseAddress = new Uri("http://192.168.0.200:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {
@@ -243,7 +243,7 @@ class Program
        
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {
-            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
+            httpClient.BaseAddress = new Uri("http://192.168.0.200:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             string aux = "/api/Pot/" + USER + "/" + potMain.PotId + "/PictReq:false";
@@ -267,7 +267,7 @@ class Program
         Console.WriteLine("Trying to GET ...");
         using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true }))
         {
-            httpClient.BaseAddress = new Uri("http://roka.go.ro:3000");
+            httpClient.BaseAddress = new Uri("http://192.168.0.200:3000");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await httpClient.GetAsync($"/api/Pot/1/{index}");
@@ -337,17 +337,19 @@ class Program
         if (activate && !statusPompa)
         {
             Console.WriteLine("Pump started");
-            serialPortStream.WriteByte(15);
-            serialPortStream.WriteByte(1);
-            serialPortStream.WriteByte(1);
+            serialPortStream.WriteByte(0x15);
+            serialPortStream.WriteByte(0x3);
+            serialPortStream.WriteByte(0x3);
+            serialPortStream.WriteByte(0x1);
             statusPompa = true;
         }
         else if (!activate && statusPompa)
         {
             Console.WriteLine("Pump Stopped");
-            serialPortStream.WriteByte(15);
-            serialPortStream.WriteByte(1);
-            serialPortStream.WriteByte(0);
+            serialPortStream.WriteByte(0x15);
+            serialPortStream.WriteByte(0x3);
+            serialPortStream.WriteByte(0x3);
+            serialPortStream.WriteByte(0x0);
             statusPompa = false;
         }
     }

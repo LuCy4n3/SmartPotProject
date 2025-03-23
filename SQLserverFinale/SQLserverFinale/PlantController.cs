@@ -195,8 +195,10 @@ namespace SQLserverFinale
             {
                 NotFound();
             }
-
-            pot.PlantName = PlantName;
+            if (pot != null)
+                pot.PlantName = PlantName;
+            else
+                return BadRequest();
 
             _context.Pot.Update(pot);
             await _context.SaveChangesAsync();
@@ -216,7 +218,7 @@ namespace SQLserverFinale
             pot.PumpStatus = PumpStatus;
 
             _context.Pot.Update(pot);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();x
 
             return NoContent();
 

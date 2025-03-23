@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       // "launchUrl": "swagger",
       //"applicationUrl": "http://192.168.1.186:3000",
-      "applicationUrl": "http://192.168.0.192:3000",
+      "applicationUrl": "http://192.168.0.200:3000",
       //"applicationUrl": "http://10.132.88.231:3000",
       //"applicationUrl": "http://10.132.66.174:3000",
       "environmentVariables": {

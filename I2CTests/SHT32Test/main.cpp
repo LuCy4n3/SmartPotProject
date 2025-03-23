@@ -93,7 +93,7 @@ int main(void)
 	ENABLE_INTERRUPTS();
 	atmel_start_init();
 	
-	PORTA_set_pin_dir(4,PORT_DIR_OUT);
+	PORTF_set_pin_dir(5,PORT_DIR_OUT);
 	PORTC_set_pin_dir(2,PORT_DIR_OUT);
 	PORTC_set_pin_level(2,false);
 	/* Replace with your application code */
@@ -117,9 +117,9 @@ int main(void)
 		//if(ReadOneByte() == 1)
 			//PORTC_set_pin_level(2,true);
 		//serialPrint(humBytes);
-		PORTA_set_pin_level(4,true);
+		PORTF_set_pin_level(5,true);
 		_delay_ms(3000);
-		PORTA_set_pin_level(4,false);
+		PORTF_set_pin_level(5,false);
 		_delay_ms(3000);
 	}
 }
