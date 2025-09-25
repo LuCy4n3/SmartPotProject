@@ -88,7 +88,7 @@
           <AcmeProjectActionInfo Action="File" Source="src/pwm_basic.c" IsConfig="false" Hash="gruEMT0UNKqj3vNM3NCZow" />
           <AcmeProjectActionInfo Action="File" Source="src/slpctrl.c" IsConfig="false" Hash="QkIqUubBLg6fH7ESMxxauQ" />
           <AcmeProjectActionInfo Action="File" Source="src/usart.c" IsConfig="false" Hash="+rTBEvt4A2VAj0doG06hOA" />
-          <AcmeProjectActionInfo Action="File" Source="src/usart_basic.c" IsConfig="false" Hash="QSMGjBFPTtVaTHd3jZKySQ" />
+          <AcmeProjectActionInfo Action="File" Source="src/usart_basic.c" IsConfig="false" Hash="07AU9QsN5F3WExdHeAH0Mg" />
           <AcmeProjectActionInfo Action="File" Source="utils/assembler.h" IsConfig="false" Hash="jaaWqpCXnRJMciuXpjSfgQ" />
           <AcmeProjectActionInfo Action="File" Source="utils/assembler/gas.h" IsConfig="false" Hash="wV+34zXWOOJ7jfwQibBgLQ" />
           <AcmeProjectActionInfo Action="File" Source="utils/assembler/iar.h" IsConfig="false" Hash="re7qP3QC0FK72z2UZ4UoFg" />
@@ -108,7 +108,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrGcc>
-  <avrgcc.common.Device>-mmcu=avr32da32 -B "%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\gcc\dev\avr32da32"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=avr32da32 -B "%24(PackRepoDir)\atmel\AVR-Dx_DFP\1.8.95\gcc\dev\avr32da32"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -129,7 +129,7 @@
       <Value>../utils/assembler</Value>
       <Value>../</Value>
       <Value>../Config</Value>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\include\</Value>
+      <Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\1.8.95\include\</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
@@ -149,7 +149,7 @@
       <Value>../utils</Value>
       <Value>../utils/assembler</Value>
       <Value>../</Value>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\include\</Value>
+      <Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\1.8.95\include\</Value>
     </ListValues>
   </avrgcc.assembler.general.IncludePaths>
 </AvrGcc>
@@ -158,7 +158,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGcc>
-  <avrgcc.common.Device>-mmcu=avr32da32 -B "%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\gcc\dev\avr32da32"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=avr32da32 -B "%24(PackRepoDir)\atmel\AVR-Dx_DFP\1.8.95\gcc\dev\avr32da32"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -179,7 +179,7 @@
       <Value>../utils/assembler</Value>
       <Value>../</Value>
       <Value>../Config</Value>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\include\</Value>
+      <Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\1.8.95\include\</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
@@ -200,7 +200,7 @@
       <Value>../utils</Value>
       <Value>../utils/assembler</Value>
       <Value>../</Value>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\1.8.95\include\</Value>
+      <Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\1.8.95\include\</Value>
     </ListValues>
   </avrgcc.assembler.general.IncludePaths>
   <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>

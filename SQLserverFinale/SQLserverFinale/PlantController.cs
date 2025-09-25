@@ -218,7 +218,7 @@ namespace SQLserverFinale
             pot.PumpStatus = PumpStatus;
 
             _context.Pot.Update(pot);
-            await _context.SaveChangesAsync();x
+            await _context.SaveChangesAsync();
 
             return NoContent();
 

@@ -217,7 +217,7 @@ void USART_RADIO_write(const uint8_t data)
 int8_t USART_RADIO_init()
 {
 
-	USART2.BAUD = (uint16_t)USART2_BAUD_RATE(9600); /* set baud rate register */
+	USART2.BAUD = (uint16_t)USART2_BAUD_RATE(115200); /* set baud rate register */
 
 	USART2.CTRLA = 0 << USART_ABEIE_bp      /* Auto-baud Error Interrupt Enable: disabled */
 	               | 0 << USART_DREIE_bp    /* Data Register Empty Interrupt Enable: disabled */

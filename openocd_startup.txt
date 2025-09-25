@@ -1,0 +1,83 @@
+Start-up command:
+==============
+openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/at91samdXX.cfg -c "adapter speed 1000"
+==============
+
+Output if working:
+
+Terminal
+==============
+PS C:\WORK\Programmer> openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/at91samdXX.cfg -c "adapter speed 1000"
+xPack Open On-Chip Debugger 0.12.0+dev-01850-geb6f2745b-dirty (2025-02-07-10:08)
+Licensed under GNU GPL v2
+For bug reports, read
+        http://openocd.org/doc/doxygen/bugs.html
+adapter speed: 1000 kHz
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : CMSIS-DAP: SWD supported
+Info : CMSIS-DAP: JTAG supported
+Info : CMSIS-DAP: FW Version = 1.0
+Info : CMSIS-DAP: Serial# = J42700049205
+Info : CMSIS-DAP: Interface Initialised (SWD)
+Info : SWCLK/TCK = 1 SWDIO/TMS = 1 TDI = 1 TDO = 1 nTRST = 0 nRESET = 1
+Info : CMSIS-DAP: Interface ready
+Info : clock speed 1000 kHz
+Info : SWD DPIDR 0x0bc11477
+Info : [at91samd.cpu] Cortex-M0+ r0p1 processor detected
+Info : [at91samd.cpu] target has 4 breakpoints, 2 watchpoints
+Info : [at91samd.cpu] Examination succeed
+Info : [at91samd.cpu] starting gdb server on 3333
+Info : Listening on port 3333 for gdb connections
+Error: [at91samd.cpu] clearing lockup after double fault
+Error: [at91samd.cpu] Polling failed, trying to reexamine
+Info : [at91samd.cpu] Cortex-M0+ r0p1 processor detected
+Info : [at91samd.cpu] target has 4 breakpoints, 2 watchpoints
+Info : [at91samd.cpu] Examination succeed
+=================
+
+-interface/cmsis-dap.cfg is the atmel-ice programmer for SAM devices
+-target/at91samdXX.cfg config file for samd11
+
+What next?:
+
+-Open Putty, there should be a session saved as openocd, if not start a new session using telnet on port 4444
+
+Putty
+================
+
+Open On-Chip Debugger
+>
+
+===============
+
+How to program the microcontroller:
+
+Putty
+===============
+Open On-Chip Debugger
+> program "C:\\WORK\\Proiect\\ProiectGhiveci\\test2MPLAB.X.production.elf" verify reset
+[at91samd.cpu] halted due to breakpoint, current mode: Thread
+xPSR: 0x01000000 pc: 0x00001064 msp: 0x20000ff0
+** Programming Started **
+SAMD MCU: SAMD11C14A (16KB Flash, 4KB RAM)
+** Programming Finished **
+** Verify Started **
+** Verified OK **
+** Resetting Target **
+=================
+
+the program keyword is self-explanatory. To note is the string of the file path(it needs the \\ for the file location). Verify and reset are pretty easy to understand too, use exit to close the telnet connection in putty.
+
+Terminal
+==============
+Info : accepting 'telnet' connection on tcp/4444
+[at91samd.cpu] halted due to breakpoint, current mode: Thread
+xPSR: 0x01000000 pc: 0x00001064 msp: 0x20000ff0
+** Programming Started **
+Info : SAMD MCU: SAMD11C14A (16KB Flash, 4KB RAM)
+** Programming Finished **
+** Verify Started **
+** Verified OK **
+** Resetting Target **
+==============

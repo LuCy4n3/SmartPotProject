@@ -280,11 +280,11 @@ pwm_irq_cb_t PWM_0_cb = NULL;
 int8_t PWM_0_init()
 {
 
-	TCB0.CCMPL = 0xf; /* PWM Period: 0xff */
+	TCB0.CCMPL = 0xff; /* PWM Period: 0xff */
 
-	TCB0.CCMPH = 0xff; /* PWM Compare: 0xf */
+	TCB0.CCMPH = 0xf; /* PWM Compare: 0xf */
 
-	//TCB0.CNT = 0x0; /* Count: 0x0 */
+	// TCB0.CNT = 0x0; /* Count: 0x0 */
 
 	TCB0.CTRLB = 0 << TCB_ASYNC_bp      /* Asynchronous Enable: disabled */
 	             | 1 << TCB_CCMPEN_bp   /* Pin Output Enable: enabled */
@@ -299,7 +299,7 @@ int8_t PWM_0_init()
 
 	// TCB0.INTCTRL = 0 << TCB_CAPT_bp /* Setting: disabled */;
 
-	TCB0.CTRLA = TCB_CLKSEL_DIV2_gc     /* CLK_PER */
+	TCB0.CTRLA = TCB_CLKSEL_DIV1_gc     /* CLK_PER */
 	             | 1 << TCB_ENABLE_bp   /* Enable: enabled */
 	             | 0 << TCB_RUNSTDBY_bp /* Run Standby: disabled */
 	             | 0 << TCB_SYNCUPD_bp /* Synchronize Update: disabled */;

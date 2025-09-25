@@ -137,7 +137,7 @@ drivers:
     functionality: USART
     api: Drivers:USART:Basic
     configuration:
-      baud_rate: 9600
+      baud_rate: 115200
       ctrla_abeie: false
       ctrla_dreie: false
       ctrla_lbme: false
@@ -413,6 +413,13 @@ pads:
     configuration: null
 toolchain_options:
 - definition:
+    identifier: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::environment_definition::All:Microchip.Studio.xc8:7.0.0
+  configuration:
+    compiler_config:
+      xc8_compiler_miscellaneous_OtherFlags: -std=gnu99
+    linker_config:
+      xc8_linker_miscellaneous_LinkerFlags: ''
+- definition:
     identifier: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::environment_definition::All:Microchip.Studio.gcc:7.0.0
   configuration:
     compiler_config:
@@ -426,11 +433,4 @@ toolchain_options:
       avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
     linker_config:
       avrgcc_linker_miscellaneous_LinkerFlags: ''
-- definition:
-    identifier: Atmel:AVRDA_32_drivers:1.0.0::AVR32DA32::environment_definition::All:Microchip.Studio.xc8:7.0.0
-  configuration:
-    compiler_config:
-      xc8_compiler_miscellaneous_OtherFlags: -std=gnu99
-    linker_config:
-      xc8_linker_miscellaneous_LinkerFlags: ''
 static_files: []
