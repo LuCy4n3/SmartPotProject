@@ -12,7 +12,7 @@ public class JSONresponseHandler implements Serializable {
     private int index, type;
     private boolean sera, pompa,camera;
     private double temp, lumi, hum, pot, pho, ni, tempExt, humExt;
-    private String plantName;
+    private String plantName,potName;
     private String error = "no error";
 
 
@@ -94,6 +94,7 @@ public class JSONresponseHandler implements Serializable {
         try {
             index = response.optInt("potId", -1); // Default to -1 if missing
             plantName = response.optString("plantName", "Unknown");
+            potName = response.optString("potName","Unknown");
             type = response.optInt("potType", 0);
             camera = response.optBoolean("hasCamera", false);
             pompa = response.optBoolean("pumpStatus", false);
@@ -115,6 +116,7 @@ public class JSONresponseHandler implements Serializable {
     public String getPlantName() {
         return plantName;
     }
+    public String getPotName(){return  potName;}
 
     public int getType() {
         return type;

@@ -29,9 +29,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private static Integer indexOfCurrentPot = new Integer(1);
-    private static Integer indexOfCurrentUser = new Integer(1);
-    private static String Url = "http://192.168.0.200:3000/api/";
+    private static Integer indexOfCurrentPot = new Integer(102);
+    private static Integer indexOfCurrentUser = new Integer(303);
+    private static String Url = "http://10.234.111.185:8081/api/";
     //private static String URLpot = new String("http://roka.go.ro:3000/api/Pot/");
     private static String URLpot = new String(Url+"Pot/");
     //private static String URLplant = new String("http://roka.go.ro:3000/api/Plant/");
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         NetworkHandler finalNetworkHandler = networkHandler;
-        networkHandler.sendGetRequestListPot(URLpot + "1", new NetworkCallback() {
+        networkHandler.sendGetRequestListPot(URLpot + indexOfCurrentUser, new NetworkCallback() {
             @Override
             public void onSuccess() {
 
@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
             public void onPotListGetSucces(List<Pot> pots) {
                 Pot aux = pots.get(0);
                 indexOfCurrentPot = aux.getPotId();
+                notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
+                dashViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
                 updatePumpStatusBeforeFragmentStart(finalNetworkHandler,responseHandler, homeViewModel, notViewModel, dashViewModel);
 
             }
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 notViewModel.setResponseHandler(responseHandler);
                 notViewModel.setIndexOfCurrentPot(indexOfCurrentPot);
                 notViewModel.setIndexOfCurrentUser(indexOfCurrentUser);
-                notViewModel.setURL(URLpot);
+                notViewModel.setURL(Url);
 
 
                 dashViewModel.setNetworkHandler(networkHandler);

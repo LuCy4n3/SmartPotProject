@@ -1,5 +1,6 @@
 package com.example.greengrowtechapp.ui.home;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class HomeFragment extends Fragment {
     private NetworkHandler networkHandler = null;
     private static String[] paths = {"Dispozitiv 1", "Dispozitiv 2", "Dispozitiv 3", "Dispozitiv 4", "Dispozitiv 5"};
     private Integer[] idPaths = new Integer[0]; // Initialize as an empty array
+    @SuppressLint("SuspiciousIndentation")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +51,11 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
+        homeViewModel.getAIresp().observe(getViewLifecycleOwner(), s -> {
+            // This is called whenever AIr changes in the ViewModel
+            binding.textAI.setText(s);
+        });
 
 
         homeViewModel.getURLimage().observe(getViewLifecycleOwner(), url->{
@@ -150,51 +157,59 @@ public class HomeFragment extends Fragment {
 
         });
 
-        homeViewModel.getNetworkHandler().observe(getViewLifecycleOwner(), new Observer<NetworkHandler>() {
-            @Override
-            public void onChanged(NetworkHandler netHandler) {
-                networkHandler = netHandler;
-                if (networkHandler != null && homeViewModel.getURL().getValue() != null) {
-                    updateSpinner(); // Call updateSpinner() when networkHandler is initialized
+        homeViewModel.getNetworkHandler().observe(getViewLifecycleOwner(), netHandler -> {
+            networkHandler = netHandler;
+
+            if (networkHandler == null) return;
+
+            // 1) Observe AI response from NetworkHandler and push into ViewModel
+            networkHandler.getAIresp().observe(getViewLifecycleOwner(), s -> {
+                homeViewModel.setAIresp(s);   // update VM AI LiveData
+            });
+
+            // 2) Observe error text if you want
+            networkHandler.getErrorText().observe(getViewLifecycleOwner(), errorMessage -> {
+                binding.textHome.setText(errorMessage);
+                if (networkHandler.getErrorCode() != null &&
+                        networkHandler.getErrorCode().getValue() != null &&
+                        networkHandler.getErrorCode().getValue() < 0) {
+                    homeViewModel.setText(String.valueOf(networkHandler.getErrorCode().getValue()));
+                } else if (networkHandler.getErrorCode() == null) {
+                    homeViewModel.setText("Cant communicate with server.");
                 }
-                if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null)
-                {
-                    String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+ homeViewModel.getIndexOfCurrentPot().getValue();
+            });
 
-                    networkHandler.sendGetRequest(aux, new NetworkCallback() {
-
-                        @Override
-                        public void onSuccess() {
-                            homeViewModel.updateTextView(); // Execute this after the network request completes successfully
-                            //updateSpinner();
-                        }
-                        @Override
-                        public void onPlantListGetSucces(List<Plant> plants) {
-
-                        }
-
-                        @Override
-                        public void onPotListGetSucces(List<Pot> pots) {
-
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Toast.makeText(getContext(), "Network request failed for index "+homeViewModel.getIndexOfCurrentPot().getValue() +" !", Toast.LENGTH_SHORT).show();
-                            homeViewModel.setText(networkHandler.getErrorText().getValue());
-                            //homeViewModel.handleError();
-                        }
-                    });
-
-
-                }
-//                else if(homeViewModel.getURL().getValue()!=null && networkHandler!=null)
-//                {
-//                    updateSpinner();
-//                }
+            // 3) Existing logic
+            if (homeViewModel.getURL().getValue() != null) {
+                updateSpinner();
             }
 
+            if (homeViewModel.getURL().getValue() != null &&
+                    homeViewModel.getIndexOfCurrentUser().getValue() != null &&
+                    homeViewModel.getIndexOfCurrentPot().getValue() != null) {
+
+                String aux = homeViewModel.getURL().getValue()
+                        + homeViewModel.getIndexOfCurrentUser().getValue()
+                        + "/"
+                        + homeViewModel.getIndexOfCurrentPot().getValue();
+
+                networkHandler.sendGetRequest(aux, new NetworkCallback() {
+                    @Override
+                    public void onSuccess() {
+                        homeViewModel.updateTextView();
+                    }
+                    @Override public void onPlantListGetSucces(List<Plant> plants) {}
+                    @Override public void onPotListGetSucces(List<Pot> pots) {}
+                    @Override public void onFailure() {
+                        Toast.makeText(getContext(),
+                                "Network request failed for index "+homeViewModel.getIndexOfCurrentPot().getValue()+" !",
+                                Toast.LENGTH_SHORT).show();
+                        homeViewModel.setText(networkHandler.getErrorText().getValue());
+                    }
+                });
+            }
         });
+
         if (networkHandler != null) {
             networkHandler.getErrorText().observe(getViewLifecycleOwner(), errorMessage -> {
                 binding.textHome.setText(errorMessage); // Update TextView
@@ -206,12 +221,21 @@ public class HomeFragment extends Fragment {
         }
 
         if(networkHandler!=null)
+        {
             networkHandler.getErrorText().observe(getViewLifecycleOwner(), new Observer<String>() {
                 @Override
                 public void onChanged(String s) {
                     homeViewModel.setText(s);
                 }
             });
+            networkHandler.getAIresp().observe(getViewLifecycleOwner(), new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    homeViewModel.setAIresp(s);
+                }
+            });
+        }
+
 
         // Observing LiveData from HomeViewModel
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -227,7 +251,27 @@ public class HomeFragment extends Fragment {
             int a = 0;
             if(homeViewModel.getURL().getValue() != null && homeViewModel.getIndexOfCurrentUser().getValue() != null && homeViewModel.getIndexOfCurrentPot().getValue() != null && idPaths.length> 0) {
                 String aux = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue() +"/"+(idPaths[homeViewModel.getIndexOfCurrentPot().getValue()-1]);
+                networkHandler.sendGetRequestString(homeViewModel.getURL().getValue() + "AI/" + homeViewModel.getIndexOfCurrentPot().getValue(), new NetworkCallback() {
+                    @Override
+                    public void onSuccess() {
+                        homeViewModel.updateTextView();
+                    }
 
+                    @Override
+                    public void onPlantListGetSucces(List<Plant> plants) {
+
+                    }
+
+                    @Override
+                    public void onPotListGetSucces(List<Pot> pots) {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
                 networkHandler.sendGetRequest(aux, new NetworkCallback() {
                     @Override
                     public void onSuccess() {
@@ -258,29 +302,29 @@ public class HomeFragment extends Fragment {
 
                 networkHandler.sendPutRequest(aux,"PictReq:true");
                 String imageUrl = homeViewModel.getURLimage().getValue();
-                if(imageUrl != null)
-                    networkHandler.sendImageRequest(imageUrl, binding.imageViewHome, new NetworkCallback() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(getContext() ,"getting image!",Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onPlantListGetSucces(List<Plant> plants) {
-
-                        }
-
-                        @Override
-                        public void onPotListGetSucces(List<Pot> pots) {
-
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
-                            //homeViewModel.handleError();
-                        }
-                    });
+                //if(imageUrl != null)
+//                    networkHandler.sendImageRequest(imageUrl, binding.imageViewHome, new NetworkCallback() {
+//                        @Override
+//                        public void onSuccess() {
+//                            Toast.makeText(getContext() ,"getting image!",Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        @Override
+//                        public void onPlantListGetSucces(List<Plant> plants) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onPotListGetSucces(List<Pot> pots) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure() {
+//                            Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
+//                            //homeViewModel.handleError();
+//                        }
+//                    });
 
                 }
 
@@ -299,6 +343,8 @@ public class HomeFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(getContext(), "Changed pot index to "+(position+1)+" !", Toast.LENGTH_SHORT).show();
                 homeViewModel.setIndexOfCurrentPot(position+1);
+
+                binding.buttonUpdate.post(() -> binding.buttonUpdate.performClick());
             }
 
             @Override
@@ -321,7 +367,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        executor.scheduleAtFixedRate(() -> updateImage(homeViewModel.getURLimage().getValue(),binding.imageViewHome), 0, 2, TimeUnit.SECONDS);
+        //executor.scheduleAtFixedRate(() -> updateImage(homeViewModel.getURLimage().getValue(),binding.imageViewHome), 0, 2, TimeUnit.SECONDS);
 
 
         return root;
@@ -354,7 +400,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onFailure() {
                     Toast.makeText(getContext() ,"ERROR at getting image!",Toast.LENGTH_SHORT).show();
-                    homeViewModel.setText(networkHandler.getErrorText().getValue());
+                    //homeViewModel.setText(networkHandler.getErrorText().getValue());
 
                     //homeViewModel.handleError();
                 }
@@ -363,7 +409,8 @@ public class HomeFragment extends Fragment {
     }
     public void updateSpinner()
     {
-        networkHandler.sendGetRequestListPot(homeViewModel.getURL().getValue() + "1", new NetworkCallback() {
+        String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue();
+        networkHandler.sendGetRequestListPot(url, new NetworkCallback() {
             @Override
             public void onSuccess() {
 

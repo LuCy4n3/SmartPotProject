@@ -35,13 +35,15 @@ public class NetworkHandler implements Serializable {
     private JSONresponseHandler responseHandler;
 
     private MutableLiveData<String> errorText = new MutableLiveData<>(); // Use LiveData
+    private MutableLiveData<String> AIresp = new MutableLiveData<>();
     private  MutableLiveData<Integer> errorCode = new MutableLiveData<>();
     public NetworkHandler(Context context,JSONresponseHandler responseHandler) throws JSONException {
         ctx = context;
         this.responseHandler = responseHandler;
         requestQueue = getRequestQueue();
         JSONresponse = new JSONObject("{}");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.0.192:3000/api/Plant/a/15/0",
+        errorCode = new MutableLiveData<Integer>(0);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "/a/15/0",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -61,6 +63,67 @@ public class NetworkHandler implements Serializable {
 
         // Add the request to the RequestQueue
         requestQueue.add(stringRequest);
+    }
+    public void sendAiRequest(String url, String userMessage, AiCallback callback) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("message", userMessage);  // adapt key to what your backend expects
+        } catch (JSONException e) {
+            if (callback != null) {
+                callback.onFailure("JSON error: " + e.getMessage());
+            }
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Example: backend returns { "reply": "..." }
+                        String reply = response.optString("reply", "");
+                        if (callback != null) {
+                            callback.onSuccess(reply);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String msg = (error != null && error.networkResponse != null)
+                                ? "AI error " + error.networkResponse.statusCode
+                                : "AI error: " + error;
+
+                        // optional: reuse your errorText/errorCode
+                        errorText.postValue(msg);
+                        errorCode.postValue(-10);
+
+                        if (callback != null) {
+                            callback.onFailure(msg);
+                        }
+                    }
+                }
+        ) {
+            @Override
+            public java.util.Map<String, String> getHeaders() {
+                java.util.Map<String, String> headers = new java.util.HashMap<>();
+                headers.put("Content-Type", "application/json");
+                // If your backend needs auth:
+                // headers.put("Authorization", "Bearer YOUR_TOKEN");
+                return headers;
+            }
+        };
+
+        // (optional) set retry policy if you want
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        getRequestQueue().add(jsonObjectRequest);
     }
     public void createPot(Pot pot,String url) {
         // Define the URL for the POST request
@@ -339,14 +402,55 @@ public class NetworkHandler implements Serializable {
 
         getRequestQueue().add(jsonObjectRequest);
     }
+    public void sendGetRequestString(String url, NetworkCallback callback) {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // If you want to keep JSONresponse for other code, you can skip it here
+                        // or wrap the string into a JSON object if needed.
+
+                        // Example: directly pass the string to the callback
+                        if (callback != null) {
+                            // you’ll need a callback method that accepts String, e.g. onStringSuccess
+                            //callback.onStringSuccess(response);
+                            AIresp.postValue(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error != null && error.networkResponse != null
+                                && error.networkResponse.statusCode == 404) {
+                            AIresp.postValue("Error AT AI");
+                            Toast.makeText(ctx, "ERROR on AI", Toast.LENGTH_SHORT).show();
+                        }
+                        if (callback != null) {
+                            callback.onFailure();
+                        }
+                    }
+                }
+        );
+
+        getRequestQueue().add(stringRequest);
+    }
 
     public JSONObject getJSONresponse() {
         return JSONresponse;
     }
     public MutableLiveData<String> getErrorText(){return errorText;}
+    public MutableLiveData<String> getAIresp(){return AIresp;}
     public MutableLiveData<Integer> getErrorCode(){return errorCode;}
     public interface DeleteRequestCallback {
         void onSuccess(String response); // Called when the request is successful
         void onFailure(String error);    // Called when the request fails
     }
+    public interface AiCallback {
+        void onSuccess(String reply);
+        void onFailure(String error);
+    }
+
 }

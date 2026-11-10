@@ -1,0 +1,3 @@
+# Dependencies for startup_uart.py and finalScript.py.
+pyserial
+requests

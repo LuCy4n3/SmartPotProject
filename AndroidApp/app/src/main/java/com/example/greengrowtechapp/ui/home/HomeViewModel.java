@@ -10,6 +10,7 @@ import com.example.greengrowtechapp.Handlers.NetworkHandler;
 public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
+    private final MutableLiveData<String> AIr;
     private final MutableLiveData<String> mButtonText; // LiveData for button text
     private final MutableLiveData<Boolean> mHasCamera;
     private final MutableLiveData<Boolean> mButtonPump; // LiveData for button state
@@ -36,8 +37,12 @@ public class HomeViewModel extends ViewModel {
         mText = new MutableLiveData<>();
         mText.postValue("Loading...");
 
+        AIr = new MutableLiveData<>();
+        AIr.postValue("Loading...");
+
         mButtonText = new MutableLiveData<>();
         mButtonText.postValue("Click ME 2"); // Initial button text
+
 
         mHasCamera = new MutableLiveData<>();
         mHasCamera.postValue(false);
@@ -113,6 +118,10 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
     public void setText(String text){mText.postValue(text);}
+    public LiveData<String> getAIresp() {
+        return AIr;
+    }
+    public  void setAIresp(String text) { AIr.postValue(text); }
 
     public LiveData<String> getButtonText() {
         return mButtonText;
@@ -159,16 +168,16 @@ public class HomeViewModel extends ViewModel {
                 aux ="Nu exista givechi!";
                 break;
             case 1:
-                aux = "Ghiveciul " + auxHandler.getIndex() + "\n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTemp() + " Temperatura \n" + auxHandler.getHum() + " Umiditate \n" + auxHandler.getTempExt() + " Temperatura Exterioara\n" + auxHandler.getHumExt() + " Umiditate Exterioara\n";
+                aux = "Ghiveciul " + auxHandler.getPotName() + "\n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTemp() + " Temperatura \n" + auxHandler.getHum() + " Umiditate \n" + auxHandler.getTempExt() + " Temperatura Exterioara\n" + auxHandler.getHumExt() + " Umiditate Exterioara\n";
                 break;
             case 2:
-                aux = "Ghiveciul " + auxHandler.getIndex() + "\n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTempExt()  + " Temperatura Exterioara\n" + auxHandler.getHumExt() + "Umiditate Exterioara\n" + auxHandler.getTemp() + " Temperatura \n" + auxHandler.getHum() + " Umiditate \n" + auxHandler.getPot() + " Potasiu \n" + auxHandler.getNi() + " Azot \n" + auxHandler.getPho() + " Phospor \n";
+                aux = "Ghiveciul " + auxHandler.getPotName()+ "\n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTempExt()  + " Temperatura Exterioara\n" + auxHandler.getHumExt() + "Umiditate Exterioara\n" + auxHandler.getTemp() + " Temperatura \n" + auxHandler.getHum() + " Umiditate \n" + auxHandler.getPot() + " Potasiu \n" + auxHandler.getNi() + " Azot \n" + auxHandler.getPho() + " Phospor \n";
                 break;
             case 3:
-                aux = "Ghiveciul " + auxHandler.getIndex() + "beneficeaza si sera \n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTemp() + " Temperatura \n" + auxHandler.getHum() + "Umiditate \n" + auxHandler.getPot() + "Potasiu \n" + auxHandler.getNi() + " Azot \n" + auxHandler.getPho() + " Phospor \n" + auxHandler.getTempExt() + " Temperatura Exterioara\n" + auxHandler.getHumExt() + " Umiditate Exterioara\n";
+                aux = "Ghiveciul " + auxHandler.getPotName() + " beneficeaza si sera \n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTemp() + " Temperatura \n" + auxHandler.getHum() + "Umiditate \n" + auxHandler.getPot() + "Potasiu \n" + auxHandler.getNi() + " Azot \n" + auxHandler.getPho() + " Phospor \n" + auxHandler.getTempExt() + " Temperatura Exterioara\n" + auxHandler.getHumExt() + " Umiditate Exterioara\n";
                 break;
             case 4:
-                aux = "Sera " + auxHandler.getIndex() + "\n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTemp() + " Temperatura Exterioara\n" + auxHandler.getHumExt() + " Umiditate Exterioara\n";
+                aux = "Sera " + auxHandler.getPotName() + "\n" + auxHandler.getPlantName() + " Planta in ghiveci" + "\n" + auxHandler.getTemp() + " Temperatura Exterioara\n" + auxHandler.getHumExt() + " Umiditate Exterioara\n";
                 break;
             default:
                 aux = "Error : didnt get a good type data";

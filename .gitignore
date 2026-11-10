@@ -302,3 +302,37 @@ Embeded/OrangePi_pc_ubuntu_xenial_server_linux5.3.5_v1.0.img
 *.img
 *.h265
 *.mp4
+
+# Python environments and files copied from the camera host
+.venv/
+venv/
+/CameraCode/.cache/
+/CameraCode/.local/
+/CameraCode/.bash_history
+/CameraCode/.bash_logout
+/CameraCode/.bashrc
+/CameraCode/.profile
+/CameraCode/.wget-hsts
+/CameraCode/*.deb
+/CameraCode/*.save
+*.swp
+*.swo
+
+# KiCad per-user state, locks and automatic backups (keep design sources)
+*.kicad_prl
+*.lck
+*.bak
+*-backups/
+*.kicad_sch-bak
+*.kicad_pcb-bak
+_autosave-*
+~_autosave-*
+fp-info-cache
+
+# Machine-specific configuration; tracked examples document setup
+/SQLserverFinale/SQLserverFinale/appsettings.json
+/proj_test/wpa_supplicant.conf
+
+# Images and video created by the API at runtime
+/SQLserverFinale/SQLserverFinale/wwwroot/images/
+/SQLserverFinale/SQLserverFinale/wwwroot/video/

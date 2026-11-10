@@ -25,6 +25,7 @@ import com.example.greengrowtechapp.Handlers.Pot;
 import com.example.greengrowtechapp.NetworkCallback;
 import com.example.greengrowtechapp.databinding.FragmentDashboardBinding;
 import com.example.greengrowtechapp.ui.home.HomeViewModel;
+import com.example.greengrowtechapp.ui.notifications.NotificationsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
     private FragmentDashboardBinding binding;
     private DashboardViewModel dashViewModel;
     private HomeViewModel homeViewModel;
+    private NotificationsViewModel notViewModel;
     private JSONresponseHandler responseHandler = null;
     private NetworkHandler networkHandler = null;
     private PlantAdapter plantAdapter;
@@ -50,6 +52,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashViewModel = new ViewModelProvider(requireActivity()).get(DashboardViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        notViewModel = new ViewModelProvider(requireActivity()).get(NotificationsViewModel.class);
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -283,7 +286,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
         if (isLoading) return;
         isLoading = true;
 
-        String url = homeViewModel.getURL().getValue() + "1";
+        String url = homeViewModel.getURL().getValue() + homeViewModel.getIndexOfCurrentUser().getValue();
 
         networkHandler.sendGetRequestListPot(url, new NetworkCallback() {
             @Override
@@ -323,8 +326,11 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
     public void onItemClick(Plant plant) {
         // Handle the item click, e.g., show a toast with the plant name
         Toast.makeText(getContext(), "Clicked plant: " + plant.getPlantName(), Toast.LENGTH_SHORT).show();
-        String aux = homeViewModel.getURL().getValue()+"1/"+clickPot.getPotId();
-        networkHandler.sendPutRequest(aux,"PlantName:"+plant.getPlantName());
+        if(clickPot == null)
+            return;
+        String aux = homeViewModel.getURL().getValue()+ homeViewModel.getIndexOfCurrentUser().getValue()+"/"+clickPot.getPotId();
+
+        networkHandler.sendPutRequest(aux,"PlantName:"+plant.getPlantName().toString());
     }
     public void changeTextAddBtn()
     {
@@ -356,7 +362,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
                     binding.editNamePot.getText().toString(), // potName
                     dashViewModel.getIndexOfCurrentPot().getValue(), // potType
                     "Test", // plantName
-                    1, // userId
+                    homeViewModel.getIndexOfCurrentUser().getValue(), // userId
                     false, // hasCamera
                     true, // pictReq
                     false, // pumpStatus
@@ -369,7 +375,7 @@ public class DashboardFragment extends Fragment implements PlantAdapter.OnItemCl
                     0 // potNitrogen
             );
 
-            networkHandler.createPot(pot,homeViewModel.getURL().getValue());
+            networkHandler.createPot(pot,notViewModel.getURL().getValue()+"Pot");
         }
         else
             Toast.makeText(getContext(),"Please add a name for the pot!",Toast.LENGTH_LONG).show();
