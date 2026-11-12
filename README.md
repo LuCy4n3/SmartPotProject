@@ -38,6 +38,10 @@ has launch profiles, it does not start an HTTP server.
 The root files `BackUpDataBase` and `DatabaseBackUp` are legacy SQL Server backup
 files, despite having no extension. They are retained as database restore inputs.
 
+The [SmartPot PCB overview](PCB/SmartPot/README.md) links the current editable
+board, the separately preserved 2024-10-09 snapshot and the additional
+manufacturing exports supplied with the local PCB collection.
+
 ## Requirements
 
 - Windows with the .NET 8 SDK for the API and gateway.
